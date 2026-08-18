@@ -1,0 +1,27 @@
+jobs_dir: jobs-official
+job_name: gpt-5.5-wthink
+n_attempts: 1
+timeout_multiplier: 10.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 3
+  quiet: false
+environment:
+  type: docker
+  force_build: false
+  delete: true
+agents:
+  - name: terminus-2
+    model_name: gpt-5.5
+    kwargs:
+      llm_import_path: "harbor.llms.models.gpt:ApevonGPT5Responses"
+      api_base: "https://api.apevon.ai/v1"
+      api_key: "sk-fTdgPBHqHGTQqFFgH6yr9XVuUGD1BQtFLzsy5TqyyAfTYPP4"
+      max_tokens: 64000
+      reasoning_effort: "xhigh"
+      context_limit: 1050000
+datasets:
+  - path: examples/agent-terminal-benchmark
+    exclude_task_names: ["benchmark_gpu_time", "fid_calculation", "docker"]
+metrics:
+  - type: sum

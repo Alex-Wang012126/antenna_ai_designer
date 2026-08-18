@@ -1,0 +1,9 @@
+# 真实模型接口（OpenAIModelClient 使用 requests 直连，无需 openai 库）
+requests>=2.31.0
+
+# HFSS / AEDT 控制（真实模式需要；PyAEDT 新包名为 ansys-aedt-core）
+# pyaedt>=0.8.0
+
+# 基础依赖
+python-dotenv>=1.0.0
+PyYAML>=6.0           # 读取 job_kimi_k3.yaml 中的模型配置

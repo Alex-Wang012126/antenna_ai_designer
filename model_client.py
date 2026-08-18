@@ -1,0 +1,169 @@
+"""模型调用接口
+
+- `OpenAIModelClient`：真实模型客户端（OpenAI 风格 chat/completions，用 requests 直连，
+  配置来自 config.py / job_kimi_k3.yaml）；
+- `PlaceholderModelClient` / `MockErrorModelClient`：占位与测试用客户端。
+"""
+
+import json
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+
+
+@dataclass
+class ToolCall:
+    """一次工具调用请求。"""
+    name: str
+    arguments: Dict[str, Any]
+
+
+@dataclass
+class ChatResponse:
+    """模型返回的结构化响应。"""
+    content: Optional[str] = None          # 模型自然语言回复
+    tool_calls: List[ToolCall] = field(default_factory=list)
+
+
+class ModelClient(ABC):
+    """模型客户端抽象基类。"""
+
+    @abstractmethod
+    def chat(
+        self,
+        messages: List[Dict[str, str]],
+        tools: Optional[List[Dict[str, Any]]] = None,
+    ) -> ChatResponse:
+        """向模型发送对话请求，返回模型响应。"""
+        raise NotImplementedError
+
+
+class OpenAIModelClient(ModelClient):
+    """OpenAI 风格（/chat/completions）真实模型客户端，用 requests 直连。
+
+    配置来源：config.cfg（环境变量 / .env / job_kimi_k3.yaml）。
+    适用于 Moonshot/Kimi、OpenAI、vLLM 等兼容该接口的服务。
+    """
+
+    def __init__(self, config=None):
+        from .config import cfg as default_cfg
+
+        self.config = config or default_cfg
+        if not self.config.model_api_key:
+            raise ValueError(
+                "MODEL_API_KEY 未配置：请在环境变量、.env 或 job_kimi_k3.yaml 中提供 api_key"
+            )
+
+    def chat(
+        self,
+        messages: List[Dict[str, str]],
+        tools: Optional[List[Dict[str, Any]]] = None,
+    ) -> ChatResponse:
+        import requests
+
+        payload: Dict[str, Any] = {
+            "model": self.config.model_name,
+            "messages": messages,
+            "temperature": self.config.model_temperature,
+            "max_tokens": self.config.model_max_tokens,
+        }
+        if tools:
+            payload["tools"] = tools
+            payload["tool_choice"] = "auto"
+
+        resp = requests.post(
+            f"{self.config.model_base_url.rstrip('/')}/chat/completions",
+            headers={
+                "Authorization": f"Bearer {self.config.model_api_key}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=300,
+        )
+        try:
+            resp.raise_for_status()
+        except requests.HTTPError as e:
+            # 带上服务端返回体，便于诊断（如 401 key 无效、429 限流）
+            raise requests.HTTPError(f"{e} | 响应内容: {resp.text[:500]}", response=resp) from e
+        msg = resp.json()["choices"][0]["message"]
+
+        tool_calls = [
+            ToolCall(
+                name=tc["function"]["name"],
+                arguments=json.loads(tc["function"].get("arguments") or "{}"),
+            )
+            for tc in (msg.get("tool_calls") or [])
+        ]
+        return ChatResponse(content=msg.get("content"), tool_calls=tool_calls)
+
+
+class PlaceholderModelClient(ModelClient):
+    """占位模型客户端：返回预先设定好的工具调用序列，仅用于演示主循环。
+
+    真实模型请使用上方的 OpenAIModelClient。
+    """
+
+    def __init__(self, demo_sequence: Optional[List[Dict[str, Any]]] = None):
+        # 演示用的默认“设计”序列
+        if demo_sequence is None:
+            demo_sequence = [
+                {"name": "set_variable", "arguments": {"name": "patch_length", "value": "28.5mm"}},
+                {"name": "update_geometry", "arguments": {"script": "oEditor.CreateRectangle(...)"}},
+                {"name": "solve", "arguments": {}},
+                {"name": "get_result", "arguments": {"report_name": "S Parameter Plot 1", "solution_name": "Setup1 : Sweep1"}},
+                {"name": "export_design", "arguments": {"file_path": "./hfss_projects/demo_antenna.aedt"}},
+                {"name": "finalize_design", "arguments": {"summary": "Final antenna: patch 28.5 mm, S11 <-10 dB at 2.45 GHz."}},
+            ]
+        self._demo_sequence = demo_sequence
+        self._step = 0
+
+    def chat(
+        self,
+        messages: List[Dict[str, str]],
+        tools: Optional[List[Dict[str, Any]]] = None,
+    ) -> ChatResponse:
+        """按顺序返回预设工具调用，循环结束后返回自然语言总结。"""
+        if self._step < len(self._demo_sequence):
+            item = self._demo_sequence[self._step]
+            self._step += 1
+            return ChatResponse(
+                content=None,
+                tool_calls=[ToolCall(name=item["name"], arguments=item["arguments"])],
+            )
+
+        # 序列结束后，返回终止消息（正常不应进入这里，因为 finalize_design 已结束）
+        return ChatResponse(content="设计序列已结束。", tool_calls=[])
+
+
+class MockErrorModelClient(ModelClient):
+    """用于测试：第三轮故意返回错误/重试行为。"""
+
+    def __init__(self):
+        self._step = 0
+
+    def chat(self, messages, tools=None):
+        self._step += 1
+        if self._step == 1:
+            return ChatResponse(
+                content=None,
+                tool_calls=[ToolCall(name="set_variable", arguments={"name": "patch_length", "value": "28.5mm"})],
+            )
+        if self._step == 2:
+            return ChatResponse(
+                content=None,
+                tool_calls=[ToolCall(name="update_geometry", arguments={"script": "oEditor.CreateRectangle(...)"})],
+            )
+        if self._step == 3:
+            return ChatResponse(
+                content=None,
+                tool_calls=[ToolCall(name="update_geometry", arguments={"script": "invalid_script"})],
+            )
+        if self._step == 4:
+            return ChatResponse(
+                content="I see the geometry failed; let me reset the variable.",
+                tool_calls=[ToolCall(name="set_variable", arguments={"name": "patch_length", "value": "29.0mm"})],
+            )
+        return ChatResponse(
+            content=None,
+            tool_calls=[ToolCall(name="finalize_design", arguments={"summary": "Recovered after geometry error."})],
+        )
