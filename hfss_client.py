@@ -13,10 +13,11 @@ Ansys Electronics Desktop Student 2025 R2 常见接入方式：
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from .config import Config, cfg
+from config import Config, cfg
 
 
 @dataclass
@@ -177,13 +178,19 @@ class PyAEDTHFSSClient(HFSSClient):
     def connect(self, config: Optional[Config] = None) -> HFSSResult:
         config = config or cfg
         try:
-            from ansys.aedt.core import Hfss
+            from ansys.aedt.core import Hfss, settings
         except ImportError:
             return HFSSResult(success=False, message="未安装 pyaedt：pip install pyaedt")
 
+        # AEDT Student 2025 R2 的 gRPC server 以 insecure 模式启动，
+        # 必须关闭安全模式（与 verify_min.py 一致），否则连接会被拒
+        settings.grpc_secure_mode = False
+
         project_dir = Path(config.project_dir)
         project_dir.mkdir(parents=True, exist_ok=True)
-        self._project_path = project_dir / "eval_design.aedt"
+        # 项目文件名带时间戳：避免重复运行打开同一项目，导致旧对象叠加、互相污染
+        stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self._project_path = project_dir / f"eval_design_{stamp}.aedt"
         self._setup_name = config.default_setup_name
         self._sweep_name = config.default_sweep_name
 
@@ -294,6 +301,14 @@ class PyAEDTHFSSClient(HFSSClient):
     def get_result(self, report_name: str, solution_name: str) -> HFSSResult:
         self._check_connected()
         try:
+            # 报告名提到增益/效率/远场时返回增益与辐射效率，否则默认返回 S11 曲线
+            name = (report_name or "").lower()
+            if any(k in name for k in ("gain", "efficien", "far", "radiat")):
+                data = self._antenna_metrics()
+                if not data:
+                    return HFSSResult(success=False,
+                                      message="未读取到增益/效率数据，请确认已完成求解且存在远场设置")
+                return HFSSResult(success=True, data=data, message="增益/效率读取成功")
             freq, s11 = self._s11_curve(solution_name or None)
             return HFSSResult(success=True,
                               data={"freq_ghz": (freq / 1e9).tolist(), "s11_db": s11.tolist()},
@@ -304,15 +319,129 @@ class PyAEDTHFSSClient(HFSSClient):
     def export_design(self, file_path) -> HFSSResult:
         self._check_connected()
         try:
-            self._hfss.save_project()
-            # .aedt 是“文件+同名文件夹”结构；评测时直接以项目路径为准
+            path = Path(file_path) if file_path else self._project_path
+            if path.suffix.lower() != ".aedt":
+                path = path.with_suffix(".aedt")
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if self._project_path is not None and path.resolve() != self._project_path.resolve():
+                # 另存到调用方指定的路径，后续操作以新路径为准
+                self._hfss.save_project(str(path))
+                self._project_path = path
+            else:
+                self._hfss.save_project()
             return HFSSResult(success=True,
-                              data={"file_path": str(self._project_path)},
-                              message=f"设计已保存: {self._project_path}")
+                              data={"file_path": str(path)},
+                              message=f"设计已保存: {path}")
         except Exception as e:
             return HFSSResult(success=False, message=f"保存失败: {e}")
 
+    # ---------- 远场指标（增益 / 辐射效率） ----------
+
+    def _ensure_far_field_sphere(self) -> Optional[str]:
+        """返回无限球（far-field setup）名称；不存在则创建，失败返回 None。"""
+        try:
+            setups = list(getattr(self._hfss, "field_setups", None) or [])
+            if setups:
+                s = setups[0]
+                return getattr(s, "name", None) or str(s)
+        except Exception:
+            pass
+        try:
+            sphere = self._hfss.insert_infinite_sphere(name="InfiniteSphere1")
+            return getattr(sphere, "name", None) or "InfiniteSphere1"
+        except Exception as e:
+            print(f"[HFSS] 创建远场无限球失败: {e}")
+            return None
+
+    def _antenna_metrics(self) -> Dict[str, float]:
+        """读取峰值增益 [dBi] 与辐射效率 [%]。
+
+        不同 pyaedt 版本的远场 API 有差异，这里做多路尝试；全部失败时对应键缺失，
+        评测器会按"指标缺失"判不通过（不编造数据）。
+        """
+        out: Dict[str, float] = {}
+        sphere = self._ensure_far_field_sphere()
+        if not sphere:
+            return out
+
+        # 路径 1：get_antenna_data（返回值是对象还是 (params, ffd) 元组视版本而定）
+        try:
+            res = self._hfss.get_antenna_data(setup_name=self._setup_name, sphere_name=sphere)
+            params = res[0] if isinstance(res, tuple) else res
+            gain = getattr(params, "peak_gain", None)
+            if gain is not None:
+                out["peak_gain_dbi"] = float(gain)
+            eff = getattr(params, "radiation_efficiency", None)
+            if eff is not None:
+                eff = float(eff)
+                out["radiation_efficiency_percent"] = eff * 100.0 if eff <= 1.0 else eff
+        except Exception:
+            pass
+
+        # 路径 2：远场报告取 GainTotal 全角度最大值
+        if "peak_gain_dbi" not in out:
+            try:
+                d = self._hfss.post.get_solution_data(
+                    expressions="dB(GainTotal)",
+                    setup_sweep_name=f"{self._setup_name} : LastAdaptive",
+                    report_category="Far Fields",
+                    context=sphere,
+                )
+                vals = d.data_real() if d is not None else None
+                if vals:
+                    out["peak_gain_dbi"] = float(max(vals))
+            except Exception:
+                pass
+
+        # 路径 3：Antenna Parameters 报告取辐射效率
+        if "radiation_efficiency_percent" not in out:
+            try:
+                d = self._hfss.post.get_solution_data(
+                    expressions="RadiationEfficiency",
+                    setup_sweep_name=f"{self._setup_name} : LastAdaptive",
+                    report_category="Antenna Parameters",
+                    context=sphere,
+                )
+                vals = d.data_real() if d is not None else None
+                if vals:
+                    eff = float(vals[0])
+                    out["radiation_efficiency_percent"] = eff * 100.0 if eff <= 1.0 else eff
+            except Exception:
+                pass
+
+        return out
+
     # ---------- 评测指标 ----------
+
+    @staticmethod
+    def _bandwidth_hz(freq, s11, threshold_db: float = -10.0) -> float:
+        """以谐振点为中心计算带宽，端点处对穿越频率做线性插值。
+
+        S11 全程高于阈值时返回 0；扫频边缘仍低于阈值时以边缘频率为界。
+        """
+        import numpy as np
+
+        i_min = int(np.argmin(s11))
+        if s11[i_min] > threshold_db:
+            return 0.0
+
+        # 左侧穿越点：从谐振点向左找第一个高于阈值的采样点，再线性插值
+        lo = float(freq[0])
+        for i in range(i_min, 0, -1):
+            if s11[i - 1] > threshold_db:
+                t = (threshold_db - s11[i - 1]) / (s11[i] - s11[i - 1])
+                lo = float(freq[i - 1] + t * (freq[i] - freq[i - 1]))
+                break
+
+        # 右侧穿越点
+        hi = float(freq[-1])
+        for i in range(i_min, len(s11) - 1):
+            if s11[i + 1] > threshold_db:
+                t = (threshold_db - s11[i]) / (s11[i + 1] - s11[i])
+                hi = float(freq[i] + t * (freq[i + 1] - freq[i]))
+                break
+
+        return max(0.0, hi - lo)
 
     def get_metrics(self) -> HFSSResult:
         self._check_connected()
@@ -320,19 +449,13 @@ class PyAEDTHFSSClient(HFSSClient):
             import numpy as np
             freq, s11 = self._s11_curve()
             i_min = int(np.argmin(s11))
-            # -10 dB 带宽：以谐振点为中心向两侧扩展
-            below = np.where(s11 <= -10.0)[0]
-            if len(below) > 0:
-                lo = below[below <= i_min].min()
-                hi = below[below >= i_min].max()
-                bw_hz = float(freq[hi] - freq[lo])
-            else:
-                bw_hz = 0.0
             metrics = {
                 "center_freq_ghz": float(freq[i_min] / 1e9),
                 "s11_min_db": float(s11[i_min]),
-                "bandwidth_mhz": bw_hz / 1e6,
+                "bandwidth_mhz": self._bandwidth_hz(freq, s11) / 1e6,
             }
+            # 增益 / 辐射效率（读取失败时键缺失，评测按缺失判不通过）
+            metrics.update(self._antenna_metrics())
             return HFSSResult(success=True, data=metrics, message="指标计算完成")
         except Exception as e:
             return HFSSResult(success=False, message=f"指标计算失败: {e}")

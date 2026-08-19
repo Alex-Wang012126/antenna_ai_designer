@@ -16,10 +16,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from .config import Config, cfg
-from .hfss_client import HFSSClient, HFSSResult
-from .model_client import ChatResponse, ModelClient, ToolCall
-from .prompts import build_initial_message, build_system_prompt, build_tools_description
+from config import Config, cfg
+from hfss_client import HFSSClient, HFSSResult
+from model_client import ChatResponse, ModelClient, ToolCall
+from prompts import build_initial_message, build_system_prompt, build_tools_description
 
 
 @dataclass
@@ -143,14 +143,22 @@ class DesignAgent:
         ]
 
         final_summary = ""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         metrics_file: Optional[Path] = None
 
         try:
             while self.rounds_used < max_rounds and not self._finalized:
-                # 调用模型
+                # 调用模型；API 报错或工具参数 JSON 被 max_tokens 截断时，
+                # 记录原因并跳出循环，对话日志仍会在 finally 中落盘
                 tools = build_tools_description()
-                response = self.model.chat(self.messages, tools=tools)
+                try:
+                    response = self.model.chat(self.messages, tools=tools)
+                except Exception as exc:
+                    final_summary = (
+                        f"模型调用失败（{type(exc).__name__}: {exc}），设计循环提前终止。"
+                    )
+                    print(f"\n[模型错误] {final_summary}")
+                    break
 
                 # 记录模型回复
                 assistant_msg = self._build_assistant_message(response)
@@ -210,25 +218,28 @@ class DesignAgent:
                 print(f"\n[指标读取异常] {type(exc).__name__}: {exc}")
 
         finally:
-            self.hfss.disconnect()
+            try:
+                self.hfss.disconnect()
+            except Exception as exc:
+                print(f"\n[断开连接异常] {type(exc).__name__}: {exc}")
 
-        # 保存日志
-        log_file = self.config.log_dir / f"design_log_{timestamp}.json"
-        log_file.write_text(
-            json.dumps(
-                {
-                    "requirements": self.requirements,
-                    "final_summary": final_summary,
-                    "rounds_used": self.rounds_used,
-                    "messages": self.messages,
-                },
-                ensure_ascii=False,
-                indent=2,
-                default=str,
-            ),
-            encoding="utf-8",
-        )
-        print(f"\n[日志已保存] {log_file}")
+            # 保存日志（放在 finally 中：模型调用崩溃等异常路径下日志也不丢）
+            log_file = self.config.log_dir / f"design_log_{timestamp}.json"
+            log_file.write_text(
+                json.dumps(
+                    {
+                        "requirements": self.requirements,
+                        "final_summary": final_summary,
+                        "rounds_used": self.rounds_used,
+                        "messages": self.messages,
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                    default=str,
+                ),
+                encoding="utf-8",
+            )
+            print(f"\n[日志已保存] {log_file}")
 
         return DesignLoopResult(
             success=self._finalized,

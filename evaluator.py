@@ -1,11 +1,12 @@
 """设计评测脚本
 
-读取 HFSS 设计或导出的结果文件，计算关键指标：
+读取设计循环落盘的指标文件（或在线 HFSS 客户端），对照需求判定：
 - S11 最小值 / -10 dB 带宽
 - 中心频率 / 谐振频率
 - 增益 / 辐射效率
 
-TODO：当前为占位实现，真实数据读取逻辑待 HFSS API 提供后补充。
+指标阈值（频率、S11、带宽、增益）从需求文本中解析；解析不到时使用默认值。
+指标缺失一律判不通过，不用默认值放行。
 """
 
 import json
@@ -14,10 +15,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional, Union
 
-from .config import Config, cfg
-from .hfss_client import HFSSClient
+from config import Config, cfg
+from hfss_client import HFSSClient
 
 
 @dataclass
@@ -45,42 +46,51 @@ class Evaluator(ABC):
 
 
 class AntennaEvaluator(Evaluator):
-    """针对天线指标的占位评测器。"""
+    """针对天线指标的评测器。"""
 
     def __init__(self, config: Config = cfg):
         self.config = config
 
     def _extract_targets(self, requirements: str) -> Dict[str, Optional[float]]:
-        """从需求文本中提取目标指标（占位，可用正则/LLM改进）。"""
-        # 简单示例：从文本中查找类似 "2.45 GHz" 的目标频率
+        """从需求文本中解析目标指标阈值；解析不到的项使用保守默认值。"""
         targets: Dict[str, Optional[float]] = {
             "target_freq_ghz": None,
             "max_s11_db": -10.0,
             "min_bandwidth_mhz": 50.0,
             "min_gain_dbi": 0.0,
         }
-        # 极简单的频率匹配：找 "x.xx GHz"
+        # 目标频率："2.45 GHz"
         m = re.search(r"(\d+\.?\d*)\s*GHz", requirements, re.IGNORECASE)
         if m:
             targets["target_freq_ghz"] = float(m.group(1))
+        # S11 阈值："S11 < -10 dB" / "回波损耗 < 10 dB" / "return loss < 10 dB"
+        m = re.search(
+            r"(?:S\s*11|回波损耗|return\s*loss)\s*[<≤＜]?\s*-?\s*(\d+\.?\d*)\s*dB",
+            requirements,
+            re.IGNORECASE,
+        )
+        if m:
+            targets["max_s11_db"] = -abs(float(m.group(1)))
+        # 带宽阈值："带宽 > 100 MHz" / "bandwidth > 0.1 GHz"
+        m = re.search(
+            r"(?:带宽|bandwidth)\s*[>≥＞]?\s*(\d+\.?\d*)\s*(MHz|GHz)",
+            requirements,
+            re.IGNORECASE,
+        )
+        if m:
+            bw = float(m.group(1))
+            if m.group(2).lower() == "ghz":
+                bw *= 1000.0
+            targets["min_bandwidth_mhz"] = bw
+        # 增益阈值："增益 > 3 dBi" / "gain > 3 dBi"
+        m = re.search(
+            r"(?:增益|gain)\s*[>≥＞]?\s*(-?\d+\.?\d*)\s*dBi",
+            requirements,
+            re.IGNORECASE,
+        )
+        if m:
+            targets["min_gain_dbi"] = float(m.group(1))
         return targets
-
-    def _compute_bandwidth(
-        self,
-        freq_ghz: List[float],
-        s11_db: List[float],
-        threshold: float = -10.0,
-    ) -> Dict[str, Any]:
-        """从 S11 曲线计算 -10 dB 带宽（简单线性插值占位）。"""
-        indices = [i for i, v in enumerate(s11_db) if v <= threshold]
-        if not indices:
-            return {"bandwidth_mhz": 0.0, "low_ghz": None, "high_ghz": None}
-
-        low_idx, high_idx = indices[0], indices[-1]
-        low_ghz = freq_ghz[low_idx]
-        high_ghz = freq_ghz[high_idx]
-        bw_mhz = (high_ghz - low_ghz) * 1000.0
-        return {"bandwidth_mhz": bw_mhz, "low_ghz": low_ghz, "high_ghz": high_ghz}
 
     def evaluate(
         self,
@@ -138,7 +148,7 @@ class AntennaEvaluator(Evaluator):
 
         # 保存评测报告（带时间戳，避免多次运行互相覆盖）
         self.config.ensure_dirs()
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         report_file = self.config.log_dir / f"evaluation_report_{timestamp}.json"
         report_file.write_text(
             json.dumps(

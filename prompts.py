@@ -28,6 +28,9 @@ Environment (read carefully — most mistakes happen here):
 - Fixed naming convention (do not invent other names):
   solution setup: "Setup1"; frequency sweep: "Sweep1"; wave port: "Port1".
   When reading results use solution name "Setup1 : Sweep1" and expression dB(S(1,1)).
+- To read gain / radiation efficiency, call `get_result` with a report name mentioning
+  gain or efficiency (e.g. "Gain Plot"); the result returns peak_gain_dbi and
+  radiation_efficiency_percent.
 - `solve` calls are budget-limited. Every tool result reports `remaining_solve_calls`;
   plan your iterations so you stay within budget.
 - Call `export_design` to save the project before `finalize_design`.
@@ -97,7 +100,7 @@ def build_tools_description() -> List[Dict[str, Any]]:
             "type": "function",
             "function": {
                 "name": "get_result",
-                "description": "Read a simulation result report, e.g. S-parameter or radiation pattern.",
+                "description": "Read a simulation result report. Returns the S11 curve by default; if the report name mentions gain/efficiency/far-field, returns peak_gain_dbi and radiation_efficiency_percent.",
                 "parameters": {
                     "type": "object",
                     "properties": {

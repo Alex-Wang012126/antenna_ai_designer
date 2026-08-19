@@ -12,8 +12,8 @@ antenna_ai_designer/
 ├── __init__.py
 ├── config.py           # 全局配置
 ├── prompts.py          # 提示词与工具描述
-├── model_client.py     # 模型调用接口占位
-├── hfss_client.py      # HFSS/AEDT 调用接口占位
+├── model_client.py     # 模型调用接口（占位 + 真实 OpenAI 风格客户端）
+├── hfss_client.py      # HFSS/AEDT 调用接口（占位 + PyAEDT 客户端）
 ├── design_loop.py      # 多轮设计主循环
 ├── evaluator.py        # 设计评测脚本
 ├── main.py             # 入口脚本
@@ -93,8 +93,13 @@ python -m antenna_ai_designer.main --no-use-placeholder \
 - 设计循环结束时会先把指标落盘到 `logs/metrics_<时间戳>.json`，
   评测脚本离线读取该文件，无需为评测第二次拉起 AEDT。
 - 评测时指标缺失一律判不通过（不会用默认值放行）。
+- 评测阈值（频率、S11、带宽、增益）从需求文本中解析，解析不到才用默认值。
+- 每次运行生成带时间戳的项目文件（`hfss_projects/eval_design_<时间戳>.aedt`），
+  避免重复运行互相污染；日志/指标/评测报告文件名时间戳精确到微秒。
 
-如果学生版 2025 R2 的 gRPC 连接失败，可在 `hfss_client.PyAEDTHFSSClient.connect`
+真实客户端在连接时会设置 `settings.grpc_secure_mode = False`
+（AEDT Student 2025 R2 的 gRPC server 以 insecure 模式启动，与 `verify_min.py` 一致）。
+若 gRPC 仍连接失败，可在 `hfss_client.PyAEDTHFSSClient.connect`
 中启用 `use_grpc_api=False` 改用 COM。
 
 ## 提示词与工具

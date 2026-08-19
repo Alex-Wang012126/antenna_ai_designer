@@ -14,11 +14,11 @@
 import argparse
 import sys
 
-from .config import cfg
-from .design_loop import DesignAgent
-from .evaluator import AntennaEvaluator
-from .hfss_client import PlaceholderHFSSClient, PyAEDTHFSSClient
-from .model_client import OpenAIModelClient, PlaceholderModelClient
+from config import cfg
+from design_loop import DesignAgent
+from evaluator import AntennaEvaluator
+from hfss_client import PlaceholderHFSSClient, PyAEDTHFSSClient
+from model_client import OpenAIModelClient, PlaceholderModelClient
 
 
 def parse_args() -> argparse.Namespace:
