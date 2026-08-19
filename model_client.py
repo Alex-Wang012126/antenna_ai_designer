@@ -37,6 +37,115 @@ class ModelClient(ABC):
         """向模型发送对话请求，返回模型响应。"""
         raise NotImplementedError
 
+class ResponsesModelClient(ModelClient):
+    """OpenAI Responses API（/responses）客户端，适配 gpt-5.5 @ api.apevon.ai。
+
+    与 OpenAIModelClient 接口完全一致，design_loop 无需改动。
+    """
+
+    def __init__(self, config=None):
+        from config import cfg as default_cfg
+
+        self.config = config or default_cfg
+        if not self.config.model_api_key:
+            raise ValueError("MODEL_API_KEY 未配置")
+
+    @staticmethod
+    def _convert_messages(messages):
+        """chat/completions 风格消息 -> Responses input items。"""
+        instructions = None
+        items = []
+        for m in messages:
+            role = m.get("role")
+            if role == "system":
+                instructions = (instructions or "") + (m.get("content") or "")
+            elif role in ("user", "assistant"):
+                for tc in m.get("tool_calls") or []:
+                    items.append({
+                        "type": "function_call",
+                        "call_id": tc["id"],
+                        "name": tc["function"]["name"],
+                        "arguments": tc["function"]["arguments"],
+                    })
+                if m.get("content"):
+                    items.append({"role": role, "content": m["content"]})
+            elif role == "tool":
+                items.append({
+                    "type": "function_call_output",
+                    "call_id": m["tool_call_id"],
+                    "output": m["content"],
+                })
+        return instructions, items
+
+    @staticmethod
+    def _convert_tools(tools):
+        """chat 格式 {"type":"function","function":{...}} -> Responses 扁平格式。"""
+        out = []
+        for t in tools or []:
+            fn = t.get("function", t)
+            out.append({
+                "type": "function",
+                "name": fn["name"],
+                "description": fn.get("description", ""),
+                "parameters": fn.get("parameters", {"type": "object", "properties": {}}),
+            })
+        return out
+
+    def chat(self, messages, tools=None):
+        import time
+
+        import requests
+
+        url = f"{self.config.model_base_url.rstrip('/')}/responses"
+        instructions, items = self._convert_messages(messages)
+        payload: Dict[str, Any] = {
+            "model": self.config.model_name,
+            "input": items,
+            # 推理模型的思考也消耗输出额度，16k 容易截断，建议 32000 起
+            "max_output_tokens": max(self.config.model_max_completion_tokens, 32000),
+            "reasoning": {"effort": "high"},  # yaml 里是 xhigh；网关不认就保持 high
+        }
+        if instructions:
+            payload["instructions"] = instructions
+        if tools:
+            payload["tools"] = self._convert_tools(tools)
+
+        print(f"[MODEL] >>> 请求 {url} | model={self.config.model_name} | "
+              f"items={len(items)} | tools={len(tools or [])}", flush=True)
+        t0 = time.time()
+        resp = requests.post(
+            url,
+            headers={
+                "Authorization": f"Bearer {self.config.model_api_key}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=600,  # 推理模型耗时长，超时放宽
+        )
+        print(f"[MODEL] <<< HTTP {resp.status_code} | 耗时 {time.time() - t0:.1f}s", flush=True)
+        try:
+            resp.raise_for_status()
+        except requests.HTTPError as e:
+            raise requests.HTTPError(f"{e} | 响应内容: {resp.text[:500]}", response=resp) from e
+
+        content_parts: List[str] = []
+        tool_calls: List[ToolCall] = []
+        for item in resp.json().get("output", []):
+            if item.get("type") == "message":
+                for c in item.get("content", []):
+                    if c.get("type") == "output_text":
+                        content_parts.append(c.get("text", ""))
+            elif item.get("type") == "function_call":
+                raw = item.get("arguments") or "{}"
+                try:
+                    arguments = json.loads(raw)
+                except json.JSONDecodeError as e:
+                    raise ValueError(f"工具 {item.get('name')} 参数 JSON 解析失败: {e}") from e
+                tool_calls.append(ToolCall(name=item["name"], arguments=arguments))
+
+        print(f"[MODEL] <<< 回复: content={sum(len(p) for p in content_parts)} 字符 | "
+              f"tool_calls={[tc.name for tc in tool_calls] or '无'}", flush=True)
+        return ChatResponse(content="".join(content_parts) or None, tool_calls=tool_calls)
 
 class OpenAIModelClient(ModelClient):
     """OpenAI 风格（/chat/completions）真实模型客户端，用 requests 直连。
@@ -68,7 +177,7 @@ class OpenAIModelClient(ModelClient):
             "model": self.config.model_name,
             "messages": messages,
             "temperature": self.config.model_temperature,
-            "max_tokens": self.config.model_max_tokens,
+            "max_completion_tokens": self.config.model_max_completion_tokens,
         }
         if tools:
             payload["tools"] = tools
@@ -103,7 +212,7 @@ class OpenAIModelClient(ModelClient):
             except json.JSONDecodeError as e:
                 raise ValueError(
                     f"工具 {tc['function']['name']} 的参数 JSON 解析失败: {e}；"
-                    f"可能是 max_tokens 截断所致。原始内容: {raw_args[:300]}"
+                    f"可能是 max_completion_tokens 截断所致。原始内容: {raw_args[:300]}"
                 ) from e
             tool_calls.append(ToolCall(name=tc["function"]["name"], arguments=arguments))
         print(f"[MODEL] <<< 回复: content={len(msg.get('content') or '')} 字符 | "

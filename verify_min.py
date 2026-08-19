@@ -6,13 +6,14 @@ os.environ["ANSYSEMSV_ROOT252"] = r"C:\ANSYS Inc\ANSYS Student\v252\AnsysEM"
 
 from ansys.aedt.core import Hfss, settings
 settings.grpc_secure_mode = False
+settings.enable_debug_logger = True
 
 hfss = Hfss(
     version="2025.2",
     student_version=True,
     non_graphical=False,
     new_desktop=True,
-    close_on_exit=False,
+    close_on_exit=True,
 )
 print("连接成功，AEDT 版本:", hfss.aedt_version_id)
 hfss.release_desktop()

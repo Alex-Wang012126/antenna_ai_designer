@@ -12,6 +12,11 @@
 2. 保存完整对话日志；
 3. 调用评测脚本读取/计算指标并生成报告。
 """
+import os
+# 学生版 2025 R2 必须：强制使用 legacy "-grpcsrv <port>" 启动方式（官方 workaround）
+os.environ["PYAEDT_USE_PRE_GRPC_ARGS"] = "True"
+# 正确的学生版安装路径变量名（原来写的是 ANSYSEM_ROOTSV252，顺序反了）
+os.environ["ANSYSEMSV_ROOT252"] = r"C:\ANSYS Inc\ANSYS Student\v252\AnsysEM"
 
 import argparse
 import sys
@@ -20,7 +25,7 @@ from config import cfg
 from design_loop import DesignAgent
 from evaluator import AntennaEvaluator
 from hfss_client import PlaceholderHFSSClient, PyAEDTHFSSClient
-from model_client import OpenAIModelClient, PlaceholderModelClient
+from model_client import ResponsesModelClient, PlaceholderModelClient
 
 
 def parse_args() -> argparse.Namespace:
@@ -66,7 +71,7 @@ def main() -> int:
         print(f"AEDT: version={cfg.aedt_version}, student={cfg.aedt_student}, "
               f"non_graphical={cfg.aedt_non_graphical}")
         print(f"项目目录: {cfg.project_dir.resolve()}\n")
-        model_client = OpenAIModelClient(cfg)
+        model_client = ResponsesModelClient(cfg)
         hfss_client = PyAEDTHFSSClient()
 
     # 阶段 1：设计循环

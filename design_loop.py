@@ -148,7 +148,7 @@ class DesignAgent:
 
         try:
             while self.rounds_used < max_rounds and not self._finalized:
-                # 调用模型；API 报错或工具参数 JSON 被 max_tokens 截断时，
+                # 调用模型；API 报错或工具参数 JSON 被 max_completion_tokens 截断时，
                 # 记录原因并跳出循环，对话日志仍会在 finally 中落盘
                 tools = build_tools_description()
                 try:

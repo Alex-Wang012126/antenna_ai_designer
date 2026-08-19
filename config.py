@@ -69,8 +69,8 @@ class Config:
         os.getenv("MODEL_BASE_URL") or _yaml_model.get("model_base_url") or "https://api.apevon.ai/v1"
     )
     model_name: str = os.getenv("MODEL_NAME") or _yaml_model.get("model_name") or "gpt-5.5"
-    model_temperature: float = float(os.getenv("MODEL_TEMPERATURE", "0.2"))
-    model_max_tokens: int = int(os.getenv("MODEL_MAX_TOKENS", "16384"))
+    model_temperature: float = float(os.getenv("MODEL_TEMPERATURE", "1"))
+    model_max_completion_tokens: int = int(os.getenv("MODEL_max_completion_tokens", "32000"))
 
     # ---------------- HFSS / AEDT 占位配置 ----------------
     # Ansys Electronics Desktop Student 2025 R2 示例配置

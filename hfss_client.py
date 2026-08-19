@@ -194,7 +194,7 @@ class PyAEDTHFSSClient(HFSSClient):
         settings.grpc_secure_mode = False
         _dbg("settings.grpc_secure_mode = False")
 
-        project_dir = Path(config.project_dir)
+        project_dir = Path(config.project_dir).expanduser().resolve()   # 关键：转绝对路径
         project_dir.mkdir(parents=True, exist_ok=True)
         # 项目文件名带时间戳：避免重复运行打开同一项目，导致旧对象叠加、互相污染
         stamp = datetime.now().strftime("%Y%m%d_%H%M%S")

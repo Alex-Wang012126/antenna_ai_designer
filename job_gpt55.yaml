@@ -17,7 +17,7 @@ agents:
       llm_import_path: "harbor.llms.models.gpt:ApevonGPT5Responses"
       api_base: "https://api.apevon.ai/v1"
       api_key: "sk-fTdgPBHqHGTQqFFgH6yr9XVuUGD1BQtFLzsy5TqyyAfTYPP4"
-      max_tokens: 64000
+      max_completion_tokens: 64000
       reasoning_effort: "xhigh"
       context_limit: 1050000
 datasets:

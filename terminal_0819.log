@@ -1,0 +1,346 @@
+(pyaedt192) PS C:\Users\user\Downloads\antenna_ai_designer> python main.py
+模型配置: model_name=gpt-5.5, api_base=https://api.apevon.ai/v1, api_key=已配置
+============================================================
+天线 AI 设计工具 [真实模式（模型 + AEDT）]
+============================================================
+需求: 设计一个中心频率 2.45 GHz 的微带贴片天线，S11 < -10 dB，-10 dB 带宽 > 100 MHz，峰值增益 > 3 dBi。
+仿真次数预算: 5
+
+模型: gpt-5.5 @ https://api.apevon.ai/v1
+模型 API key: 已配置（尾号 YPP4）
+AEDT: version=2025.2, student=True, non_graphical=False
+项目目录: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects
+
+[PyAEDT] >>> connect: 导入 ansys.aedt.core ...
+[PyAEDT] pyaedt 版本: 0.19.0
+[PyAEDT] settings.grpc_secure_mode = False
+[PyAEDT] 项目文件: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260819_175142.aedt
+[PyAEDT] >>> 启动 AEDT: version=2025.2, student=True, non_graphical=False, design=antenna
+PyAEDT INFO: Python version 3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)].
+PyAEDT INFO: PyAEDT version 0.19.0.
+PyAEDT INFO: Initializing new Desktop session.
+PyAEDT INFO: Log on console is enabled.
+PyAEDT INFO: Log on file C:\Users\user\AppData\Local\Temp\pyaedt_user_2419f4a5-af9f-47e2-ad02-1077dc4f4bd1.log is enabled.
+PyAEDT INFO: Log on AEDT is disabled.
+PyAEDT INFO: Debug logger is disabled. PyAEDT methods will not be logged.
+PyAEDT INFO: Launching PyAEDT with gRPC plugin.
+PyAEDT INFO: New AEDT session is starting on gRPC port 51560.
+PyAEDT INFO: Electronics Desktop started on gRPC port: 51560 after 11.899266004562378 seconds.
+PyAEDT INFO: AEDT installation Path C:\ANSYS Inc\ANSYS Student\v252\AnsysEM
+PyAEDT INFO: Ansoft.ElectronicsDesktop.2025.2 Student version started with process ID 46580.
+PyAEDT INFO: Project eval_design_20260819_175142 has been created.
+PyAEDT INFO: Added design 'antenna' of type HFSS.
+PyAEDT INFO: Aedt Objects correctly read
+[PyAEDT] <<< AEDT 已启动: ANSYSEM_ROOT252
+[MODEL] >>> 请求 https://api.apevon.ai/v1/chat/completions | model=gpt-5.5 | messages=2 | tools=6
+[MODEL] <<< HTTP 400 | 耗时 3.1s
+
+[模型错误] 模型调用失败（HTTPError: 400 Client Error: Bad Request for url: https://api.apevon.ai/v1/chat/completions | 响应内容: {"error":{"message":"Unsupported value: 'temperature' does not support 0.2 with this model. Only the default (1) value is supported. (request id: 20260819175156456360768eMQ3sDZ4b)","type":"invalid_request_error","param":"temperature","code":"unsupported_value"}}），设计循环提前终止。
+[PyAEDT] >>> get_metrics: 计算 S11 指标 + 读取增益/效率
+[PyAEDT] >>> 读取 S(1,1): setup_sweep='Setup1 : Sweep1'
+PyAEDT INFO: Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260819_175142.aedt.
+PyAEDT INFO: File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260819_175142.aedt correctly loaded. Elapsed time: 0m 0sec
+PyAEDT INFO: aedt file load time 0.03212547302246094
+PyAEDT INFO: PostProcessor class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: PostProcessor class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: Post class has been initialized! Elapsed time: 0m 0sec
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+PyAEDT ERROR:     sys.exit(main())
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+PyAEDT ERROR:     design_result = agent.run(max_rounds=args.max_rounds)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 210, in run
+PyAEDT ERROR:     m = self.hfss.get_metrics()
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 502, in get_metrics
+PyAEDT ERROR:     freq, s11 = self._s11_curve()
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 309, in _s11_curve
+PyAEDT ERROR:     data = self._hfss.post.get_solution_data(
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1590, in get_solution_data
+PyAEDT ERROR:     report = self._get_report_object(
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1162, in _get_report_object
+PyAEDT ERROR:     raise KeyError(f"Setup {setup_name} not available in current design.")
+PyAEDT ERROR: 'setup setup1 not available in current design.' on _get_report_object
+PyAEDT ERROR: Last Electronics Desktop Message - [error] 'setup setup1 not available in current design.' on _get_report_object
+
+PyAEDT ERROR: Method arguments: 
+PyAEDT ERROR:     expressions = dB(S(1,1)) 
+PyAEDT ERROR:     setup_sweep_name = Setup1 : Sweep1 
+PyAEDT ERROR:     polyline_points = 1001 
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+PyAEDT ERROR:     sys.exit(main())
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+PyAEDT ERROR:     design_result = agent.run(max_rounds=args.max_rounds)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 210, in run
+PyAEDT ERROR:     m = self.hfss.get_metrics()
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 502, in get_metrics
+PyAEDT ERROR:     freq, s11 = self._s11_curve()
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 309, in _s11_curve
+PyAEDT ERROR:     data = self._hfss.post.get_solution_data(
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1605, in get_solution_data
+PyAEDT ERROR:     return report.get_solution_data()
+PyAEDT ERROR:            ^^^^^^^^^^^^^^^^^^^^^^^^
+PyAEDT ERROR: 'bool' object has no attribute 'get_solution_data' on get_solution_data
+PyAEDT ERROR: Last Electronics Desktop Message - [error] 'bool' object has no attribute 'get_solution_data' on get_solution_data
+
+PyAEDT ERROR: Method arguments: 
+PyAEDT ERROR:     expressions = dB(S(1,1)) 
+PyAEDT ERROR:     setup_sweep_name = Setup1 : Sweep1 
+PyAEDT ERROR: **************************************************************
+[PyAEDT] <<< get_metrics 失败: AttributeError: 'bool' object has no attribute 'data_real'
+
+[指标读取失败] 指标计算失败: 'bool' object has no attribute 'data_real'
+[PyAEDT] >>> disconnect: 保存项目并释放 AEDT ...
+PyAEDT INFO: Project eval_design_20260819_175142 Saved correctly
+PyAEDT INFO: Desktop has been released and closed.
+[PyAEDT] <<< AEDT 已释放
+
+[日志已保存] logs\design_log_20260819_175157_002418.json
+
+============================================================
+设计结果
+============================================================
+是否完成: False
+使用轮次: 0
+最终总结:
+模型调用失败（HTTPError: 400 Client Error: Bad Request for url: https://api.apevon.ai/v1/chat/completions | 响应内容: {"error":{"message":"Unsupported value: 'temperature' does not support 0.2 with this model. Only the default (1) value is supported. (request id: 20260819175156456360768eMQ3sDZ4b)","type":"invalid_request_error","param":"temperature","code":"unsupported_value"}}），设计循环提前终止。
+日志文件: logs\design_log_20260819_175157_002418.json
+指标文件: None
+[评测报告已保存] logs\evaluation_report_20260819_175206_339874.json
+
+============================================================
+评测结果
+============================================================
+评测结果：未通过
+目标频率: 2.45 GHz, 实际中心频率: None GHz
+S11 最小值: None dB
+-10 dB 带宽: None MHz
+峰值增益: None dBi
+辐射效率: None%
+检查项: {'center_frequency': False, 'return_loss': False, 'bandwidth': False, 'gain': False}
+(pyaedt192) PS C:\Users\user\Downloads\antenna_ai_designer> python main.py --MAX_SOLVE_CALLS 1
+模型配置: model_name=gpt-5.5, api_base=https://api.apevon.ai/v1, api_key=已配置
+usage: main.py [-h] [--requirements REQUIREMENTS] [--max-rounds MAX_ROUNDS]
+               [--use-placeholder]
+main.py: error: unrecognized arguments: --MAX_SOLVE_CALLS 1
+(pyaedt192) PS C:\Users\user\Downloads\antenna_ai_designer> python main.py --max-rounds 1     
+模型配置: model_name=gpt-5.5, api_base=https://api.apevon.ai/v1, api_key=已配置
+============================================================
+天线 AI 设计工具 [真实模式（模型 + AEDT）]
+============================================================
+需求: 设计一个中心频率 2.45 GHz 的微带贴片天线，S11 < -10 dB，-10 dB 带宽 > 100 MHz，峰值增益 > 3 dBi。
+仿真次数预算: 5
+
+模型: gpt-5.5 @ https://api.apevon.ai/v1
+模型 API key: 已配置（尾号 YPP4）
+AEDT: version=2025.2, student=True, non_graphical=False
+项目目录: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects
+
+[PyAEDT] >>> connect: 导入 ansys.aedt.core ...
+[PyAEDT] pyaedt 版本: 0.19.0
+[PyAEDT] settings.grpc_secure_mode = False
+[PyAEDT] 项目文件: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260819_183646.aedt
+[PyAEDT] >>> 启动 AEDT: version=2025.2, student=True, non_graphical=False, design=antenna
+PyAEDT INFO: Python version 3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)].
+PyAEDT INFO: PyAEDT version 0.19.0.
+PyAEDT INFO: Initializing new Desktop session.
+PyAEDT INFO: Log on console is enabled.
+PyAEDT INFO: Log on file C:\Users\user\AppData\Local\Temp\pyaedt_user_4dde23d9-c463-4d27-9819-2503b67ba3e2.log is enabled.
+PyAEDT INFO: Log on AEDT is disabled.
+PyAEDT INFO: Debug logger is disabled. PyAEDT methods will not be logged.
+PyAEDT INFO: Launching PyAEDT with gRPC plugin.
+PyAEDT INFO: New AEDT session is starting on gRPC port 64609.
+PyAEDT INFO: Electronics Desktop started on gRPC port: 64609 after 17.745824337005615 seconds.
+PyAEDT INFO: AEDT installation Path C:\ANSYS Inc\ANSYS Student\v252\AnsysEM
+PyAEDT INFO: Ansoft.ElectronicsDesktop.2025.2 Student version started with process ID 3676.
+PyAEDT INFO: Project eval_design_20260819_183646 has been created.
+PyAEDT INFO: Added design 'antenna' of type HFSS.
+PyAEDT INFO: Aedt Objects correctly read
+[PyAEDT] <<< AEDT 已启动: ANSYSEM_ROOT252
+[MODEL] >>> 请求 https://api.apevon.ai/v1/responses | model=gpt-5.5 | items=1 | tools=6
+[MODEL] <<< HTTP 200 | 耗时 78.2s
+[MODEL] <<< 回复: content=180 字符 | tool_calls=['update_geometry']
+
+[Round 1] Tool call: update_geometry({'script': 'import math\nfrom ansys.aedt.core import Hfss\n\n# Clear existing model\ntry:\n    hfss.modeler.delete()\nexcept Exception:\n    pass\n\n# -------------------------------------------------------------------------\n# Design variables (all with explicit units)\n# -------------------------------------------------------------------------\nhfss["f0"] = "2.45GHz"\nhfss["sub_L"] = "100mm"\nhfss["sub_W"] = "100mm"\nhfss["h_sub"] = "3.175mm"\nhfss["t_cu"] = "0.035mm"\nhfss["patch_L"] = "39.2mm"\nhfss["patch_W"] = "40.0mm"\nhfss["feed_W"] = "9.6mm"\nhfss["inset_D"] = "12.2mm"\nhfss["gap"] = "1.0mm"\nhfss["air_margin_xy"] = "35mm"\nhfss["air_margin_z"] = "45mm"\n\n# -------------------------------------------------------------------------\n# Materials\n# -------------------------------------------------------------------------\ntry:\n    if "Rogers5880_custom" not in hfss.materials.material_keys:\n        mat = hfss.materials.add_material("Rogers5880_custom")\n        mat.permittivity = 2.2\n        mat.dielectric_loss_tangent = 0.0009\nexcept Exception:\n    pass\n\n# -------------------------------------------------------------------------\n# Geometry: substrate, ground, inset-fed patch + feed line, air box\n# Coordinates: patch centered at x=0,y=0. Substrate z=0..h_sub.\n# Ground is a copper box below substrate, top metallization is copper box above.\n# -------------------------------------------------------------------------\nsubstrate = hfss.modeler.create_box(\n    origin=["-sub_W/2", "-sub_L/2", "0mm"],\n    sizes=["sub_W", "sub_L", "h_sub"],\n    name="Substrate",\n    material="Rogers5880_custom"\n)\n\nground = hfss.modeler.create_box(\n    origin=["-sub_W/2", "-sub_L/2", "-t_cu"],\n    sizes=["sub_W", "sub_L", "t_cu"],\n    name="Ground",\n    material="copper"\n)\n\n# Top copper pieces for inset-fed patch.\n# Upper patch section (beyond inset)\npatch_upper = hfss.modeler.create_box(\n    origin=["-patch_W/2", "-patch_L/2+inset_D", "h_sub"],\n    sizes=["patch_W", "patch_L-inset_D", "t_cu"],\n    name="Patch_Upper",\n    material="copper"\n)\n# Left and right lower patch arms that form the inset slot around the feed line\npatch_left = hfss.modeler.create_box(\n    origin=["-patch_W/2", "-patch_L/2", "h_sub"],\n    sizes=["patch_W/2-feed_W/2-gap", "inset_D", "t_cu"],\n    name="Patch_LeftInsetArm",\n    material="copper"\n)\npatch_right = hfss.modeler.create_box(\n    origin=["feed_W/2+gap", "-patch_L/2", "h_sub"],\n    sizes=["patch_W/2-feed_W/2-gap", "inset_D", "t_cu"],\n    name="Patch_RightInsetArm",\n    material="copper"\n)\n# 50-ohm microstrip feed line from lower substrate edge into the inset\nfeed = hfss.modeler.create_box(\n    origin=["-feed_W/2", "-sub_L/2", "h_sub"],\n    sizes=["feed_W", "sub_L/2-patch_L/2+inset_D", "t_cu"],\n    name="FeedLine",\n    material="copper"\n)\n\n# Unite all top copper into one conductor for clean electrical connectivity\ntry:\n    hfss.modeler.unite(["Patch_Upper", "Patch_LeftInsetArm", "Patch_RightInsetArm", "FeedLine"])\n    # Rename united object if needed\n    for obj in hfss.modeler.object_names:\n        if obj.startswith("Patch_Upper"):\n            hfss.modeler[obj].name = "PatchFeed"\n            break\nexcept Exception:\n    pass\n\n# Lumped/wave-port sheet at feed input: vertical rectangle from ground to signal strip.\n# It is named PortSheet; excitation will be named Port1.\ntry:\n    port_sheet = hfss.modeler.create_rectangle(\n        orientation="XZ",\n        origin=["-feed_W/2", "-sub_L/2", "0mm"],\n        sizes=["feed_W", "h_sub+t_cu"],\n        name="PortSheet",\n        material="vacuum"\n    )\nexcept Exception:\n    # Fallback using plane enum if string orientation is not accepted\n    from ansys.aedt.core.generic.constants import Plane\n    port_sheet = hfss.modeler.create_rectangle(\n        orientation=Plane.XZ,\n        origin=["-feed_W/2", "-sub_L/2", "0mm"],\n        sizes=["feed_W", "h_sub+t_cu"],\n        name="PortSheet",\n        material="vacuum"\n    )\n\n# Air region for radiation boundary\ntry:\n    air = hfss.modeler.create_box(\n        origin=["-sub_W/2-air_margin_xy", "-sub_L/2-air_margin_xy", "-air_margin_z"],\n        sizes=["sub_W+2*air_margin_xy", "sub_L+2*air_margin_xy", "h_sub+t_cu+2*air_margin_z"],\n        name="AirBox",\n        material="air"\n    )\n    hfss.assign_radiation_boundary_to_objects("AirBox", boundary_name="Rad1")\nexcept Exception:\n    air = None\n\n# -------------------------------------------------------------------------\n# Excitation Port1. Try wave-port assignment first; fall back to lumped port\n# if the active PyAEDT API/geometry rules reject a wave port on this sheet.\n# -------------------------------------------------------------------------\nport_assigned = False\nintegration_line = [["0mm", "-sub_L/2", "0mm"], ["0mm", "-sub_L/2", "h_sub+t_cu"]]\ntry:\n    hfss.wave_port(\n        assignment="PortSheet",\n        create_port_sheet=False,\n        integration_line=integration_line,\n        name="Port1",\n        modes=1,\n        impedance=50\n    )\n    port_assigned = True\nexcept Exception as e1:\n    try:\n        hfss.create_wave_port_from_sheet(\n            sheet="PortSheet",\n            axisdir=2,\n            name="Port1",\n            impedance=50\n        )\n        port_assigned = True\n    except Exception as e2:\n        try:\n            hfss.lumped_port(\n                assignment="PortSheet",\n                create_port_sheet=False,\n                integration_line=integration_line,\n                impedance=50,\n                name="Port1"\n            )\n            port_assigned = True\n        except Exception as e3:\n            raise RuntimeError(f"Could not assign Port1. wave_port error={e1}; create_wave_port_from_sheet error={e2}; lumped_port error={e3}")\n\n# -------------------------------------------------------------------------\n# Analysis setup and broadband interpolating/discrete sweep\n# -------------------------------------------------------------------------\ntry:\n    # Remove existing setup if present\n    for s in list(hfss.setups):\n        if getattr(s, \'name\', \'\') == "Setup1":\n            hfss.delete_setup("Setup1")\nexcept Exception:\n    pass\n\nsetup = hfss.create_setup("Setup1")\nsetup.props["Frequency"] = "2.45GHz"\nsetup.props["MaximumPasses"] = 12\nsetup.props["MinimumPasses"] = 2\nsetup.props["MinimumConvergedPasses"] = 2\nsetup.props["PercentRefinement"] = 30\nsetup.props["DeltaS"] = 0.02\ntry:\n    setup.update()\nexcept Exception:\n    pass\n\n# Create sweep from 2.2 to 2.7 GHz with fine enough resolution to measure >100 MHz bandwidth\ntry:\n    sweep = setup.add_sweep("Sweep1")\n    sweep.props["RangeType"] = "LinearStep"\n    sweep.props["RangeStart"] = "2.2GHz"\n    sweep.props["RangeEnd"] = "2.7GHz"\n    sweep.props["RangeStep"] = "5MHz"\n    sweep.props["Type"] = "Interpolating"\n    sweep.props["SaveFields"] = False\n    sweep.props["SaveRadFields"] = False\n    sweep.update()\nexcept Exception:\n    try:\n        hfss.create_linear_count_sweep(\n            setup="Setup1",\n            units="GHz",\n            start_frequency=2.2,\n            stop_frequency=2.7,\n            num_of_freq_points=101,\n            name="Sweep1",\n            sweep_type="Interpolating",\n            save_fields=False,\n        )\n    except Exception:\n        pass\n\n# Add an infinite sphere for far-field reports/gain extraction\ntry:\n    hfss.insert_infinite_sphere(name="Infinite Sphere1")\nexcept Exception:\n    pass\n\n# Save project state\ntry:\n    hfss.save_project()\nexcept Exception:\n    pass\n'})
+[PyAEDT] >>> update_geometry: 脚本 7386 字符，开头: 'import math\nfrom ansys.aedt.core import Hfss\n\n# Clear existing model\ntry:\n    hfss.modeler.delete()\nexcept Exception:\n  '
+PyAEDT INFO: Modeler class has been initialized! Elapsed time: 0m 0sec
+PyAEDT WARNING: No objects to delete
+PyAEDT INFO: Materials class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: Adding new material to the Project Library: Rogers5880_custom
+PyAEDT INFO: Material has been added in Desktop.
+PyAEDT INFO: Parsing design objects. This operation can take time
+PyAEDT INFO: Refreshing bodies from Object Info
+PyAEDT INFO: Bodies Info Refreshed Elapsed time: 0m 0sec
+PyAEDT INFO: 3D Modeler objects parsed. Elapsed time: 0m 0sec
+PyAEDT INFO: Union of 4 objects has been executed.
+PyAEDT WARNING: Argument `boundary_name` is deprecated for method `assign_radiation_boundary_to_objects`; use `name` instead.
+PyAEDT INFO: Boundary Radiation Rad1 has been created.
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+PyAEDT ERROR:     sys.exit(main())
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+PyAEDT ERROR:     design_result = agent.run(max_rounds=args.max_rounds)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 188, in run
+PyAEDT ERROR:     result = self._execute_tool(tool_call)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 86, in _execute_tool
+PyAEDT ERROR:     return self.hfss.update_geometry(args["script"])
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 276, in update_geometry
+PyAEDT ERROR:     exec(script, {"hfss": self._hfss})
+PyAEDT ERROR:   File "<string>", line 136, in <module>
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 6996, in wave_port
+PyAEDT ERROR:     return self._create_waveport_driven(
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 656, in _create_waveport_driven
+PyAEDT ERROR:     return self._create_boundary(port_name, props, "Wave Port")
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 251, in _create_boundary
+PyAEDT ERROR:     return super()._create_boundary(name, props, boundary_type)
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\mixins.py", line 73, in _create_boundary
+PyAEDT ERROR:     if not bound.create():
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\boundary\common.py", line 518, in create
+PyAEDT ERROR:     self._app.oboundary.AssignWavePort(self._get_args())
+PyAEDT ERROR: AEDT API Error on create
+PyAEDT ERROR: Last Electronics Desktop Message - [error] script macro error: port 'port1': length of port lines must be greater than zero. (06:38:27 pm  aug 19, 2026)
+
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+PyAEDT ERROR:     sys.exit(main())
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+PyAEDT ERROR:     design_result = agent.run(max_rounds=args.max_rounds)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 188, in run
+PyAEDT ERROR:     result = self._execute_tool(tool_call)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 86, in _execute_tool
+PyAEDT ERROR:     return self.hfss.update_geometry(args["script"])
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 276, in update_geometry
+PyAEDT ERROR:     exec(script, {"hfss": self._hfss})
+PyAEDT ERROR:   File "<string>", line 136, in <module>
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 6996, in wave_port
+PyAEDT ERROR:     return self._create_waveport_driven(
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 656, in _create_waveport_driven
+PyAEDT ERROR:     return self._create_boundary(port_name, props, "Wave Port")
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 251, in _create_boundary
+PyAEDT ERROR:     return super()._create_boundary(name, props, boundary_type)
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\mixins.py", line 74, in _create_boundary
+PyAEDT ERROR:     raise AEDTRuntimeError(f"Failed to create boundary {boundary_type} {name}")
+PyAEDT ERROR: Failed to create boundary wave port port1 on _create_boundary
+PyAEDT ERROR: Last Electronics Desktop Message - [error] script macro error: port 'port1': length of port lines must be greater than zero. (06:38:27 pm  aug 19, 2026)
+
+PyAEDT ERROR: Method arguments: 
+PyAEDT ERROR:     name = Port1 
+PyAEDT ERROR:     props = {'Objects': ['PortSheet'], 'NumModes': 1, 'UseLineModeAlignment': False, 'DoDeembed': False, 'RenormalizeAllTerminals': True, 'Modes': {'Mode1': {'ModeNum': 1, 'UseIntLine': True, 'IntLine': {'Start': ['0mm', '-sub_L/2', '0mm'], 'End': ['
+PyAEDT ERROR: 0mm', '-sub_L/2', 'h_sub+t_cu']}, 'AlignmentGroup': 0, 'CharImp': 'Zpi', 'RenormImp': '50ohm'}}, 'ShowReporterFilter': False, 'ReporterFilter': [True], 'UseAnalyticAlignment': False} 
+PyAEDT ERROR:     boundary_type = Wave Port 
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+PyAEDT ERROR:     sys.exit(main())
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+PyAEDT ERROR:     design_result = agent.run(max_rounds=args.max_rounds)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 188, in run
+PyAEDT ERROR:     result = self._execute_tool(tool_call)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 86, in _execute_tool
+PyAEDT ERROR:     return self.hfss.update_geometry(args["script"])
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 276, in update_geometry
+PyAEDT ERROR:     exec(script, {"hfss": self._hfss})
+PyAEDT ERROR:   File "<string>", line 192, in <module>
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\solve_setup.py", line 2934, in add_sweep
+PyAEDT ERROR:     sweep_n.create()
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\solve_sweeps.py", line 324, in create
+PyAEDT ERROR:     self.oanalysis.InsertFrequencySweep(self.setup_name, self._get_args())
+PyAEDT ERROR: AEDT API Error on create
+PyAEDT ERROR: Last Electronics Desktop Message - [error] script macro error: solution setup 'setup1', sweep 'sweep1': interpolating sweeps are not supported for problems with no ports. (06:38:28 pm  aug 19, 2026)
+
+PyAEDT ERROR: **************************************************************
+PyAEDT INFO: Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260819_183646.aedt.
+PyAEDT INFO: File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260819_183646.aedt correctly loaded. Elapsed time: 0m 0sec
+PyAEDT INFO: aedt file load time 0.03515291213989258
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+PyAEDT ERROR:     sys.exit(main())
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+PyAEDT ERROR:     design_result = agent.run(max_rounds=args.max_rounds)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 188, in run
+PyAEDT ERROR:     result = self._execute_tool(tool_call)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 86, in _execute_tool
+PyAEDT ERROR:     return self.hfss.update_geometry(args["script"])
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 276, in update_geometry
+PyAEDT ERROR:     exec(script, {"hfss": self._hfss})
+PyAEDT ERROR:   File "<string>", line 200, in <module>
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\solve_sweeps.py", line 337, in update
+PyAEDT ERROR:     self.oanalysis.EditFrequencySweep(self.setup_name, self.name, self._get_args())
+PyAEDT ERROR: AEDT API Error on update
+PyAEDT ERROR: Last Electronics Desktop Message - [error] script macro error: there is no sweep named 'sweep1'. (06:38:28 pm  aug 19, 2026)
+
+PyAEDT ERROR: **************************************************************
+PyAEDT INFO: Project eval_design_20260819_183646 Saved correctly
+[PyAEDT] <<< update_geometry 成功
+[Round 1] update_geometry -> 成功: 脚本执行成功
+[PyAEDT] >>> get_metrics: 计算 S11 指标 + 读取增益/效率
+[PyAEDT] >>> 读取 S(1,1): setup_sweep='Setup1 : Sweep1'
+PyAEDT INFO: Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260819_183646.aedt.
+PyAEDT INFO: File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260819_183646.aedt correctly loaded. Elapsed time: 0m 0sec
+PyAEDT INFO: aedt file load time 0.040564537048339844
+PyAEDT INFO: PostProcessor class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: PostProcessor class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: Post class has been initialized! Elapsed time: 0m 0sec
+PyAEDT WARNING: Solution Data failed to load. Check solution, context or expression.
+PyAEDT WARNING: No Data Available. Check inputs
+[PyAEDT] <<< get_metrics 失败: AttributeError: 'bool' object has no attribute 'data_real'
+
+[指标读取失败] 指标计算失败: 'bool' object has no attribute 'data_real'
+[PyAEDT] >>> disconnect: 保存项目并释放 AEDT ...
+PyAEDT INFO: Project None Saved correctly
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+PyAEDT ERROR:     sys.exit(main())
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+PyAEDT ERROR:     design_result = agent.run(max_rounds=args.max_rounds)
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 225, in run
+PyAEDT ERROR:     self.hfss.disconnect()
+PyAEDT ERROR:   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 234, in disconnect
+PyAEDT ERROR:     self._hfss.release_desktop(close_projects=True, close_desktop=True)
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\application\design.py", line 2629, in release_desktop
+PyAEDT ERROR:     self.desktop_class.release_desktop(close_projects, close_desktop)
+PyAEDT ERROR:  on release_desktop
+PyAEDT ERROR: Method arguments: 
+PyAEDT ERROR:     close_projects = True 
+PyAEDT ERROR:     close_desktop = True 
+PyAEDT ERROR: **************************************************************
+[PyAEDT] <<< AEDT 已释放
+
+[日志已保存] logs\design_log_20260819_183706_854018.json
+
+============================================================
+设计结果
+============================================================
+是否完成: False
+使用轮次: 1
+最终总结:
+达到最大轮次 (1)，强制结束。
+日志文件: logs\design_log_20260819_183706_854018.json
+指标文件: None
+[评测报告已保存] logs\evaluation_report_20260819_184622_903708.json
+
+============================================================
+评测结果
+============================================================
+评测结果：未通过
+目标频率: 2.45 GHz, 实际中心频率: None GHz
+S11 最小值: None dB
+-10 dB 带宽: None MHz
+峰值增益: None dBi
+辐射效率: None%
+检查项: {'center_frequency': False, 'return_loss': False, 'bandwidth': False, 'gain': False}
+PyAEDT ERROR: **************************************************************
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\desktop.py", line 614, in <lambda>
+PyAEDT ERROR:     atexit.register(lambda: self.release_desktop(close_projects=close_on_exit, close_on_exit=close_on_exit))
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\desktop.py", line 1328, in release_desktop
+PyAEDT ERROR:     self.grpc_plugin.recreate_application(True)
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\internal\grpc_plugin_dll_class.py", line 376, in recreate_application
+PyAEDT ERROR:     return run()
+PyAEDT ERROR:            ^^^^^
+PyAEDT ERROR:   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\internal\grpc_plugin_dll_class.py", line 366, in run
+PyAEDT ERROR:     self.ReleaseAedtObject(self.aedt.objectID)
+PyAEDT ERROR:                            ^^^^^^^^^^^^^^^^^^
+PyAEDT ERROR: 'nonetype' object has no attribute 'objectid' on release_desktop
+PyAEDT ERROR: **************************************************************
