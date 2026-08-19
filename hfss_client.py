@@ -1,14 +1,10 @@
-"""HFSS / AEDT 调用接口占位
+"""HFSS / AEDT 调用接口
 
-这里封装所有与 HFSS/AEDT 交互的操作。当前为占位实现，仅打印调用并返回示例数据。
-后续请替换为真实 API（例如 PyAEDT、win32com、IronPython 脚本等）。
+封装所有与 HFSS/AEDT 交互的操作，两个实现：
+- PlaceholderHFSSClient：占位客户端，不连接真实软件，仅打印调用并返回演示数据；
+- PyAEDTHFSSClient：基于 PyAEDT 的真实客户端（Ansys Electronics Desktop Student 2025 R2）。
 
-Ansys Electronics Desktop Student 2025 R2 常见接入方式：
-1. PyAEDT（推荐）：pip install pyaedt
-   from ansys.aedt.core import Hfss
-   hfss = Hfss(version="2025.2", non_graphical=False, student_version=True)
-2. Windows COM：使用 win32com 启动 Ansoft.ElectronicsDesktop.xxxx。
-3. 脚本文件：生成 .py/vbs/js 脚本，通过 AEDT 的 Run Script 命令执行。
+真实客户端在关键节点打印 [PyAEDT] 前缀的调试输出，便于排查连接/求解/读数问题。
 """
 
 from abc import ABC, abstractmethod
@@ -18,6 +14,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 from config import Config, cfg
+
+
+def _dbg(msg: str) -> None:
+    """真实客户端调试输出：统一 [PyAEDT] 前缀，便于在日志里检索定位。"""
+    print(f"[PyAEDT] {msg}", flush=True)
 
 
 @dataclass
@@ -165,7 +166,10 @@ class PlaceholderHFSSClient(HFSSClient):
 
 
 class PyAEDTHFSSClient(HFSSClient):
-    """基于 PyAEDT 的真实 HFSS 客户端（AEDT Student 2025 R2）。"""
+    """基于 PyAEDT 的真实 HFSS 客户端（AEDT Student 2025 R2）。
+
+    所有关键节点都有 [PyAEDT] 前缀的调试输出，便于排查连接/求解/读数问题。
+    """
 
     def __init__(self):
         self._hfss = None
@@ -177,14 +181,18 @@ class PyAEDTHFSSClient(HFSSClient):
 
     def connect(self, config: Optional[Config] = None) -> HFSSResult:
         config = config or cfg
+        _dbg(">>> connect: 导入 ansys.aedt.core ...")
         try:
             from ansys.aedt.core import Hfss, settings
         except ImportError:
             return HFSSResult(success=False, message="未安装 pyaedt：pip install pyaedt")
+        import ansys.aedt.core
+        _dbg(f"pyaedt 版本: {getattr(ansys.aedt.core, '__version__', '未知')}")
 
         # AEDT Student 2025 R2 的 gRPC server 以 insecure 模式启动，
         # 必须关闭安全模式（与 verify_min.py 一致），否则连接会被拒
         settings.grpc_secure_mode = False
+        _dbg("settings.grpc_secure_mode = False")
 
         project_dir = Path(config.project_dir)
         project_dir.mkdir(parents=True, exist_ok=True)
@@ -193,6 +201,9 @@ class PyAEDTHFSSClient(HFSSClient):
         self._project_path = project_dir / f"eval_design_{stamp}.aedt"
         self._setup_name = config.default_setup_name
         self._sweep_name = config.default_sweep_name
+        _dbg(f"项目文件: {self._project_path.resolve()}")
+        _dbg(f">>> 启动 AEDT: version={config.aedt_version}, student={config.aedt_student}, "
+             f"non_graphical={config.aedt_non_graphical}, design={config.default_design_name}")
 
         try:
             self._hfss = Hfss(
@@ -208,16 +219,20 @@ class PyAEDTHFSSClient(HFSSClient):
                 # use_grpc_api=False,
             )
         except Exception as e:
+            _dbg(f"<<< AEDT 启动失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False, message=f"AEDT 启动失败: {type(e).__name__}: {e}")
 
+        _dbg(f"<<< AEDT 已启动: {self._hfss.aedt_version_id}")
         return HFSSResult(success=True,
                           message=f"已连接 AEDT {self._hfss.aedt_version_id}, 项目: {self._project_path}")
 
     def disconnect(self) -> HFSSResult:
         if self._hfss is not None:
             try:
+                _dbg(">>> disconnect: 保存项目并释放 AEDT ...")
                 self._hfss.save_project()
                 self._hfss.release_desktop(close_projects=True, close_desktop=True)
+                _dbg("<<< AEDT 已释放")
             finally:
                 self._hfss = None
         return HFSSResult(success=True, message="已断开并保存项目")
@@ -230,19 +245,25 @@ class PyAEDTHFSSClient(HFSSClient):
 
     def set_design_variable(self, name: str, value) -> HFSSResult:
         self._check_connected()
+        _dbg(f">>> set_variable: {name} = {value}")
         try:
             # 字符串原样传入（须带单位，如 "30mm"）；数字按 SI 单位处理
             self._hfss[name] = value if isinstance(value, str) else float(value)
+            _dbg(f"<<< set_variable 成功: {name} = {value}")
             return HFSSResult(success=True, data={name: value}, message=f"Set {name}={value}")
         except Exception as e:
+            _dbg(f"<<< set_variable 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False, message=f"set_variable 失败: {e}")
 
     def get_design_variable(self, name: str) -> HFSSResult:
         self._check_connected()
+        _dbg(f">>> get_variable: {name}")
         try:
             expr = self._hfss.variable_manager[name].expression
+            _dbg(f"<<< get_variable: {name} = {expr}")
             return HFSSResult(success=True, data=expr, message=f"{name}={expr}")
         except KeyError:
+            _dbg(f"<<< get_variable 失败: 变量 {name} 不存在")
             return HFSSResult(success=False, message=f"变量 {name} 不存在")
 
     # ---------- 建模（Agent 多轮迭代的核心入口） ----------
@@ -250,12 +271,15 @@ class PyAEDTHFSSClient(HFSSClient):
     def update_geometry(self, script: str) -> HFSSResult:
         """执行模型生成的 pyaedt 脚本。脚本中可直接使用变量 `hfss`。"""
         self._check_connected()
+        _dbg(f">>> update_geometry: 脚本 {len(script)} 字符，开头: {script[:120]!r}")
         try:
             exec(script, {"hfss": self._hfss})
+            _dbg("<<< update_geometry 成功")
             return HFSSResult(success=True, message="脚本执行成功")
         except Exception as e:
             # 把完整异常反馈给模型，这是迭代修正的关键信息
             import traceback
+            _dbg(f"<<< update_geometry 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False,
                               message=f"{type(e).__name__}: {e}\n{traceback.format_exc(limit=3)}")
 
@@ -264,11 +288,16 @@ class PyAEDTHFSSClient(HFSSClient):
     def solve(self, solution_name: Optional[str] = None) -> HFSSResult:
         self._check_connected()
         name = solution_name or self._setup_name
+        _dbg(f">>> solve: analyze_setup({name})（阻塞式，可能需要几分钟）...")
+        t0 = datetime.now()
         try:
             self._hfss.analyze_setup(name)   # 阻塞式，直到求解完成
+            elapsed = (datetime.now() - t0).total_seconds()
+            _dbg(f"<<< solve 完成: {name}，耗时 {elapsed:.1f}s")
             return HFSSResult(success=True, data={"solution": name},
                               message=f"求解完成: {name}")
         except Exception as e:
+            _dbg(f"<<< solve 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False, message=f"求解失败: {type(e).__name__}: {e}")
 
     # ---------- 结果读取 ----------
@@ -276,6 +305,7 @@ class PyAEDTHFSSClient(HFSSClient):
     def _s11_curve(self, setup_sweep_name: Optional[str] = None):
         """返回 (freq_hz_array, s11_db_array)，供 get_result / get_metrics 复用。"""
         setup_sweep = setup_sweep_name or f"{self._setup_name} : {self._sweep_name}"
+        _dbg(f">>> 读取 S(1,1): setup_sweep={setup_sweep!r}")
         data = self._hfss.post.get_solution_data(
             expressions="dB(S(1,1))",
             setup_sweep_name=setup_sweep,
@@ -296,6 +326,9 @@ class PyAEDTHFSSClient(HFSSClient):
             freq_vals = data.intrinsics["Freq"]
         freq = np.asarray(freq_vals, dtype=float)
         s11 = np.asarray(s11_vals, dtype=float)
+        _dbg(f"<<< S(1,1) 共 {len(freq)} 个采样点，频率范围 "
+             f"{freq.min() / 1e9:.3f} ~ {freq.max() / 1e9:.3f} GHz，"
+             f"S11 min = {s11.min():.2f} dB")
         return freq, s11
 
     def get_result(self, report_name: str, solution_name: str) -> HFSSResult:
@@ -304,16 +337,21 @@ class PyAEDTHFSSClient(HFSSClient):
             # 报告名提到增益/效率/远场时返回增益与辐射效率，否则默认返回 S11 曲线
             name = (report_name or "").lower()
             if any(k in name for k in ("gain", "efficien", "far", "radiat")):
+                _dbg(f">>> get_result: 报告 {report_name!r} -> 增益/效率分支")
                 data = self._antenna_metrics()
                 if not data:
+                    _dbg("<<< get_result 失败: 未读取到增益/效率数据")
                     return HFSSResult(success=False,
                                       message="未读取到增益/效率数据，请确认已完成求解且存在远场设置")
+                _dbg(f"<<< get_result 增益/效率: {data}")
                 return HFSSResult(success=True, data=data, message="增益/效率读取成功")
+            _dbg(f">>> get_result: 报告 {report_name!r} -> S11 曲线分支")
             freq, s11 = self._s11_curve(solution_name or None)
             return HFSSResult(success=True,
                               data={"freq_ghz": (freq / 1e9).tolist(), "s11_db": s11.tolist()},
                               message="S11 曲线读取成功")
         except Exception as e:
+            _dbg(f"<<< get_result 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False, message=f"读取结果失败: {e}")
 
     def export_design(self, file_path) -> HFSSResult:
@@ -325,14 +363,18 @@ class PyAEDTHFSSClient(HFSSClient):
             path.parent.mkdir(parents=True, exist_ok=True)
             if self._project_path is not None and path.resolve() != self._project_path.resolve():
                 # 另存到调用方指定的路径，后续操作以新路径为准
+                _dbg(f">>> export_design: 另存为 {path.resolve()}")
                 self._hfss.save_project(str(path))
                 self._project_path = path
             else:
+                _dbg(f">>> export_design: 保存当前项目 {path.resolve()}")
                 self._hfss.save_project()
+            _dbg("<<< export_design 成功")
             return HFSSResult(success=True,
                               data={"file_path": str(path)},
                               message=f"设计已保存: {path}")
         except Exception as e:
+            _dbg(f"<<< export_design 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False, message=f"保存失败: {e}")
 
     # ---------- 远场指标（增益 / 辐射效率） ----------
@@ -343,14 +385,18 @@ class PyAEDTHFSSClient(HFSSClient):
             setups = list(getattr(self._hfss, "field_setups", None) or [])
             if setups:
                 s = setups[0]
-                return getattr(s, "name", None) or str(s)
-        except Exception:
-            pass
+                name = getattr(s, "name", None) or str(s)
+                _dbg(f"远场设置已存在: {name}")
+                return name
+        except Exception as e:
+            _dbg(f"查询已有远场设置失败（将尝试新建）: {type(e).__name__}: {e}")
         try:
             sphere = self._hfss.insert_infinite_sphere(name="InfiniteSphere1")
-            return getattr(sphere, "name", None) or "InfiniteSphere1"
+            name = getattr(sphere, "name", None) or "InfiniteSphere1"
+            _dbg(f"已创建远场无限球: {name}")
+            return name
         except Exception as e:
-            print(f"[HFSS] 创建远场无限球失败: {e}")
+            _dbg(f"创建远场无限球失败: {type(e).__name__}: {e}")
             return None
 
     def _antenna_metrics(self) -> Dict[str, float]:
@@ -362,6 +408,7 @@ class PyAEDTHFSSClient(HFSSClient):
         out: Dict[str, float] = {}
         sphere = self._ensure_far_field_sphere()
         if not sphere:
+            _dbg("无远场设置，增益/效率读取中止")
             return out
 
         # 路径 1：get_antenna_data（返回值是对象还是 (params, ffd) 元组视版本而定）
@@ -375,8 +422,9 @@ class PyAEDTHFSSClient(HFSSClient):
             if eff is not None:
                 eff = float(eff)
                 out["radiation_efficiency_percent"] = eff * 100.0 if eff <= 1.0 else eff
-        except Exception:
-            pass
+            _dbg(f"路径1 get_antenna_data: {out or '未取到字段'}")
+        except Exception as e:
+            _dbg(f"路径1 get_antenna_data 失败: {type(e).__name__}: {e}")
 
         # 路径 2：远场报告取 GainTotal 全角度最大值
         if "peak_gain_dbi" not in out:
@@ -390,8 +438,9 @@ class PyAEDTHFSSClient(HFSSClient):
                 vals = d.data_real() if d is not None else None
                 if vals:
                     out["peak_gain_dbi"] = float(max(vals))
-            except Exception:
-                pass
+                _dbg(f"路径2 Far Fields/GainTotal: peak_gain={out.get('peak_gain_dbi')}")
+            except Exception as e:
+                _dbg(f"路径2 Far Fields/GainTotal 失败: {type(e).__name__}: {e}")
 
         # 路径 3：Antenna Parameters 报告取辐射效率
         if "radiation_efficiency_percent" not in out:
@@ -406,8 +455,10 @@ class PyAEDTHFSSClient(HFSSClient):
                 if vals:
                     eff = float(vals[0])
                     out["radiation_efficiency_percent"] = eff * 100.0 if eff <= 1.0 else eff
-            except Exception:
-                pass
+                _dbg(f"路径3 Antenna Parameters/RadiationEfficiency: "
+                     f"eff={out.get('radiation_efficiency_percent')}")
+            except Exception as e:
+                _dbg(f"路径3 Antenna Parameters/RadiationEfficiency 失败: {type(e).__name__}: {e}")
 
         return out
 
@@ -445,6 +496,7 @@ class PyAEDTHFSSClient(HFSSClient):
 
     def get_metrics(self) -> HFSSResult:
         self._check_connected()
+        _dbg(">>> get_metrics: 计算 S11 指标 + 读取增益/效率")
         try:
             import numpy as np
             freq, s11 = self._s11_curve()
@@ -456,6 +508,8 @@ class PyAEDTHFSSClient(HFSSClient):
             }
             # 增益 / 辐射效率（读取失败时键缺失，评测按缺失判不通过）
             metrics.update(self._antenna_metrics())
+            _dbg(f"<<< get_metrics: {metrics}")
             return HFSSResult(success=True, data=metrics, message="指标计算完成")
         except Exception as e:
+            _dbg(f"<<< get_metrics 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False, message=f"指标计算失败: {e}")

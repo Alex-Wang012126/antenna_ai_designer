@@ -1,9 +1,8 @@
 # Antenna AI Designer
 
 一个“模型多轮调用 HFSS API -> 生成设计文件 -> 指标评测”的 Python 项目。
-默认以占位模式运行（无需真实模型/HFSS 即可跑通流程）；
-真实模型（OpenAI 风格接口）与真实 AEDT（PyAEDT）客户端已实现，
-用 `--no-use-placeholder` 切换。
+默认使用真实模型（OpenAI 风格接口）与真实 AEDT（PyAEDT）运行；
+另提供占位模式（无需真实模型/HFSS 即可跑通流程），用 `--use-placeholder` 切换。
 
 ## 目录结构
 
@@ -25,18 +24,10 @@ antenna_ai_designer/
 
 ## 快速体验（占位模式）
 
-不需要真实模型或 HFSS，即可跑通整个流程。由于包内使用相对导入，
-请在 **本目录的上一级** 以模块方式运行：
+不需要真实模型或 HFSS，即可跑通整个流程。在本目录下运行：
 
 ```bash
-cd antenna_ai_designer/..   # 即进入包含 antenna_ai_designer/ 的目录
-python -m antenna_ai_designer.main
-```
-
-也可以在本目录内直接运行（同样推荐用模块方式）：
-
-```bash
-python -m main
+python main.py --use-placeholder
 ```
 
 会按顺序执行：
@@ -71,13 +62,12 @@ python verify_min.py
 - **HFSS**：`hfss_client.PyAEDTHFSSClient`（PyAEDT 驱动
   Ansys Electronics Desktop Student 2025 R2）
 
-步骤：
+步骤（在本目录下运行）：
 
 ```bash
 pip install pyaedt          # 真实 HFSS 客户端依赖
 python verify_min.py        # 先确认能拉起 AEDT Student 2025 R2
-cd antenna_ai_designer/..   # 进入包含 antenna_ai_designer/ 的目录
-python -m antenna_ai_designer.main --no-use-placeholder \
+python main.py \
     --requirements "设计一个中心频率 2.45 GHz 的微带贴片天线，S11 < -10 dB"
 ```
 
@@ -96,6 +86,8 @@ python -m antenna_ai_designer.main --no-use-placeholder \
 - 评测阈值（频率、S11、带宽、增益）从需求文本中解析，解析不到才用默认值。
 - 每次运行生成带时间戳的项目文件（`hfss_projects/eval_design_<时间戳>.aedt`），
   避免重复运行互相污染；日志/指标/评测报告文件名时间戳精确到微秒。
+- 真实模式下各关键节点有带前缀的调试输出：HFSS 客户端 `[PyAEDT]`、
+  模型客户端 `[MODEL]`、主循环 `[Round N]`，排查问题时按前缀检索即可。
 
 真实客户端在连接时会设置 `settings.grpc_secure_mode = False`
 （AEDT Student 2025 R2 的 gRPC server 以 insecure 模式启动，与 `verify_min.py` 一致）。

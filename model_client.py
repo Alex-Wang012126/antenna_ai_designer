@@ -1,7 +1,7 @@
 """模型调用接口
 
 - `OpenAIModelClient`：真实模型客户端（OpenAI 风格 chat/completions，用 requests 直连，
-  配置来自 config.py / job_kimi_k3.yaml）；
+  配置来自 config.py / job_gpt55.yaml）；
 - `PlaceholderModelClient` / `MockErrorModelClient`：占位与测试用客户端。
 """
 
@@ -41,17 +41,17 @@ class ModelClient(ABC):
 class OpenAIModelClient(ModelClient):
     """OpenAI 风格（/chat/completions）真实模型客户端，用 requests 直连。
 
-    配置来源：config.cfg（环境变量 / .env / job_kimi_k3.yaml）。
+    配置来源：config.cfg（环境变量 / .env / job_gpt55.yaml）。
     适用于 Moonshot/Kimi、OpenAI、vLLM 等兼容该接口的服务。
     """
 
     def __init__(self, config=None):
-        from .config import cfg as default_cfg
+        from config import cfg as default_cfg
 
         self.config = config or default_cfg
         if not self.config.model_api_key:
             raise ValueError(
-                "MODEL_API_KEY 未配置：请在环境变量、.env 或 job_kimi_k3.yaml 中提供 api_key"
+                "MODEL_API_KEY 未配置：请在环境变量、.env 或 job_gpt55.yaml 中提供 api_key"
             )
 
     def chat(
@@ -59,8 +59,11 @@ class OpenAIModelClient(ModelClient):
         messages: List[Dict[str, str]],
         tools: Optional[List[Dict[str, Any]]] = None,
     ) -> ChatResponse:
+        import time
+
         import requests
 
+        url = f"{self.config.model_base_url.rstrip('/')}/chat/completions"
         payload: Dict[str, Any] = {
             "model": self.config.model_name,
             "messages": messages,
@@ -71,8 +74,11 @@ class OpenAIModelClient(ModelClient):
             payload["tools"] = tools
             payload["tool_choice"] = "auto"
 
+        print(f"[MODEL] >>> 请求 {url} | model={self.config.model_name} | "
+              f"messages={len(messages)} | tools={len(tools or [])}", flush=True)
+        t0 = time.time()
         resp = requests.post(
-            f"{self.config.model_base_url.rstrip('/')}/chat/completions",
+            url,
             headers={
                 "Authorization": f"Bearer {self.config.model_api_key}",
                 "Content-Type": "application/json",
@@ -80,6 +86,8 @@ class OpenAIModelClient(ModelClient):
             json=payload,
             timeout=300,
         )
+        elapsed = time.time() - t0
+        print(f"[MODEL] <<< HTTP {resp.status_code} | 耗时 {elapsed:.1f}s", flush=True)
         try:
             resp.raise_for_status()
         except requests.HTTPError as e:
@@ -87,13 +95,19 @@ class OpenAIModelClient(ModelClient):
             raise requests.HTTPError(f"{e} | 响应内容: {resp.text[:500]}", response=resp) from e
         msg = resp.json()["choices"][0]["message"]
 
-        tool_calls = [
-            ToolCall(
-                name=tc["function"]["name"],
-                arguments=json.loads(tc["function"].get("arguments") or "{}"),
-            )
-            for tc in (msg.get("tool_calls") or [])
-        ]
+        tool_calls: List[ToolCall] = []
+        for tc in (msg.get("tool_calls") or []):
+            raw_args = tc["function"].get("arguments") or "{}"
+            try:
+                arguments = json.loads(raw_args)
+            except json.JSONDecodeError as e:
+                raise ValueError(
+                    f"工具 {tc['function']['name']} 的参数 JSON 解析失败: {e}；"
+                    f"可能是 max_tokens 截断所致。原始内容: {raw_args[:300]}"
+                ) from e
+            tool_calls.append(ToolCall(name=tc["function"]["name"], arguments=arguments))
+        print(f"[MODEL] <<< 回复: content={len(msg.get('content') or '')} 字符 | "
+              f"tool_calls={[tc.name for tc in tool_calls] or '无'}", flush=True)
         return ChatResponse(content=msg.get("content"), tool_calls=tool_calls)
 
 

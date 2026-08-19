@@ -192,6 +192,9 @@ class DesignAgent:
                         print(f"[HFSS 错误] {error_msg}")
 
                     self._append_tool_result(tc_id, tool_call.name, result)
+                    status = "成功" if result.success else "失败"
+                    print(f"[Round {self.rounds_used + 1}] {tool_call.name} -> {status}: "
+                          f"{str(result.message)[:200]}", flush=True)
 
                     if tool_call.name == "finalize_design" and result.success:
                         final_summary = result.data.get("summary", "")

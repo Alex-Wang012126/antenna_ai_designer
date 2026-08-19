@@ -1,9 +1,11 @@
 """入口脚本
 
-用法示例：
-    python -m antenna_ai_designer.main \
+用法示例（在本目录下运行）：
+    python main.py \
         --requirements "设计一个中心频率 2.45 GHz 的微带贴片天线，S11 <-10 dB，带宽 > 100 MHz" \
         --max-rounds 10
+
+默认使用真实模型 + 真实 AEDT；加 --use-placeholder 可切换到占位演示模式。
 
 运行后会：
 1. 启动设计循环（模型多次调用 HFSS API）；
@@ -37,9 +39,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--use-placeholder",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="使用占位模型和占位 HFSS（默认开启；--no-use-placeholder 使用真实模型 + 真实 AEDT）",
+        action="store_true",
+        help="使用占位模型和占位 HFSS 演示流程（默认关闭：默认使用真实模型 + 真实 AEDT）",
     )
     return parser.parse_args()
 
@@ -58,6 +59,13 @@ def main() -> int:
         model_client = PlaceholderModelClient()
         hfss_client = PlaceholderHFSSClient()
     else:
+        # 真实模式：先回显关键配置，连不上/调不通时方便排查
+        print(f"模型: {cfg.model_name} @ {cfg.model_base_url}")
+        key = cfg.model_api_key
+        print(f"模型 API key: {'已配置（尾号 ' + key[-4:] + '）' if key else '未配置！请设置 MODEL_API_KEY 或在 job yaml 中提供'}")
+        print(f"AEDT: version={cfg.aedt_version}, student={cfg.aedt_student}, "
+              f"non_graphical={cfg.aedt_non_graphical}")
+        print(f"项目目录: {cfg.project_dir.resolve()}\n")
         model_client = OpenAIModelClient(cfg)
         hfss_client = PyAEDTHFSSClient()
 
