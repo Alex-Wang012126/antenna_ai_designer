@@ -692,3 +692,304 @@ Project directory: C:\Users\user\Documents\Ansoft
           [error] Script macro error: Solution Setup 'Setup1', Sweep 'Sweep1': Interpolating sweeps are not supported for problems with no ports. (10:32:32 AM  Aug 20, 2026)
           [error] Script macro error: There is no sweep named 'Sweep1'. (10:32:32 AM  Aug 20, 2026)
 -- Message Window --
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 2:17:08 PM  Aug 20, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 58660 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project eval_design_20260820_141706_621003 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 129, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 101, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 282, in run
+        [error]     result = self._execute_tool(tool_call)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 112, in _execute_tool
+        [error]     result = self.hfss.create_patch_antenna(args)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 465, in create_patch_antenna
+        [error]     self._hfss.lumped_port(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 6788, in lumped_port
+        [error]     return self._create_lumped_driven(sheet_name, point0, point1, impedance, name, renormalize, deembed)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 437, in _create_lumped_driven
+        [error]     return self._create_boundary(port_name, props, "Lumped Port")
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 251, in _create_boundary
+        [error]     return super()._create_boundary(name, props, boundary_type)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\mixins.py", line 73, in _create_boundary
+        [error]     if not bound.create():
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\boundary\common.py", line 516, in create
+        [error]     self._app.oboundary.AssignLumpedPort(self._get_args())
+        [error] AEDT API Error on create
+        [error] Last Electronics Desktop Message - [error] script macro error: port 'port1': both endpoints of port lines must lie on the port. (02:17:39 pm  aug 20, 2026)  
+        [error] **************************************************************
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 129, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 101, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 282, in run
+        [error]     result = self._execute_tool(tool_call)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 112, in _execute_tool
+        [error]     result = self.hfss.create_patch_antenna(args)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 465, in create_patch_antenna
+        [error]     self._hfss.lumped_port(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 6788, in lumped_port
+        [error]     return self._create_lumped_driven(sheet_name, point0, point1, impedance, name, renormalize, deembed)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 437, in _create_lumped_driven
+        [error]     return self._create_boundary(port_name, props, "Lumped Port")
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 251, in _create_boundary
+        [error]     return super()._create_boundary(name, props, boundary_type)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\mixins.py", line 74, in _create_boundary
+        [error]     raise AEDTRuntimeError(f"Failed to create boundary {boundary_type} {name}")
+        [error] Failed to create boundary lumped port port1 on _create_boundary
+        [error] Last Electronics Desktop Message - [error] script macro error: port 'port1': both endpoints of port lines must lie on the port. (02:17:39 pm  aug 20, 2026)  
+        [error] Method arguments: 
+        [error]     name = Port1 
+        [error]     props = {'Objects': ['Port1_sheet'], 'DoDeembed': False, 'RenormalizeAllTerminals': True, 'Modes': {'Mode1': {'ModeNum': 1, 'UseIntLine': True, 'IntLine': {'Start': ['0.0mm', '-42.5mm', '0.0mm'], 'End': ['0.0mm', '-42.5mm', '3.175mm']}, 'Alignmen
+        [error] tGroup': 0, 'CharImp': 'Zpi', 'RenormImp': '50ohm'}}, 'ShowReporterFilter': False, 'ReporterFilter': [True], 'Impedance': '50ohm'} 
+        [error]     boundary_type = Lumped Port 
+        [error] **************************************************************
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 4 Objects: Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 129, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 101, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 282, in run
+        [error]     result = self._execute_tool(tool_call)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 112, in _execute_tool
+        [error]     result = self.hfss.create_patch_antenna(args)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 465, in create_patch_antenna
+        [error]     self._hfss.lumped_port(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 6788, in lumped_port
+        [error]     return self._create_lumped_driven(sheet_name, point0, point1, impedance, name, renormalize, deembed)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 437, in _create_lumped_driven
+        [error]     return self._create_boundary(port_name, props, "Lumped Port")
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 251, in _create_boundary
+        [error]     return super()._create_boundary(name, props, boundary_type)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\mixins.py", line 73, in _create_boundary
+        [error]     if not bound.create():
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\boundary\common.py", line 516, in create
+        [error]     self._app.oboundary.AssignLumpedPort(self._get_args())
+        [error] AEDT API Error on create
+        [error] Last Electronics Desktop Message - [error] script macro error: port 'port1': both endpoints of port lines must lie on the port. (02:17:55 pm  aug 20, 2026)  
+        [error] **************************************************************
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 129, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 101, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 282, in run
+        [error]     result = self._execute_tool(tool_call)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 112, in _execute_tool
+        [error]     result = self.hfss.create_patch_antenna(args)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 465, in create_patch_antenna
+        [error]     self._hfss.lumped_port(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 6788, in lumped_port
+        [error]     return self._create_lumped_driven(sheet_name, point0, point1, impedance, name, renormalize, deembed)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 437, in _create_lumped_driven
+        [error]     return self._create_boundary(port_name, props, "Lumped Port")
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 251, in _create_boundary
+        [error]     return super()._create_boundary(name, props, boundary_type)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\mixins.py", line 74, in _create_boundary
+        [error]     raise AEDTRuntimeError(f"Failed to create boundary {boundary_type} {name}")
+        [error] Failed to create boundary lumped port port1 on _create_boundary
+        [error] Last Electronics Desktop Message - [error] script macro error: port 'port1': both endpoints of port lines must lie on the port. (02:17:55 pm  aug 20, 2026)  
+        [error] Method arguments: 
+        [error]     name = Port1 
+        [error]     props = {'Objects': ['Port1_sheet'], 'DoDeembed': False, 'RenormalizeAllTerminals': True, 'Modes': {'Mode1': {'ModeNum': 1, 'UseIntLine': True, 'IntLine': {'Start': ['0.0mm', '-45.0mm', '0.0mm'], 'End': ['0.0mm', '-45.0mm', '3.175mm']}, 'Alignmen
+        [error] tGroup': 0, 'CharImp': 'Zpi', 'RenormImp': '50ohm'}}, 'ShowReporterFilter': False, 'ReporterFilter': [True], 'Impedance': '50ohm'} 
+        [error]     boundary_type = Lumped Port 
+        [error] **************************************************************
+        [info] Project eval_design_20260820_141706_621003 Saved correctly
+-- Message Window --
+Stopping Batch Run: 2:17:57 PM  Aug 20, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 2:30:53 PM  Aug 20, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 50237 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project eval_design_20260820_143052_516226 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Ob-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 63616 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project eval_design_20260820_143142_581400 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_143142_581400.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_143142_581400.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.046449899673461914
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving de-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 56616 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project eval_design_20260820_144834_223067 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_144834_223067.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_144834_223067.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.04632234573364258
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 1.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiThe project 'candidate_004' has been edited and/or solved. Do you want to save the changes?
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 49849 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260820_154219_136112\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260820_154219_136112\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.07482767105102539
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 1.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260820_154219_136112\candidate_002.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260820_154219_136112\candidate_002.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.07455134391784668
+        [warning] Parameter 'ID' is invalid and will be ignored.
+        [warning] Sweep Sweep1 is already present. Sweep has been renamed in Sweep1_1KV357.
+        [info] Linear count sweep Sweep1_1KV357 has been correctly created.
+        [info] Design validation checks.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260820_154219_136112\candidate_003.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260820_154219_136112\candidate_003.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.05982804298400879
+        [warning] Parameter 'ID' is invalid and will be ignored.
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 52.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260820_154219_136112\candidate_004.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260820_154219_136112\candidate_004.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.08023953437805176
+        [warning] Parameter 'ID' is invalid and will be ignored.
+        [warning] Sweep Sweep1 is already present. Sweep has been renamed in Sweep1_11NKQV.
+        [info] Linear count sweep Sweep1_11NKQV has been correctly created.
+        [info] Design validation checks.
+        [info] Project candidate_004 Saved correctly
+        [info] The project 'candidate_004' has been edited and/or solved. Do you want to save the changes?
+-- Message Window --
+Stopping Batch Run: 3:59:45 PM  Aug 20, 2026

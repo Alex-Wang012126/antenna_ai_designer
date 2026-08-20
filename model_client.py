@@ -31,7 +31,7 @@ class ModelClient(ABC):
     @abstractmethod
     def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: List[Dict[str, Any]],
         tools: Optional[List[Dict[str, Any]]] = None,
     ) -> ChatResponse:
         """向模型发送对话请求，返回模型响应。"""
@@ -88,6 +88,7 @@ class ResponsesModelClient(ModelClient):
                 "name": fn["name"],
                 "description": fn.get("description", ""),
                 "parameters": fn.get("parameters", {"type": "object", "properties": {}}),
+                "strict": bool(fn.get("strict", False)),
             })
         return out
 
@@ -103,12 +104,14 @@ class ResponsesModelClient(ModelClient):
             "input": items,
             # 推理模型的思考也消耗输出额度，16k 容易截断，建议 32000 起
             "max_output_tokens": max(self.config.model_max_completion_tokens, 32000),
-            "reasoning": {"effort": "high"},  # yaml 里是 xhigh；网关不认就保持 high
+            "reasoning": {"effort": self.config.model_reasoning_effort},
+            "parallel_tool_calls": False,
         }
         if instructions:
             payload["instructions"] = instructions
         if tools:
             payload["tools"] = self._convert_tools(tools)
+            payload["tool_choice"] = "required"
 
         print(f"[MODEL] >>> 请求 {url} | model={self.config.model_name} | "
               f"items={len(items)} | tools={len(tools or [])}", flush=True)
@@ -141,6 +144,8 @@ class ResponsesModelClient(ModelClient):
                     arguments = json.loads(raw)
                 except json.JSONDecodeError as e:
                     raise ValueError(f"工具 {item.get('name')} 参数 JSON 解析失败: {e}") from e
+                if not isinstance(arguments, dict):
+                    raise ValueError(f"工具 {item.get('name')} 参数必须是 JSON object")
                 tool_calls.append(ToolCall(name=item["name"], arguments=arguments))
 
         print(f"[MODEL] <<< 回复: content={sum(len(p) for p in content_parts)} 字符 | "
@@ -160,12 +165,12 @@ class OpenAIModelClient(ModelClient):
         self.config = config or default_cfg
         if not self.config.model_api_key:
             raise ValueError(
-                "MODEL_API_KEY 未配置：请在环境变量、.env 或 job_gpt55.yaml 中提供 api_key"
+                "模型 API key 未配置：请通过 MODEL_API_KEY、.env 或 job_gpt55.yaml 提供"
             )
 
     def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: List[Dict[str, Any]],
         tools: Optional[List[Dict[str, Any]]] = None,
     ) -> ChatResponse:
         import time
@@ -181,7 +186,8 @@ class OpenAIModelClient(ModelClient):
         }
         if tools:
             payload["tools"] = tools
-            payload["tool_choice"] = "auto"
+            payload["tool_choice"] = "required"
+            payload["parallel_tool_calls"] = False
 
         print(f"[MODEL] >>> 请求 {url} | model={self.config.model_name} | "
               f"messages={len(messages)} | tools={len(tools or [])}", flush=True)
@@ -214,6 +220,8 @@ class OpenAIModelClient(ModelClient):
                     f"工具 {tc['function']['name']} 的参数 JSON 解析失败: {e}；"
                     f"可能是 max_completion_tokens 截断所致。原始内容: {raw_args[:300]}"
                 ) from e
+            if not isinstance(arguments, dict):
+                raise ValueError(f"工具 {tc['function']['name']} 的参数必须是 JSON object")
             tool_calls.append(ToolCall(name=tc["function"]["name"], arguments=arguments))
         print(f"[MODEL] <<< 回复: content={len(msg.get('content') or '')} 字符 | "
               f"tool_calls={[tc.name for tc in tool_calls] or '无'}", flush=True)
@@ -230,19 +238,42 @@ class PlaceholderModelClient(ModelClient):
         # 演示用的默认“设计”序列
         if demo_sequence is None:
             demo_sequence = [
-                {"name": "set_variable", "arguments": {"name": "patch_length", "value": "28.5mm"}},
-                {"name": "update_geometry", "arguments": {"script": "oEditor.CreateRectangle(...)"}},
-                {"name": "solve", "arguments": {}},
-                {"name": "get_result", "arguments": {"report_name": "S Parameter Plot 1", "solution_name": "Setup1 : Sweep1"}},
-                {"name": "export_design", "arguments": {"file_path": "./hfss_projects/demo_antenna.aedt"}},
-                {"name": "finalize_design", "arguments": {"summary": "Final antenna: patch 28.5 mm, S11 <-10 dB at 2.45 GHz."}},
+                {
+                    "name": "create_patch_antenna",
+                    "arguments": {
+                        "center_frequency_ghz": 2.45,
+                        "substrate_material": "Rogers5880_custom",
+                        "substrate_permittivity": 2.2,
+                        "substrate_loss_tangent": 0.0009,
+                        "substrate_width_mm": 100.0,
+                        "substrate_length_mm": 100.0,
+                        "substrate_height_mm": 3.175,
+                        "patch_width_mm": 48.5,
+                        "patch_length_mm": 39.0,
+                        "feed_width_mm": 9.6,
+                        "inset_depth_mm": 13.5,
+                        "inset_gap_mm": 1.0,
+                        "air_margin_xy_mm": 40.0,
+                        "air_above_mm": 55.0,
+                        "air_below_mm": 25.0,
+                        "sweep_start_ghz": 2.2,
+                        "sweep_stop_ghz": 2.7,
+                        "sweep_points": 251,
+                    },
+                },
+                {
+                    "name": "finalize_design",
+                    "arguments": {
+                        "summary": "Validated 2.45 GHz inset-fed patch; measured S11 -21 dB and 120 MHz bandwidth."
+                    },
+                },
             ]
         self._demo_sequence = demo_sequence
         self._step = 0
 
     def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: List[Dict[str, Any]],
         tools: Optional[List[Dict[str, Any]]] = None,
     ) -> ChatResponse:
         """按顺序返回预设工具调用，循环结束后返回自然语言总结。"""
@@ -259,34 +290,22 @@ class PlaceholderModelClient(ModelClient):
 
 
 class MockErrorModelClient(ModelClient):
-    """用于测试：第三轮故意返回错误/重试行为。"""
+    """Test client that emits one invalid spec before the valid demo workflow."""
 
     def __init__(self):
         self._step = 0
+        self._fallback = PlaceholderModelClient()
 
     def chat(self, messages, tools=None):
         self._step += 1
         if self._step == 1:
             return ChatResponse(
                 content=None,
-                tool_calls=[ToolCall(name="set_variable", arguments={"name": "patch_length", "value": "28.5mm"})],
+                tool_calls=[
+                    ToolCall(
+                        name="create_patch_antenna",
+                        arguments={"center_frequency_ghz": 2.45},
+                    )
+                ],
             )
-        if self._step == 2:
-            return ChatResponse(
-                content=None,
-                tool_calls=[ToolCall(name="update_geometry", arguments={"script": "oEditor.CreateRectangle(...)"})],
-            )
-        if self._step == 3:
-            return ChatResponse(
-                content=None,
-                tool_calls=[ToolCall(name="update_geometry", arguments={"script": "invalid_script"})],
-            )
-        if self._step == 4:
-            return ChatResponse(
-                content="I see the geometry failed; let me reset the variable.",
-                tool_calls=[ToolCall(name="set_variable", arguments={"name": "patch_length", "value": "29.0mm"})],
-            )
-        return ChatResponse(
-            content=None,
-            tool_calls=[ToolCall(name="finalize_design", arguments={"summary": "Recovered after geometry error."})],
-        )
+        return self._fallback.chat(messages, tools)

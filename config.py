@@ -2,8 +2,8 @@
 
 HFSS 相关路径、模型调用参数等都集中在这里。
 配置优先级（高 -> 低）：环境变量 / .env > yaml 配置文件 > 代码默认值。
-模型相关的 key/base_url/model_name 默认从项目根目录下的
-job_gpt55.yaml（可用 MODEL_CONFIG_YAML 指定其他文件）读取。
+模型参数可以从项目根目录下的 job_gpt55.yaml（可用 MODEL_CONFIG_YAML
+指定其他文件）读取；环境变量和 .env 的值优先于 YAML。
 """
 
 import os
@@ -28,7 +28,7 @@ def _load_model_config_from_yaml() -> Dict[str, Any]:
           - model_name: gpt-5.5
             kwargs:
               api_base: https://api.apevon.ai/v1
-              api_key: sk-...
+              api_key: your-api-key
     文件不存在或未安装 PyYAML 时返回空字典，回退到默认值。
     """
     path = Path(__file__).resolve().parent / os.getenv("MODEL_CONFIG_YAML", "job_gpt55.yaml")
@@ -48,11 +48,12 @@ def _load_model_config_from_yaml() -> Dict[str, Any]:
         return {}
     agent = agents[0] or {}
     kwargs = agent.get("kwargs") or {}
-    print(f"模型配置: model_name={agent.get('model_name')}, api_base={kwargs.get('api_base')}, api_key={'已配置' if kwargs.get('api_key') else '未配置'}")
     return {
         "model_name": agent.get("model_name"),
         "model_base_url": kwargs.get("api_base"),
         "model_api_key": kwargs.get("api_key"),
+        "model_max_completion_tokens": kwargs.get("max_completion_tokens"),
+        "model_reasoning_effort": kwargs.get("reasoning_effort"),
     }
 
 
@@ -62,7 +63,7 @@ _yaml_model = _load_model_config_from_yaml()
 @dataclass(frozen=True)
 class Config:
     # ---------------- 模型接口配置 ----------------
-    # 优先取环境变量 / .env；缺省时回退到 yaml 配置；再缺省用代码默认值。
+    # 环境变量 / .env 优先；缺省时回退到 YAML 和代码默认值。
     # 若使用本地模型（如 vLLM / ollama / 私有 API），则按实际情况修改 model_client.py。
     model_api_key: str = os.getenv("MODEL_API_KEY") or _yaml_model.get("model_api_key") or ""
     model_base_url: str = (
@@ -70,7 +71,16 @@ class Config:
     )
     model_name: str = os.getenv("MODEL_NAME") or _yaml_model.get("model_name") or "gpt-5.5"
     model_temperature: float = float(os.getenv("MODEL_TEMPERATURE", "1"))
-    model_max_completion_tokens: int = int(os.getenv("MODEL_max_completion_tokens", "32000"))
+    model_max_completion_tokens: int = int(
+        os.getenv("MODEL_MAX_COMPLETION_TOKENS")
+        or _yaml_model.get("model_max_completion_tokens")
+        or "32000"
+    )
+    model_reasoning_effort: str = (
+        os.getenv("MODEL_REASONING_EFFORT")
+        or _yaml_model.get("model_reasoning_effort")
+        or "high"
+    )
 
     # ---------------- HFSS / AEDT 占位配置 ----------------
     # Ansys Electronics Desktop Student 2025 R2 示例配置
@@ -78,6 +88,8 @@ class Config:
     aedt_student: bool = os.getenv("AEDT_STUDENT", "true").lower() in ("1", "true", "yes")
     # 非图形模式可设置为 True
     aedt_non_graphical: bool = os.getenv("AEDT_NON_GRAPHICAL", "false").lower() in ("1", "true", "yes")
+    # 自动化结束后保留 AEDT 项目和窗口，便于检查成功或失败现场
+    aedt_keep_open: bool = os.getenv("AEDT_KEEP_OPEN", "true").lower() in ("1", "true", "yes")
     # 项目目录：生成的 HFSS 项目文件默认放在这里
     project_dir: Path = Path(os.getenv("PROJECT_DIR", "./hfss_projects"))
     # 默认设计名、求解/扫参名（与 prompts.py 中告知模型的命名约定保持一致）
@@ -91,7 +103,8 @@ class Config:
         return f"{self.default_setup_name} : {self.default_sweep_name}"
 
     # ---------------- 运行控制 ----------------
-    max_design_rounds: int = int(os.getenv("MAX_DESIGN_ROUNDS", "10"))
+    # Maximum number of complete candidate designs proposed by the model.
+    max_design_iterations: int = int(os.getenv("MAX_DESIGN_ITERATIONS", "5"))
     # 仿真次数预算：限制 solve 工具的调用次数，防止模型无限求解
     max_solve_calls: int = int(os.getenv("MAX_SOLVE_CALLS", "5"))
     log_dir: Path = Path(os.getenv("LOG_DIR", "./logs"))

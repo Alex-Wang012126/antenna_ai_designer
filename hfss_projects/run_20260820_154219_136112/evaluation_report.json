@@ -1,0 +1,56 @@
+{
+  "requirements": "设计一个中心频率 2.45 GHz 的微带贴片天线，S11 < -10 dB，-10 dB 带宽 > 100 MHz，峰值增益 > 3 dBi。",
+  "targets": {
+    "target_freq_ghz": 2.45,
+    "max_s11_db": -10.0,
+    "min_bandwidth_mhz": 100.0,
+    "min_gain_dbi": 3.0
+  },
+  "metrics": {
+    "center_freq_ghz": 2.4284,
+    "s11_min_db": -22.409998215868143,
+    "bandwidth_mhz": 113.92897127694845,
+    "peak_gain_dbi": 8.250897116828794,
+    "radiation_efficiency_percent": 1.01342927571948
+  },
+  "checklist": {
+    "center_frequency": true,
+    "return_loss": true,
+    "bandwidth": true,
+    "gain": true
+  },
+  "passed": true,
+  "selected_iteration": 3,
+  "selected_project_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260820_154219_136112\\candidate_003.aedt",
+  "candidate_evaluations": [
+    {
+      "iteration": 4,
+      "pipeline_success": false,
+      "project_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260820_154219_136112\\candidate_004.aedt",
+      "status": "validation_failed",
+      "passed": false,
+      "checklist": {}
+    },
+    {
+      "iteration": 3,
+      "pipeline_success": true,
+      "project_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260820_154219_136112\\candidate_003.aedt",
+      "status": "completed",
+      "passed": true,
+      "checklist": {
+        "center_frequency": true,
+        "return_loss": true,
+        "bandwidth": true,
+        "gain": true
+      },
+      "metrics": {
+        "center_freq_ghz": 2.4284,
+        "s11_min_db": -22.409998215868143,
+        "bandwidth_mhz": 113.92897127694845,
+        "peak_gain_dbi": 8.250897116828794,
+        "radiation_efficiency_percent": 1.01342927571948
+      }
+    }
+  ],
+  "summary": "评测结果：通过\n选中候选: 3\n目标频率: 2.45 GHz, 实际中心频率: 2.4284 GHz\nS11 最小值: -22.409998215868143 dB\n-10 dB 带宽: 113.92897127694845 MHz\n峰值增益: 8.250897116828794 dBi\n辐射效率: 1.01342927571948%\n检查项: {'center_frequency': True, 'return_loss': True, 'bandwidth': True, 'gain': True}"
+}

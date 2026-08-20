@@ -3,23 +3,28 @@
 用法示例（在本目录下运行）：
     python main.py \
         --requirements "设计一个中心频率 2.45 GHz 的微带贴片天线，S11 <-10 dB，带宽 > 100 MHz" \
-        --max-rounds 10
+        --max-design-iterations 10
 
 默认使用真实模型 + 真实 AEDT；加 --use-placeholder 可切换到占位演示模式。
 
 运行后会：
-1. 启动设计循环（模型多次调用 HFSS API）；
-2. 保存完整对话日志；
-3. 调用评测脚本读取/计算指标并生成报告。
+1. 让模型提出完整候选参数或主动结束；
+2. 由 Python 为每个候选自动完成建模、校验、求解、读数和保存；
+3. 由独立评测器从新到旧寻找第一个达标候选并生成报告。
 """
 import os
 # 学生版 2025 R2 必须：强制使用 legacy "-grpcsrv <port>" 启动方式（官方 workaround）
-os.environ["PYAEDT_USE_PRE_GRPC_ARGS"] = "True"
+os.environ.setdefault("PYAEDT_USE_PRE_GRPC_ARGS", "True")
 # 正确的学生版安装路径变量名（原来写的是 ANSYSEM_ROOTSV252，顺序反了）
-os.environ["ANSYSEMSV_ROOT252"] = r"C:\ANSYS Inc\ANSYS Student\v252\AnsysEM"
+os.environ.setdefault(
+    "ANSYSEMSV_ROOT252",
+    os.getenv("AEDT_ROOT", r"C:\ANSYS Inc\ANSYS Student\v252\AnsysEM"),
+)
 
 import argparse
 import sys
+from dataclasses import replace
+from datetime import datetime
 
 from config import cfg
 from design_loop import DesignAgent
@@ -37,10 +42,18 @@ def parse_args() -> argparse.Namespace:
         help="天线设计需求描述",
     )
     parser.add_argument(
+        "--max-design-iterations",
         "--max-rounds",
+        dest="max_design_iterations",
         type=int,
-        default=cfg.max_design_rounds,
-        help="最大设计轮次",
+        default=cfg.max_design_iterations,
+        help="最多生成并完整仿真的候选设计数量（--max-rounds 为兼容别名）",
+    )
+    parser.add_argument(
+        "--max-solve-calls",
+        type=int,
+        default=cfg.max_solve_calls,
+        help="最大 HFSS 求解次数",
     )
     parser.add_argument(
         "--use-placeholder",
@@ -52,26 +65,39 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    if args.max_design_iterations < 1 or args.max_solve_calls < 1:
+        raise SystemExit("--max-design-iterations 和 --max-solve-calls 必须大于 0")
+    run_id = datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
+    run_dir = cfg.project_dir.expanduser().resolve() / run_id
+    runtime_config = replace(
+        cfg,
+        project_dir=run_dir,
+        log_dir=run_dir,
+        max_design_iterations=args.max_design_iterations,
+        max_solve_calls=args.max_solve_calls,
+    )
 
     mode = "占位模式" if args.use_placeholder else "真实模式（模型 + AEDT）"
     print("=" * 60)
     print(f"天线 AI 设计工具 [{mode}]")
     print("=" * 60)
     print(f"需求: {args.requirements}")
-    print(f"仿真次数预算: {cfg.max_solve_calls}\n")
+    print(f"候选设计迭代上限: {args.max_design_iterations}")
+    print(f"仿真次数预算: {runtime_config.max_solve_calls}\n")
 
     if args.use_placeholder:
         model_client = PlaceholderModelClient()
         hfss_client = PlaceholderHFSSClient()
     else:
         # 真实模式：先回显关键配置，连不上/调不通时方便排查
-        print(f"模型: {cfg.model_name} @ {cfg.model_base_url}")
-        key = cfg.model_api_key
-        print(f"模型 API key: {'已配置（尾号 ' + key[-4:] + '）' if key else '未配置！请设置 MODEL_API_KEY 或在 job yaml 中提供'}")
-        print(f"AEDT: version={cfg.aedt_version}, student={cfg.aedt_student}, "
-              f"non_graphical={cfg.aedt_non_graphical}")
-        print(f"项目目录: {cfg.project_dir.resolve()}\n")
-        model_client = ResponsesModelClient(cfg)
+        print(f"模型: {runtime_config.model_name} @ {runtime_config.model_base_url}")
+        key = runtime_config.model_api_key
+        print(f"模型 API key: {'已配置' if key else '未配置！请设置 MODEL_API_KEY 或 .env'}")
+        print(f"AEDT: version={runtime_config.aedt_version}, student={runtime_config.aedt_student}, "
+              f"non_graphical={runtime_config.aedt_non_graphical}, "
+              f"keep_open={runtime_config.aedt_keep_open}")
+        print(f"项目目录: {runtime_config.project_dir.resolve()}\n")
+        model_client = ResponsesModelClient(runtime_config)
         hfss_client = PyAEDTHFSSClient()
 
     # 阶段 1：设计循环
@@ -79,31 +105,35 @@ def main() -> int:
         model_client=model_client,
         hfss_client=hfss_client,
         requirements=args.requirements,
-        config=cfg,
+        config=runtime_config,
     )
-    design_result = agent.run(max_rounds=args.max_rounds)
+    design_result = agent.run(max_iterations=args.max_design_iterations)
 
     print("\n" + "=" * 60)
     print("设计结果")
     print("=" * 60)
     print(f"是否完成: {design_result.success}")
-    print(f"使用轮次: {design_result.rounds_used}")
+    print(f"候选迭代次数: {design_result.iterations_used}")
     print(f"最终总结:\n{design_result.final_summary}")
     print(f"日志文件: {design_result.log_file}")
     print(f"指标文件: {design_result.metrics_file}")
+    print(f"候选清单: {design_result.manifest_file}")
 
     # 阶段 2：评测（离线读取设计循环落盘的指标文件，无需重连 AEDT）
-    evaluator = AntennaEvaluator(config=cfg)
+    evaluator = AntennaEvaluator(config=runtime_config)
     eval_result = evaluator.evaluate(
         requirements=args.requirements,
         design_file=None,
         metrics_file=design_result.metrics_file,
+        manifest_file=design_result.manifest_file,
     )
 
     print("\n" + "=" * 60)
     print("评测结果")
     print("=" * 60)
     print(eval_result.summary)
+    if eval_result.selected_project_file:
+        print(f"最终选中工程: {eval_result.selected_project_file}")
 
     return 0 if design_result.success and eval_result.passed else 1
 

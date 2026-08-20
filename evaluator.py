@@ -12,10 +12,10 @@
 import json
 import re
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from config import Config, cfg
 from hfss_client import HFSSClient
@@ -28,6 +28,10 @@ class EvaluationResult:
     metrics: Dict[str, Any]
     checklist: Dict[str, bool]
     summary: str
+    selected_iteration: Optional[int] = None
+    selected_project_file: Optional[Path] = None
+    report_file: Optional[Path] = None
+    candidate_evaluations: List[Dict[str, Any]] = field(default_factory=list)
 
 
 class Evaluator(ABC):
@@ -40,6 +44,7 @@ class Evaluator(ABC):
         design_file: Optional[Union[str, Path]] = None,
         hfss_client: Optional[HFSSClient] = None,
         metrics_file: Optional[Union[str, Path]] = None,
+        manifest_file: Optional[Union[str, Path]] = None,
     ) -> EvaluationResult:
         """对设计进行评测。"""
         raise NotImplementedError
@@ -92,31 +97,12 @@ class AntennaEvaluator(Evaluator):
             targets["min_gain_dbi"] = float(m.group(1))
         return targets
 
-    def evaluate(
-        self,
-        requirements: str,
-        design_file: Optional[Union[str, Path]] = None,
-        hfss_client: Optional[HFSSClient] = None,
-        metrics_file: Optional[Union[str, Path]] = None,
-    ) -> EvaluationResult:
-        targets = self._extract_targets(requirements)
-
-        # 指标来源优先级：落盘的指标文件（设计循环结束时导出）> 在线 HFSS 客户端。
-        # 两者都没有时不编造数据——缺失指标会直接判为不通过。
-        metrics: Dict[str, Any] = {}
-        if metrics_file is not None:
-            try:
-                metrics = json.loads(Path(metrics_file).read_text(encoding="utf-8"))
-            except Exception as e:
-                print(f"[评测] 读取指标文件失败: {e}")
-        elif hfss_client is not None:
-            metrics_result = hfss_client.get_metrics()
-            if metrics_result.success:
-                metrics = metrics_result.data or {}
-
-        # 判定是否通过：指标缺失（None）一律判失败，不给"白捡"的默认值
+    @staticmethod
+    def _check_metrics(
+        metrics: Dict[str, Any],
+        targets: Dict[str, Optional[float]],
+    ) -> Dict[str, bool]:
         checklist: Dict[str, bool] = {}
-
         if targets["target_freq_ghz"] is not None:
             center = metrics.get("center_freq_ghz")
             checklist["center_frequency"] = (
@@ -127,16 +113,101 @@ class AntennaEvaluator(Evaluator):
 
         s11 = metrics.get("s11_min_db")
         checklist["return_loss"] = s11 is not None and s11 <= targets["max_s11_db"]
-
-        bw = metrics.get("bandwidth_mhz")
-        checklist["bandwidth"] = bw is not None and bw >= targets["min_bandwidth_mhz"]
-
+        bandwidth = metrics.get("bandwidth_mhz")
+        checklist["bandwidth"] = (
+            bandwidth is not None and bandwidth >= targets["min_bandwidth_mhz"]
+        )
         gain = metrics.get("peak_gain_dbi")
         checklist["gain"] = gain is not None and gain >= targets["min_gain_dbi"]
+        return checklist
+
+    @staticmethod
+    def _candidate_metrics(candidate: Dict[str, Any]) -> Dict[str, Any]:
+        metrics = candidate.get("metrics") or {}
+        if metrics:
+            return metrics
+        metrics_file = candidate.get("metrics_file")
+        if metrics_file:
+            try:
+                return json.loads(Path(metrics_file).read_text(encoding="utf-8"))
+            except Exception:
+                return {}
+        return {}
+
+    def evaluate(
+        self,
+        requirements: str,
+        design_file: Optional[Union[str, Path]] = None,
+        hfss_client: Optional[HFSSClient] = None,
+        metrics_file: Optional[Union[str, Path]] = None,
+        manifest_file: Optional[Union[str, Path]] = None,
+    ) -> EvaluationResult:
+        targets = self._extract_targets(requirements)
+
+        metrics: Dict[str, Any] = {}
+        checklist: Dict[str, bool] = {}
+        selected_iteration: Optional[int] = None
+        selected_project_file: Optional[Path] = None
+        candidate_evaluations: List[Dict[str, Any]] = []
+
+        if manifest_file is not None:
+            try:
+                manifest = json.loads(Path(manifest_file).read_text(encoding="utf-8"))
+                candidates = list(manifest.get("candidates") or [])
+            except Exception as e:
+                print(f"[评测] 读取候选清单失败: {e}")
+                candidates = []
+
+            latest_completed: Optional[Dict[str, Any]] = None
+            passing_candidate: Optional[Dict[str, Any]] = None
+            for candidate in reversed(candidates):
+                evaluation = {
+                    "iteration": candidate.get("iteration"),
+                    "pipeline_success": bool(candidate.get("success")),
+                    "project_file": candidate.get("project_file"),
+                    "status": candidate.get("status"),
+                    "passed": False,
+                    "checklist": {},
+                }
+                if candidate.get("success"):
+                    latest_completed = latest_completed or candidate
+                    candidate_metrics = self._candidate_metrics(candidate)
+                    candidate_checklist = self._check_metrics(candidate_metrics, targets)
+                    evaluation["metrics"] = candidate_metrics
+                    evaluation["checklist"] = candidate_checklist
+                    evaluation["passed"] = all(candidate_checklist.values())
+                    if evaluation["passed"] and passing_candidate is None:
+                        passing_candidate = candidate
+                candidate_evaluations.append(evaluation)
+                if passing_candidate is not None:
+                    break
+
+            selected = passing_candidate or latest_completed
+            if selected is not None:
+                metrics = self._candidate_metrics(selected)
+                checklist = self._check_metrics(metrics, targets)
+                selected_iteration = selected.get("iteration")
+                if selected.get("project_file"):
+                    selected_project_file = Path(selected["project_file"])
+        elif metrics_file is not None:
+            try:
+                metrics = json.loads(Path(metrics_file).read_text(encoding="utf-8"))
+            except Exception as e:
+                print(f"[评测] 读取指标文件失败: {e}")
+        elif hfss_client is not None:
+            metrics_result = hfss_client.get_metrics()
+            if metrics_result.success:
+                metrics = metrics_result.data or {}
+
+        if not checklist:
+            checklist = self._check_metrics(metrics, targets)
 
         passed = all(checklist.values())
+        s11 = metrics.get("s11_min_db")
+        bw = metrics.get("bandwidth_mhz")
         summary = (
             f"评测结果：{'通过' if passed else '未通过'}\n"
+            f"选中候选: {selected_iteration if selected_iteration is not None else '无'}\n"
             f"目标频率: {targets['target_freq_ghz']} GHz, "
             f"实际中心频率: {metrics.get('center_freq_ghz')} GHz\n"
             f"S11 最小值: {s11} dB\n"
@@ -146,10 +217,12 @@ class AntennaEvaluator(Evaluator):
             f"检查项: {checklist}"
         )
 
-        # 保存评测报告（带时间戳，避免多次运行互相覆盖）
         self.config.ensure_dirs()
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-        report_file = self.config.log_dir / f"evaluation_report_{timestamp}.json"
+        report_file = (
+            Path(manifest_file).resolve().parent / "evaluation_report.json"
+            if manifest_file is not None
+            else self.config.log_dir / f"evaluation_report_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.json"
+        )
         report_file.write_text(
             json.dumps(
                 {
@@ -158,6 +231,9 @@ class AntennaEvaluator(Evaluator):
                     "metrics": metrics,
                     "checklist": checklist,
                     "passed": passed,
+                    "selected_iteration": selected_iteration,
+                    "selected_project_file": str(selected_project_file) if selected_project_file else None,
+                    "candidate_evaluations": candidate_evaluations,
                     "summary": summary,
                 },
                 ensure_ascii=False,
@@ -168,4 +244,13 @@ class AntennaEvaluator(Evaluator):
         )
         print(f"[评测报告已保存] {report_file}")
 
-        return EvaluationResult(passed=passed, metrics=metrics, checklist=checklist, summary=summary)
+        return EvaluationResult(
+            passed=passed,
+            metrics=metrics,
+            checklist=checklist,
+            summary=summary,
+            selected_iteration=selected_iteration,
+            selected_project_file=selected_project_file,
+            report_file=report_file,
+            candidate_evaluations=candidate_evaluations,
+        )

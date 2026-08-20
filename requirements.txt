@@ -2,10 +2,9 @@
 requests>=2.31.0
 
 # HFSS / AEDT 控制（真实模式需要；PyAEDT 新包名为 ansys-aedt-core）
-pyaedt<=0.19.0
+ansys-aedt-core==0.19.0
 
 # 基础依赖
-Python<=3.11
 python-dotenv>=1.0.0
 PyYAML>=6.0           # 读取 job_kimi_k3.yaml 中的模型配置
 numpy>=1.24           # 真实客户端计算 S11/带宽等指标（pyaedt 也会依赖它）
