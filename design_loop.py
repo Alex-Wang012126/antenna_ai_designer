@@ -148,7 +148,7 @@ class DesignAgent:
 
         try:
             while self.rounds_used < max_rounds and not self._finalized:
-                # 调用模型；API 报错或工具参数 JSON 被 max_completion_tokens 截断时，
+                # 调用模型；API 报错或工具参数 JSON 被输出长度截断时，
                 # 记录原因并跳出循环，对话日志仍会在 finally 中落盘
                 tools = build_tools_description()
                 try:
@@ -205,20 +205,25 @@ class DesignAgent:
                 final_summary = f"达到最大轮次 ({max_rounds})，强制结束。"
 
             # 断开连接前把指标落盘，评测脚本离线读取该文件即可，
-            # 无需为评测第二次拉起 AEDT
-            try:
-                m = self.hfss.get_metrics()
-                if m.success and m.data:
-                    metrics_file = self.config.log_dir / f"metrics_{timestamp}.json"
-                    metrics_file.write_text(
-                        json.dumps(m.data, ensure_ascii=False, indent=2, default=str),
-                        encoding="utf-8",
-                    )
-                    print(f"\n[指标已保存] {metrics_file}")
-                else:
-                    print(f"\n[指标读取失败] {m.message}")
-            except Exception as exc:
-                print(f"\n[指标读取异常] {type(exc).__name__}: {exc}")
+            # 无需为评测第二次拉起 AEDT。
+            # 只有真正执行过 solve 才有仿真数据可读；未求解时直接跳过，
+            # 避免读取不存在的 Setup/Sweep 刷出大量无意义报错
+            if self._solve_count > 0:
+                try:
+                    m = self.hfss.get_metrics()
+                    if m.success and m.data:
+                        metrics_file = self.config.log_dir / f"metrics_{timestamp}.json"
+                        metrics_file.write_text(
+                            json.dumps(m.data, ensure_ascii=False, indent=2, default=str),
+                            encoding="utf-8",
+                        )
+                        print(f"\n[指标已保存] {metrics_file}")
+                    else:
+                        print(f"\n[指标读取失败] {m.message}")
+                except Exception as exc:
+                    print(f"\n[指标读取异常] {type(exc).__name__}: {exc}")
+            else:
+                print("\n[指标跳过] 本次未执行 solve，无仿真数据可读")
 
         finally:
             try:

@@ -410,3 +410,285 @@ Starting Batch Run: 6:36:47 PM  Aug 19, 2026
 Running as user : LAPTOP-RVKO6ORH\user
 Temp directory: C:\temp
 Project directory: C:\Users\user\Documents\Ansoft
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 9:20:31 AM  Aug 20, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 57730 of local host. Only connections from the local host initiated by the same user are permitted. 
+-- Message Window --
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 9:22:34 AM  Aug 20, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 55938 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project eval_design_20260820_092233 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_092233.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_092233.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.0697622299194336
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 210, in run
+        [error]     m = self.hfss.get_metrics()
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 502, in get_metrics
+        [error]     freq, s11 = self._s11_curve()
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 309, in _s11_curve
+        [error]     data = self._hfss.post.get_solution_data(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1590, in get_solution_data
+        [error]     report = self._get_report_object(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1162, in _get_report_object
+        [error]     raise KeyError(f"Setup {setup_name} not available in current design.")
+        [error] 'setup setup1 not available in current design.' on _get_report_object
+        [error] Last Electronics Desktop Message - [error] 'setup setup1 not available in current design.' on _get_report_object  
+        [error] Method arguments: 
+        [error]     expressions = dB(S(1,1)) 
+        [error]     setup_sweep_name = Setup1 : Sweep1 
+        [error]     polyline_points = 1001 
+        [error] **************************************************************
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 210, in run
+        [error]     m = self.hfss.get_metrics()
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 502, in get_metrics
+        [error]     freq, s11 = self._s11_curve()
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 309, in _s11_curve
+        [error]     data = self._hfss.post.get_solution_data(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1605, in get_solution_data
+        [error]     return report.get_solution_data()
+        [error]            ^^^^^^^^^^^^^^^^^^^^^^^^
+        [error] 'bool' object has no attribute 'get_solution_data' on get_solution_data
+        [error] Last Electronics Desktop Message - [error] 'bool' object has no attribute 'get_solution_data' on get_solution_data  
+        [error] Method arguments: 
+        [error]     expressions = dB(S(1,1)) 
+        [error]     setup_sweep_name = Setup1 : Sweep1 
+        [error] **************************************************************
+        [info] Project eval_design_20260820_092233 Saved correctly
+-- Message Window --
+Stopping Batch Run: 9:23:59 AM  Aug 20, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 9:26:24 AM  Aug 20, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 52559 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project eval_design_20260820_092622 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_092622.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_092622.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.026649951934814453
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 210, in run
+        [error]     m = self.hfss.get_metrics()
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 502, in get_metrics
+        [error]     freq, s11 = self._s11_curve()
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 309, in _s11_curve
+        [error]     data = self._hfss.post.get_solution_data(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1590, in get_solution_data
+        [error]     report = self._get_report_object(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1162, in _get_report_object
+        [error]     raise KeyError(f"Setup {setup_name} not available in current design.")
+        [error] 'setup setup1 not available in current design.' on _get_report_object
+        [error] Last Electronics Desktop Message - [error] 'setup setup1 not available in current design.' on _get_report_object  
+        [error] Method arguments: 
+        [error]     expressions = dB(S(1,1)) 
+        [error]     setup_sweep_name = Setup1 : Sweep1 
+        [error]     polyline_points = 1001 
+        [error] **************************************************************
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 210, in run
+        [error]     m = self.hfss.get_metrics()
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 502, in get_metrics
+        [error]     freq, s11 = self._s11_curve()
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 309, in _s11_curve
+        [error]     data = self._hfss.post.get_solution_data(
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\visualization\post\common.py", line 1605, in get_solution_data
+        [error]     return report.get_solution_data()
+        [error]            ^^^^^^^^^^^^^^^^^^^^^^^^
+        [error] 'bool' object has no attribute 'get_solution_data' on get_solution_data
+        [error] Last Electronics Desktop Message - [error] 'bool' object has no attribute 'get_solution_data' on get_solution_data  
+        [error] Method arguments: 
+        [error]     expressions = dB(S(1,1)) 
+        [error]     setup_sweep_name = Setup1 : Sweep1 
+        [error] **************************************************************
+        [info] Project eval_design_20260820_092622 Saved correctly
+-- Message Window --
+Stopping Batch Run: 9:26:52 AM  Aug 20, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 9:41:45 AM  Aug 20, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 9:44:56 AM  Aug 20, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 10:30:14 AM  Aug 20, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 55866 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project eval_design_20260820_103013 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: Rogers5880_custom
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 188, in run
+        [error]     result = self._execute_tool(tool_call)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 86, in _execute_tool
+        [error]     return self.hfss.update_geometry(args["script"])
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 278, in update_geometry
+        [error]     exec(script, {"hfss": self._hfss})
+        [error]   File "<string>", line 85, in <module>
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 6788, in lumped_port
+        [error]     return self._create_lumped_driven(sheet_name, point0, point1, impedance, name, renormalize, deembed)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 437, in _create_lumped_driven
+        [error]     return self._create_boundary(port_name, props, "Lumped Port")
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 251, in _create_boundary
+        [error]     return super()._create_boundary(name, props, boundary_type)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\mixins.py", line 73, in _create_boundary
+        [error]     if not bound.create():
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\boundary\common.py", line 516, in create
+        [error]     self._app.oboundary.AssignLumpedPort(self._get_args())
+        [error] AEDT API Error on create
+        [error] Last Electronics Desktop Message - [error] script macro error: port 'port1': length of port lines must be greater than zero. (10:32:30 am  aug 20, 2026)  
+        [error] **************************************************************
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 188, in run
+        [error]     result = self._execute_tool(tool_call)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 86, in _execute_tool
+        [error]     return self.hfss.update_geometry(args["script"])
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 278, in update_geometry
+        [error]     exec(script, {"hfss": self._hfss})
+        [error]   File "<string>", line 85, in <module>
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 6788, in lumped_port
+        [error]     return self._create_lumped_driven(sheet_name, point0, point1, impedance, name, renormalize, deembed)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 437, in _create_lumped_driven
+        [error]     return self._create_boundary(port_name, props, "Lumped Port")
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 251, in _create_boundary
+        [error]     return super()._create_boundary(name, props, boundary_type)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\mixins.py", line 74, in _create_boundary
+        [error]     raise AEDTRuntimeError(f"Failed to create boundary {boundary_type} {name}")
+        [error] Failed to create boundary lumped port port1 on _create_boundary
+        [error] Last Electronics Desktop Message - [error] script macro error: port 'port1': length of port lines must be greater than zero. (10:32:30 am  aug 20, 2026)  
+        [error] Method arguments: 
+        [error]     name = Port1 
+        [error]     props = {'Objects': ['Port1_sheet'], 'DoDeembed': False, 'RenormalizeAllTerminals': True, 'Modes': {'Mode1': {'ModeNum': 1, 'UseIntLine': True, 'IntLine': {'Start': ['0mmmm', '-50mmmm', '0mmmm'], 'End': ['0mmmm', '-50mmmm', '3.175mmmm']}, 'Alignm
+        [error] entGroup': 0, 'CharImp': 'Zpi', 'RenormImp': '50ohm'}}, 'ShowReporterFilter': False, 'ReporterFilter': [True], 'Impedance': '50ohm'} 
+        [error]     boundary_type = Lumped Port 
+        [error] **************************************************************
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_103013.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\eval_design_20260820_103013.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.05803823471069336
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 188, in run
+        [error]     result = self._execute_tool(tool_call)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 86, in _execute_tool
+        [error]     return self.hfss.update_geometry(args["script"])
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 278, in update_geometry
+        [error]     exec(script, {"hfss": self._hfss})
+        [error]   File "<string>", line 114, in <module>
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 1925, in create_linear_count_sweep
+        [error]     sweepdata = setupdata.add_sweep(name, sweep_type)
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\solve_setup.py", line 2934, in add_sweep
+        [error]     sweep_n.create()
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\solve_sweeps.py", line 324, in create
+        [error]     self.oanalysis.InsertFrequencySweep(self.setup_name, self._get_args())
+        [error] AEDT API Error on create
+        [error] Last Electronics Desktop Message - [error] script macro error: solution setup 'setup1', sweep 'sweep1': interpolating sweeps are not supported for problems with no ports. (10:32:32 am  aug 20, 2026)  
+        [error] **************************************************************
+        [error] **************************************************************
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 112, in <module>
+        [error]     sys.exit(main())
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\main.py", line 84, in main
+        [error]     design_result = agent.run(max_rounds=args.max_rounds)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 188, in run
+        [error]     result = self._execute_tool(tool_call)
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\design_loop.py", line 86, in _execute_tool
+        [error]     return self.hfss.update_geometry(args["script"])
+        [error]   File "C:\Users\user\Downloads\antenna_ai_designer\hfss_client.py", line 278, in update_geometry
+        [error]     exec(script, {"hfss": self._hfss})
+        [error]   File "<string>", line 114, in <module>
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\hfss.py", line 1941, in create_linear_count_sweep
+        [error]     sweepdata.update()
+        [error]   File "C:\Users\user\.conda\envs\pyaedt192\Lib\site-packages\ansys\aedt\core\modules\solve_sweeps.py", line 337, in update
+        [error]     self.oanalysis.EditFrequencySweep(self.setup_name, self.name, self._get_args())
+        [error] AEDT API Error on update
+        [error] Last Electronics Desktop Message - [error] script macro error: there is no sweep named 'sweep1'. (10:32:32 am  aug 20, 2026)  
+        [error] **************************************************************
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Project eval_design_20260820_103013 Saved correctly
+      eval_design_20260820_103013 (C:/Users/user/Downloads/antenna_ai_designer/hfss_projects/)
+        antenna (Modal Network)
+          [error] Script macro error: Port 'Port1': Length of port lines must be greater than zero. (10:32:30 AM  Aug 20, 2026)
+          [error] Script macro error: Solution Setup 'Setup1', Sweep 'Sweep1': Interpolating sweeps are not supported for problems with no ports. (10:32:32 AM  Aug 20, 2026)
+          [error] Script macro error: There is no sweep named 'Sweep1'. (10:32:32 AM  Aug 20, 2026)
+-- Message Window --

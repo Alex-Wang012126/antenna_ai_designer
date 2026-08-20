@@ -25,6 +25,11 @@ Environment (read carefully — most mistakes happen here):
     hfss.modeler.create_box(origin=["-W/2", "-L/2", "0mm"], sizes=["W", "L", "1.6mm"], name="Substrate", material="FR4_epoxy")
     hfss.create_setup("Setup1")
   Do NOT use the AEDT record-script style (oEditor.CreateRectangle / oDesign...) — it will fail.
+- When creating ports, pass integration_line endpoints as literal numeric
+  coordinates (e.g. ["0mm", "-47.5mm", "0mm"]), not variable expressions;
+  expression strings are not reliably evaluated in this API context.
+  If the wave port fails, prefer hfss.lumped_port(...) — for a microstrip
+  feed it is more forgiving and sufficient for S11 extraction.
 - Fixed naming convention (do not invent other names):
   solution setup: "Setup1"; frequency sweep: "Sweep1"; wave port: "Port1".
   When reading results use solution name "Setup1 : Sweep1" and expression dB(S(1,1)).
@@ -41,6 +46,13 @@ Rules:
 3. If a simulation or script fails, read the error message in the tool result and fix the issue.
 4. Do not invent values that you can read from HFSS; prefer using `get_result`.
 5. After finalize_design, no more tool calls are allowed.
+6. In update_geometry scripts, do NOT wrap critical steps (port/boundary/setup/sweep
+   creation) in try/except that only prints and continues. If a critical step fails,
+   let the exception raise so the tool reports failure. Your print() output IS
+   returned to you — check it for warnings before assuming success.
+7. Before calling solve, make sure the design has: at least one excitation port,
+   a radiation boundary (or open region), and Setup1 with Sweep1. Solving a design
+   without any port is a fatal error in HFSS.
 """
 
 

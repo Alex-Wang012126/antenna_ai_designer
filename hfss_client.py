@@ -231,7 +231,7 @@ class PyAEDTHFSSClient(HFSSClient):
             try:
                 _dbg(">>> disconnect: 保存项目并释放 AEDT ...")
                 self._hfss.save_project()
-                self._hfss.release_desktop(close_projects=True, close_desktop=True)
+                self._hfss.release_desktop(close_projects=False, close_desktop=False)
                 _dbg("<<< AEDT 已释放")
             finally:
                 self._hfss = None
@@ -269,19 +269,26 @@ class PyAEDTHFSSClient(HFSSClient):
     # ---------- 建模（Agent 多轮迭代的核心入口） ----------
 
     def update_geometry(self, script: str) -> HFSSResult:
-        """执行模型生成的 pyaedt 脚本。脚本中可直接使用变量 `hfss`。"""
         self._check_connected()
         _dbg(f">>> update_geometry: 脚本 {len(script)} 字符，开头: {script[:120]!r}")
+        import contextlib, io, traceback
+        buf = io.StringIO()
         try:
-            exec(script, {"hfss": self._hfss})
+            with contextlib.redirect_stdout(buf):   # 捕获脚本内 print
+                exec(script, {"hfss": self._hfss})
+            out = buf.getvalue().strip()
             _dbg("<<< update_geometry 成功")
-            return HFSSResult(success=True, message="脚本执行成功")
+            # 脚本输出一并回报给模型；若输出里带 warning/failed 字样，模型能自己察觉
+            msg = "脚本执行成功。"
+            if out:
+                msg += f"\n脚本输出:\n{out[-2000:]}"   # 截断防爆长度
+            return HFSSResult(success=True, message=msg)
         except Exception as e:
-            # 把完整异常反馈给模型，这是迭代修正的关键信息
-            import traceback
+            out = buf.getvalue().strip()
             _dbg(f"<<< update_geometry 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False,
-                              message=f"{type(e).__name__}: {e}\n{traceback.format_exc(limit=3)}")
+                              message=f"{type(e).__name__}: {e}\n脚本输出:\n{out[-1000:]}\n"
+                                      f"{traceback.format_exc(limit=3)}")
 
     # ---------- 求解 ----------
 
@@ -291,11 +298,18 @@ class PyAEDTHFSSClient(HFSSClient):
         _dbg(f">>> solve: analyze_setup({name})（阻塞式，可能需要几分钟）...")
         t0 = datetime.now()
         try:
-            self._hfss.analyze_setup(name)   # 阻塞式，直到求解完成
+            ok = self._hfss.analyze_setup(name)   # 返回 False 即求解失败
             elapsed = (datetime.now() - t0).total_seconds()
+            if not ok:
+                _dbg(f"<<< solve 失败: {name}，耗时 {elapsed:.1f}s（HFSS 报错，常见原因：无激励端口/网格失败）")
+                return HFSSResult(
+                    success=False,
+                    message=(f"求解失败: {name}。HFSS 报告了致命错误，常见原因："
+                             "设计中没有任何激励端口、边界条件缺失或网格剖分失败。"
+                             "请检查端口/边界是否创建成功，修复后再求解。"),
+                )
             _dbg(f"<<< solve 完成: {name}，耗时 {elapsed:.1f}s")
-            return HFSSResult(success=True, data={"solution": name},
-                              message=f"求解完成: {name}")
+            return HFSSResult(success=True, data={"solution": name}, message=f"求解完成: {name}")
         except Exception as e:
             _dbg(f"<<< solve 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False, message=f"求解失败: {type(e).__name__}: {e}")
@@ -310,7 +324,7 @@ class PyAEDTHFSSClient(HFSSClient):
             expressions="dB(S(1,1))",
             setup_sweep_name=setup_sweep,
         )
-        if data is None:
+        if not data or not hasattr(data, "data_real"):
             raise RuntimeError(
                 f"未取到 S(1,1) 数据（{setup_sweep}），请确认已完成求解且 Setup/Sweep 名称正确"
             )

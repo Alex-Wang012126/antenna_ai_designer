@@ -1,44 +1,44 @@
 $begin '$base_index$'
   $begin 'properties'
     all_levels=000000000000
-    time(year=000000002026, month=000000000008, day=000000000019, hour=000000000018, min=000000000038, sec=000000000029)
+    time(year=000000002026, month=000000000008, day=000000000020, hour=000000000010, min=000000000032, sec=000000000033)
     version=000000000000
   $end 'properties'
   $begin '$base_index$'
-    $index$(pos=000000002534, lin=000000000084, lvl=000000000000)
+    $index$(pos=000000002496, lin=000000000084, lvl=000000000000)
   $end '$base_index$'
 $end '$base_index$'
 $begin 'SolutionBlock1'
 	ProductName=''
 	CircuitName='antenna'
-	VersionID=17
+	VersionID=16
 	PostProcess=false
 	LossLess=true
-	NextUniqueID=71
+	NextUniqueID=70
 	MoveBackwards=false
 	$begin 'VariationIDs'
-		Map(V='air_margin_xy=\'35mm\' air_margin_z=\'45mm\' f0=\'2.4500000000000002GHz\' feed_W=\'9.5999999999999996mm\' gap=\'1mm\' h_sub=\'3.1749999999999998mm\' inset_D=\'12.199999999999999mm\' patch_L=\'39.200000000000003mm\' patch_W=\'40mm\' sub_L=\'100mm\' sub_W=\'100mm\' t_cu=\'0.035000000000000003mm\'', ID=23)
+		Map(V='air_above=\'55mm\' air_below=\'25mm\' air_margin=\'40mm\' feed_w=\'9.5999999999999996mm\' freq0=\'2.4500000000000002GHz\' inset_d=\'13.5mm\' notch_gap=\'1mm\' patch_l=\'39mm\' patch_w=\'48.5mm\' sub_h=\'3.1749999999999998mm\' sub_l=\'100mm\' sub_w=\'100mm\'', ID=22)
 	$end 'VariationIDs'
 	$begin 'LinkedDataList'
 	$end 'LinkedDataList'
-	MeshAssemVersionID=18
+	MeshAssemVersionID=16
 	$begin 'NextAssemVersionID'
-		NextUniqueID=19
+		NextUniqueID=17
 		MoveBackwards=false
 	$end 'NextAssemVersionID'
 	$begin 'MI'
 	$end 'MI'
-	VersionID2=18
+	VersionID2=17
 $end 'SolutionBlock1'
 $begin 'BlockMapName'
 	FileHeader='SolutionBlock1'
-	'SolutionKey(SimSetup=20, Instance=\'SetupDefinition\', Solution=-1, VersionID=0)'='SolutionBlock4'
-	'SolutionKey(SimSetup=20, Instance=\'SolutionDefinition\', Solution=21, VersionID=0)'='SolutionBlock2'
-	'SolutionKey(SimSetup=20, Instance=\'SolutionDefinition\', Solution=22, VersionID=26)'='SolutionBlock3'
+	'SolutionKey(SimSetup=19, Instance=\'SetupDefinition\', Solution=-1, VersionID=0)'='SolutionBlock4'
+	'SolutionKey(SimSetup=19, Instance=\'SolutionDefinition\', Solution=20, VersionID=0)'='SolutionBlock2'
+	'SolutionKey(SimSetup=19, Instance=\'SolutionDefinition\', Solution=21, VersionID=25)'='SolutionBlock3'
 $end 'BlockMapName'
 $begin 'SolutionBlock2'
 	SolutionName='AdaptivePass'
-	SolutionID=21
+	SolutionID=20
 	V=0
 	$begin 'States'
 	$end 'States'
@@ -56,8 +56,8 @@ $begin 'SolutionBlock2'
 $end 'SolutionBlock2'
 $begin 'SolutionBlock3'
 	SolutionName='LastAdaptive'
-	SolutionID=22
-	V=26
+	SolutionID=21
+	V=25
 	$begin 'States'
 	$end 'States'
 	$begin 'Definition'
@@ -73,7 +73,7 @@ $begin 'SolutionBlock3'
 	KeepAllFastSweepFields=false
 $end 'SolutionBlock3'
 $begin 'SolutionBlock4'
-	SimSetupID=20
+	SimSetupID=19
 	SimSetupName='Setup1'
 	VersionID=0
 	IsImported=false
@@ -93,12 +93,12 @@ $begin 'SolutionBlock4'
 $end 'SolutionBlock4'
 $begin '$index$'
 	$begin '$index$'
-		SolutionBlock2(pos=1486, lin=29, lvl=0)
-		SolutionBlock3(pos=1841, lin=47, lvl=0)
-		SolutionBlock4(pos=2197, lin=65, lvl=0)
-		BlockMapName(pos=1105, lin=23, lvl=0)
+		SolutionBlock2(pos=1448, lin=29, lvl=0)
+		SolutionBlock3(pos=1803, lin=47, lvl=0)
+		SolutionBlock4(pos=2159, lin=65, lvl=0)
+		BlockMapName(pos=1067, lin=23, lvl=0)
 		SolutionBlock1(pos=370, lin=1, lvl=0)
 		$base_index$(pos=0, lin=1, lvl=0)
-		$index$(pos=2534, lin=84, lvl=0)
+		$index$(pos=2496, lin=84, lvl=0)
 	$end '$index$'
 $end '$index$'

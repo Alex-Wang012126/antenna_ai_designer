@@ -1,0 +1,18 @@
+{
+  "requirements": "设计一个中心频率 2.45 GHz 的微带贴片天线，S11 < -10 dB，-10 dB 带宽 > 100 MHz，峰值增益 > 3 dBi。",
+  "targets": {
+    "target_freq_ghz": 2.45,
+    "max_s11_db": -10.0,
+    "min_bandwidth_mhz": 100.0,
+    "min_gain_dbi": 3.0
+  },
+  "metrics": {},
+  "checklist": {
+    "center_frequency": false,
+    "return_loss": false,
+    "bandwidth": false,
+    "gain": false
+  },
+  "passed": false,
+  "summary": "评测结果：未通过\n目标频率: 2.45 GHz, 实际中心频率: None GHz\nS11 最小值: None dB\n-10 dB 带宽: None MHz\n峰值增益: None dBi\n辐射效率: None%\n检查项: {'center_frequency': False, 'return_loss': False, 'bandwidth': False, 'gain': False}"
+}
