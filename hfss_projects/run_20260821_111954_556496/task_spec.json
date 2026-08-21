@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "task_id": "inset_patch_2p45_v5",
+  "title": "2.45 GHz 受限尺寸内嵌馈电矩形贴片天线",
+  "natural_language_description": "在给定候选与 HFSS 求解预算内，设计一副 2.45 GHz 单端口内嵌馈电矩形微带贴片天线。材料、端口、空气区域、求解设置、扫频和远场设置均由评测端固定。模型只选择基板外形与贴片/馈线几何尺寸。要求谐振频率误差不超过 25 MHz，扫频内最小 S11 不高于 -20 dB，包含该谐振点的连续 -10 dB 带宽不小于 110 MHz，2.45 GHz 自适应解处的 HFSS 峰值增益不低于 7.5 dBi，谐振频率正负 25 MHz 窗口内的平均总体效率不低于 85%。",
+  "topology": {
+    "id": "inset_fed_rectangular_patch",
+    "port_count": 1,
+    "description": "Single-layer rectangular microstrip patch with a centered inset microstrip feed and one 50-ohm lumped port."
+  },
+  "calibration": {
+    "status": "uncalibrated",
+    "full_score_witness_verified": false,
+    "verification_date": null,
+    "solver": null,
+    "notes": "This task must not be treated as a calibrated leaderboard item until an independently designed candidate reaches 100/100 under the exact fixed controls with numerical margin."
+  },
+  "fixed_parameters": {
+    "substrate_material": {
+      "value": "Rogers5880_custom",
+      "unit": "label",
+      "description": "Human-readable material label; numeric properties below are authoritative."
+    },
+    "substrate_relative_permittivity": {
+      "value": 2.2,
+      "unit": "1",
+      "description": "Linear dimensionless relative permittivity used by HFSS."
+    },
+    "substrate_loss_tangent": {
+      "value": 0.0009,
+      "unit": "1",
+      "description": "Linear dimensionless dielectric loss tangent used by HFSS."
+    }
+  },
+  "design_variables": {
+    "substrate_width_mm": {
+      "unit": "mm",
+      "minimum": 60.0,
+      "maximum": 100.0,
+      "description": "Overall substrate and ground-plane width along x."
+    },
+    "substrate_length_mm": {
+      "unit": "mm",
+      "minimum": 55.0,
+      "maximum": 85.0,
+      "description": "Overall substrate and ground-plane length along y."
+    },
+    "substrate_height_mm": {
+      "unit": "mm",
+      "minimum": 0.5,
+      "maximum": 5.0,
+      "description": "Dielectric substrate thickness."
+    },
+    "patch_width_mm": {
+      "unit": "mm",
+      "minimum": 20.0,
+      "maximum": 80.0,
+      "description": "Rectangular radiating patch width before the centered inset notch."
+    },
+    "patch_length_mm": {
+      "unit": "mm",
+      "minimum": 20.0,
+      "maximum": 60.0,
+      "description": "Rectangular radiating patch resonant length."
+    },
+    "feed_width_mm": {
+      "unit": "mm",
+      "minimum": 0.2,
+      "maximum": 20.0,
+      "description": "Centered microstrip feed-line width."
+    },
+    "inset_depth_mm": {
+      "unit": "mm",
+      "minimum": 0.1,
+      "maximum": 35.0,
+      "description": "Distance that the feed line penetrates into the patch from its radiating edge."
+    },
+    "inset_gap_mm": {
+      "unit": "mm",
+      "minimum": 0.1,
+      "maximum": 5.0,
+      "description": "Gap on each side of the inset feed line."
+    }
+  },
+  "simulation_control": {
+    "adaptive_frequency": {
+      "value": 2.45,
+      "unit": "GHz",
+      "description": "Read-only HFSS adaptive solution frequency."
+    },
+    "sweep_start": {
+      "value": 2.3,
+      "unit": "GHz",
+      "description": "Read-only lower edge of the evaluation sweep."
+    },
+    "sweep_stop": {
+      "value": 2.6,
+      "unit": "GHz",
+      "description": "Read-only upper edge of the evaluation sweep."
+    },
+    "sweep_points": {
+      "value": 301,
+      "unit": "count",
+      "description": "Read-only number of frequency samples in the interpolating sweep."
+    },
+    "sweep_type": "Interpolating",
+    "save_fields": false,
+    "save_rad_fields": false,
+    "efficiency_sweep": {
+      "name": "EfficiencySweep",
+      "start": {
+        "value": 2.3,
+        "unit": "GHz",
+        "description": "Lower edge of the discrete radiation-efficiency sweep; it matches the main evaluation sweep so reasonably detuned candidates remain measurable."
+      },
+      "stop": {
+        "value": 2.6,
+        "unit": "GHz",
+        "description": "Upper edge of the discrete radiation-efficiency sweep; it matches the main evaluation sweep so reasonably detuned candidates remain measurable."
+      },
+      "points": {
+        "value": 31,
+        "unit": "count",
+        "description": "Number of solved frequencies with saved solution and radiation fields, preserving the original 10 MHz spacing over the wider range."
+      },
+      "sweep_type": "Discrete",
+      "save_fields": true,
+      "save_rad_fields": true
+    },
+    "bandwidth_s11_threshold": {
+      "value": -10.0,
+      "unit": "dB",
+      "description": "20*log10(|S11|) threshold used for contiguous impedance bandwidth."
+    },
+    "total_efficiency_window_half_span": {
+      "value": 25.0,
+      "unit": "MHz",
+      "description": "Half-width around the measured resonant frequency used to average single-port total efficiency."
+    },
+    "air_margin_xy": {
+      "value": 40.0,
+      "unit": "mm",
+      "description": "Absolute radiation-region offset on each x/y side."
+    },
+    "air_above": {
+      "value": 55.0,
+      "unit": "mm",
+      "description": "Absolute radiation-region offset above the patch."
+    },
+    "air_below": {
+      "value": 30.0,
+      "unit": "mm",
+      "description": "Absolute radiation-region offset below the ground plane."
+    },
+    "port_impedance": {
+      "value": 50.0,
+      "unit": "ohm",
+      "description": "Read-only lumped-port reference impedance."
+    },
+    "setup": {
+      "max_delta_s": {
+        "value": 0.02,
+        "unit": "1"
+      },
+      "maximum_passes": {
+        "value": 12,
+        "unit": "count"
+      },
+      "minimum_passes": {
+        "value": 2,
+        "unit": "count"
+      },
+      "minimum_converged_passes": {
+        "value": 1,
+        "unit": "count"
+      }
+    },
+    "far_field": {
+      "theta_start": {
+        "value": 0.0,
+        "unit": "deg"
+      },
+      "theta_stop": {
+        "value": 180.0,
+        "unit": "deg"
+      },
+      "theta_step": {
+        "value": 5.0,
+        "unit": "deg"
+      },
+      "phi_start": {
+        "value": -180.0,
+        "unit": "deg"
+      },
+      "phi_stop": {
+        "value": 180.0,
+        "unit": "deg"
+      },
+      "phi_step": {
+        "value": 5.0,
+        "unit": "deg"
+      }
+    }
+  },
+  "objectives": {
+    "resonant_frequency": {
+      "metric_key": "center_freq_ghz",
+      "display_name": "Resonant frequency at minimum S11",
+      "unit": "GHz",
+      "value_representation": "linear_frequency",
+      "goal": "target_with_tolerance",
+      "target": {
+        "value": 2.45,
+        "unit": "GHz"
+      },
+      "tolerance": {
+        "value": 0.025,
+        "unit": "GHz"
+      },
+      "zero_score_tolerance": {
+        "value": 0.075,
+        "unit": "GHz"
+      },
+      "points": 15,
+      "semantics": "Frequency of the minimum sampled/interpolated dB(S(1,1)) within the fixed 2.30-2.60 GHz sweep. Values are linear GHz, not angular frequency."
+    },
+    "minimum_s11": {
+      "metric_key": "s11_min_db",
+      "display_name": "Minimum input reflection coefficient",
+      "unit": "dB",
+      "value_representation": "20_log10_magnitude",
+      "goal": "at_most",
+      "pass_threshold": {
+        "value": -20.0,
+        "unit": "dB"
+      },
+      "zero_score_threshold": {
+        "value": -10.0,
+        "unit": "dB"
+      },
+      "points": 20,
+      "semantics": "Minimum of 20*log10(|S11|) over the fixed sweep. More negative is better; this is dB, not a positive return-loss magnitude and not linear |S11|."
+    },
+    "impedance_bandwidth": {
+      "metric_key": "bandwidth_mhz",
+      "display_name": "Contiguous -10 dB impedance bandwidth",
+      "unit": "MHz",
+      "value_representation": "linear_frequency_span",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 110.0,
+        "unit": "MHz"
+      },
+      "zero_score_threshold": {
+        "value": 50.0,
+        "unit": "MHz"
+      },
+      "points": 25,
+      "semantics": "Width of the contiguous region containing the minimum-S11 resonance where 20*log10(|S11|) <= -10 dB, with linear interpolation at threshold crossings."
+    },
+    "peak_gain": {
+      "metric_key": "peak_gain_dbi",
+      "display_name": "HFSS peak gain",
+      "unit": "dBi",
+      "value_representation": "10_log10_power_gain_relative_to_isotropic",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 7.5,
+        "unit": "dBi"
+      },
+      "zero_score_threshold": {
+        "value": 3.0,
+        "unit": "dBi"
+      },
+      "points": 20,
+      "semantics": "Maximum HFSS dB(PeakGain) from the InfiniteSphere1 Antenna Parameters report at Setup1:LastAdaptive (2.45 GHz). This is logarithmic dBi, not linear gain and not realized gain."
+    },
+    "band_average_total_efficiency": {
+      "metric_key": "total_efficiency_mean_percent",
+      "display_name": "Band-average single-port total efficiency",
+      "unit": "%",
+      "value_representation": "linear_percentage",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 85.0,
+        "unit": "%"
+      },
+      "zero_score_threshold": {
+        "value": 50.0,
+        "unit": "%"
+      },
+      "points": 20,
+      "semantics": "Arithmetic mean on the 1 MHz Setup1:Sweep1 grid over measured resonance +/- 25 MHz of clamp(interp(RadiationEfficiency from the discrete Setup1:EfficiencySweep) * (1 - 10^(dB(S11)/10)), 0, 1), expressed as a linear percentage. Interpolation is allowed only inside the discrete efficiency sweep; extrapolation is forbidden. HFSS RadiationEfficiency is treated as a linear ratio even when numerical error makes it slightly greater than 1. This is single-port total efficiency, including mismatch loss, and is not in dB."
+    }
+  }
+}

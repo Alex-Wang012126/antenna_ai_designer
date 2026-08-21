@@ -1,0 +1,16 @@
+$begin 'imprintInfo'
+	FileVersion='2025R2'
+	$begin 'imprintIDMap'
+	$end 'imprintIDMap'
+	$begin 'PartsInfo'
+		Part(86, 'AirRegion', -1, 6, 87, 89, 90, 91, 88, 92)
+		Part(357, 'Substrate', -1, 6, 358, 360, 361, 362, 359, 363)
+		Part(385, 'Ground', -1, 1, 395)
+		Part(397, 'PatchFeed', -1, 1, 423)
+		Part(425, 'Port1_sheet', -1, 1, 435)
+	$end 'PartsInfo'
+	$begin 'PartAddtionalPiecesInfo'
+	$end 'PartAddtionalPiecesInfo'
+	$begin 'faceImprintInfo'
+	$end 'faceImprintInfo'
+$end 'imprintInfo'

@@ -1,21 +1,23 @@
 """LLM-driven candidate generation with a Python-controlled HFSS pipeline.
 
 The model only proposes complete antenna specifications or asks to stop. For every
-proposal, Python performs build, validation, solve, metric extraction, and saving as
+proposal, Python performs build, validation, solve, saving, and metric extraction as
 one atomic design iteration. Final pass/fail evaluation is intentionally separate.
 """
 
 import json
+import time
 import traceback
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 from config import Config, cfg
-from design_spec import PatchAntennaSpec
 from hfss_client import HFSSClient, HFSSResult
 from model_client import ChatResponse, ModelClient, ToolCall
 from prompts import build_initial_message, build_system_prompt, build_tools_description
+from task_spec import AntennaTaskSpec, load_default_task
 
 
 @dataclass
@@ -30,6 +32,8 @@ class DesignLoopResult:
     log_file: Optional[Path] = None
     metrics_file: Optional[Path] = None
     manifest_file: Optional[Path] = None
+    task_file: Optional[Path] = None
+    resource_file: Optional[Path] = None
     selected_candidate: Optional[Dict[str, Any]] = None
     candidates: List[Dict[str, Any]] = field(default_factory=list)
 
@@ -46,13 +50,16 @@ class DesignAgent:
         self,
         model_client: ModelClient,
         hfss_client: HFSSClient,
-        requirements: str,
+        requirements: Optional[str] = None,
         config: Config = cfg,
+        task_spec: Optional[AntennaTaskSpec] = None,
     ):
         self.model = model_client
         self.hfss = hfss_client
         self.config = config
-        self.requirements = requirements
+        self.task_spec = task_spec or load_default_task()
+        self.requirements = requirements or self.task_spec.description
+        self.hfss.configure_task(self.task_spec)
         self.messages: List[Dict[str, Any]] = []
         self.iterations_used = 0
         self.model_calls = 0
@@ -63,6 +70,7 @@ class DesignAgent:
         self._final_summary = ""
         self._candidates: List[Dict[str, Any]] = []
         self._selected_candidate: Optional[Dict[str, Any]] = None
+        self._model_call_records: List[Dict[str, Any]] = []
 
     @property
     def remaining_solve_calls(self) -> int:
@@ -75,7 +83,7 @@ class DesignAgent:
     def _append_tool_result(self, tool_call_id: str, name: str, result: HFSSResult) -> None:
         content = json.dumps(
             {
-                "protocol_version": 2,
+                "protocol_version": 3,
                 "tool": name,
                 "success": result.success,
                 "data": result.data,
@@ -114,6 +122,7 @@ class DesignAgent:
         operation: Callable[[], HFSSResult],
     ) -> HFSSResult:
         """Normalize backend exceptions and malformed returns into candidate failures."""
+        started = time.perf_counter()
         try:
             result = operation()
             if not isinstance(result, HFSSResult):
@@ -123,7 +132,9 @@ class DesignAgent:
                 success=False,
                 message=f"{stage} raised {type(exc).__name__}: {exc}",
             )
-        record["stages"][stage] = self._stage_result(result)
+        stage_record = self._stage_result(result)
+        stage_record["duration_seconds"] = round(time.perf_counter() - started, 6)
+        record["stages"][stage] = stage_record
         return result
 
     def _finish_failed_candidate(
@@ -155,15 +166,21 @@ class DesignAgent:
             "success": False,
             "status": "started",
             "specification": arguments,
+            "design_parameters": {},
+            "resolved_specification": {},
             "project_file": None,
             "metrics_file": None,
             "metrics": {},
+            "measured_metrics": {},
             "stages": {},
         }
 
         try:
-            spec = PatchAntennaSpec.from_mapping(arguments)
-            record["specification"] = spec.to_dict()
+            design = self.task_spec.validate_design(arguments)
+            resolved = self.task_spec.resolve_patch_spec(arguments)
+            record["specification"] = design.to_dict()
+            record["design_parameters"] = self.task_spec.structured_design(arguments)
+            record["resolved_specification"] = resolved.to_dict()
         except ValueError as exc:
             result = HFSSResult(success=False, message=f"Invalid patch specification: {exc}")
             record["stages"]["parameter_validation"] = self._stage_result(result)
@@ -195,6 +212,14 @@ class DesignAgent:
         if not solve.success:
             return self._finish_failed_candidate(record, "solve", solve)
 
+        # Save a solved checkpoint before post-processing.  A report/API failure must
+        # not leave the active AEDT project unnamed and poison the next Save As.
+        saved = self._run_stage(record, "save", self.hfss.export_design)
+        if isinstance(saved.data, dict) and saved.data.get("file_path"):
+            record["project_file"] = str(saved.data["file_path"])
+        if not saved.success:
+            return self._finish_failed_candidate(record, "save", saved)
+
         metrics = self._run_stage(record, "metrics", lambda: self.hfss.get_result("all"))
         if metrics.success and (not isinstance(metrics.data, dict) or not metrics.data):
             metrics = HFSSResult(
@@ -204,19 +229,38 @@ class DesignAgent:
             )
             record["stages"]["metrics"] = self._stage_result(metrics)
         if not metrics.success:
-            return self._finish_failed_candidate(record, "metrics", metrics)
+            failed = self._finish_failed_candidate(record, "metrics", metrics)
+            fatal_backend_error = bool(
+                isinstance(metrics.data, dict)
+                and metrics.data.get("_fatal_backend_error")
+            )
+            if fatal_backend_error:
+                self._finalized = True
+                self._stop_reason = "hfss_metrics_backend_failure"
+                self._final_summary = (
+                    f"候选 {iteration} 已在指标读取前保存，但 AEDT 必要后处理数据不可用。"
+                    "为避免在失效自动化会话上继续 Save As，设计循环已停止。"
+                )
+            return failed
         record["metrics"] = metrics.data
-
-        saved = self._run_stage(record, "save", self.hfss.export_design)
-        if isinstance(saved.data, dict) and saved.data.get("file_path"):
-            record["project_file"] = str(saved.data["file_path"])
-        if not saved.success:
-            return self._finish_failed_candidate(record, "save", saved)
+        record["measured_metrics"] = self.task_spec.structured_metrics(metrics.data)
 
         metrics_file = self.config.log_dir / f"candidate_{iteration:03d}_metrics.json"
         try:
             metrics_file.write_text(
-                json.dumps(metrics.data, ensure_ascii=False, indent=2, default=str),
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "task_id": self.task_spec.task_id,
+                        "iteration": iteration,
+                        "design_parameters": record["design_parameters"],
+                        "measured_metrics": record["measured_metrics"],
+                        "raw_metrics": metrics.data,
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                    default=str,
+                ),
                 encoding="utf-8",
             )
         except Exception as exc:
@@ -226,15 +270,28 @@ class DesignAgent:
 
         record["metrics_file"] = str(metrics_file.resolve())
         record["success"] = True
-        record["status"] = "completed"
-        record["message"] = "建模、校验、求解、指标读取和保存均成功。"
+        has_metric_penalty = bool(metrics.data.get("metric_errors"))
+        record["status"] = (
+            "completed_with_metric_penalty" if has_metric_penalty else "completed"
+        )
+        record["message"] = (
+            "完整仿真成功，但部分指标因候选响应超出固定覆盖范围而不可用，"
+            "独立评测会将对应目标计为零分。"
+            if has_metric_penalty
+            else "建模、校验、求解、保存和指标读取均成功。"
+        )
         self._candidates.append(record)
         self._selected_candidate = record
         print(f"[候选 {iteration}] 完整流水线成功: {metrics.data}", flush=True)
         return HFSSResult(
             success=True,
             data={"candidate": record},
-            message=f"候选 {iteration} 完整仿真成功，请根据实测指标决定继续修改或结束。",
+            message=(
+                f"候选 {iteration} 完整仿真成功，但存在零分指标；"
+                "请根据实测结果继续修改或结束。"
+                if has_metric_penalty
+                else f"候选 {iteration} 完整仿真成功，请根据实测指标决定继续修改或结束。"
+            ),
         )
 
     def _execute_tool(self, tool_call: ToolCall) -> HFSSResult:
@@ -301,18 +358,23 @@ class DesignAgent:
         self._final_summary = ""
         self._candidates = []
         self._selected_candidate = None
+        self._model_call_records = []
+        run_started_at = datetime.now(timezone.utc)
+        run_started_clock = time.perf_counter()
 
         self.config.ensure_dirs()
+        task_file = self.task_spec.write(self.config.log_dir / "task_spec.json")
         connection = self.hfss.connect(self.config)
         if not connection.success:
             raise RuntimeError(f"无法连接 HFSS/AEDT: {connection.message}")
 
         self.messages = [
-            {"role": "system", "content": build_system_prompt(self.requirements)},
-            build_initial_message(self.requirements),
+            {"role": "system", "content": build_system_prompt(self.task_spec)},
+            build_initial_message(self.task_spec, self.requirements),
         ]
         log_file = self.config.log_dir / "design_log.json"
         manifest_file = self.config.log_dir / "run_manifest.json"
+        resource_file = self.config.log_dir / "resource_usage.json"
         max_model_calls = max_iterations * 3 + 3
 
         try:
@@ -322,13 +384,55 @@ class DesignAgent:
                     self._final_summary = "模型重复调用无效工具，已达到内部安全上限。"
                     break
 
+                model_call_started = time.perf_counter()
                 try:
-                    response = self.model.chat(self.messages, tools=build_tools_description())
+                    response = self.model.chat(
+                        self.messages,
+                        tools=build_tools_description(self.task_spec),
+                    )
+                except KeyboardInterrupt:
+                    self._model_call_records.append(
+                        {
+                            "call_index": len(self._model_call_records) + 1,
+                            "success": False,
+                            "interrupted": True,
+                            "duration_seconds": round(
+                                time.perf_counter() - model_call_started, 6
+                            ),
+                            "error": "KeyboardInterrupt: user interrupted model request",
+                            "usage": {},
+                        }
+                    )
+                    raise
                 except Exception as exc:
+                    self._model_call_records.append(
+                        {
+                            "call_index": len(self._model_call_records) + 1,
+                            "success": False,
+                            "duration_seconds": round(time.perf_counter() - model_call_started, 6),
+                            "error": f"{type(exc).__name__}: {exc}",
+                            "usage": {},
+                        }
+                    )
                     self._stop_reason = "model_error"
                     self._final_summary = f"模型调用失败（{type(exc).__name__}: {exc}），设计循环提前终止。"
                     print(f"\n[模型错误] {self._final_summary}")
+                    self.model_calls += 1
                     break
+
+                measured_latency = time.perf_counter() - model_call_started
+                self._model_call_records.append(
+                    {
+                        "call_index": len(self._model_call_records) + 1,
+                        "success": True,
+                        "duration_seconds": round(measured_latency, 6),
+                        "provider_latency_seconds": response.latency_seconds,
+                        "response_id": response.response_id,
+                        "usage": response.usage,
+                        "tool_calls": [tool_call.name for tool_call in response.tool_calls],
+                        "content_characters": len(response.content or ""),
+                    }
+                )
 
                 assistant_message = self._build_assistant_message(response)
                 self.messages.append(assistant_message)
@@ -384,6 +488,10 @@ class DesignAgent:
                     if self._selected_candidate is not None
                     else f"已用完 {max_iterations} 次候选设计迭代，但没有候选完成完整仿真流水线。"
                 )
+        except KeyboardInterrupt:
+            self._stop_reason = "keyboard_interrupt"
+            self._final_summary = "用户通过 KeyboardInterrupt 中止运行；现有工程、清单和资源日志已保存。"
+            print(f"\n[运行中断] {self._final_summary}", flush=True)
         finally:
             try:
                 self.hfss.disconnect()
@@ -395,15 +503,76 @@ class DesignAgent:
                 if successful:
                     self._selected_candidate = successful[-1]
 
+            run_finished_at = datetime.now(timezone.utc)
+            token_keys = (
+                "input_tokens",
+                "cached_input_tokens",
+                "output_tokens",
+                "reasoning_tokens",
+                "total_tokens",
+            )
+            token_totals: Dict[str, Optional[int]] = {}
+            for key in token_keys:
+                values = [
+                    call.get("usage", {}).get(key)
+                    for call in self._model_call_records
+                    if isinstance(call.get("usage", {}).get(key), int)
+                ]
+                token_totals[key] = sum(values) if values else None
+            solve_seconds = sum(
+                float(candidate.get("stages", {}).get("solve", {}).get("duration_seconds", 0.0))
+                for candidate in self._candidates
+            )
+            resource_usage = {
+                "schema_version": 1,
+                "task_id": self.task_spec.task_id,
+                "run": {
+                    "started_at_utc": run_started_at.isoformat(),
+                    "finished_at_utc": run_finished_at.isoformat(),
+                    "duration_seconds": round(time.perf_counter() - run_started_clock, 6),
+                },
+                "model": {
+                    "client_class": type(self.model).__name__,
+                    "configured_model_name": self.config.model_name,
+                    "configured_reasoning_effort": self.config.model_reasoning_effort,
+                    "configured_max_completion_tokens_per_call": self.config.model_max_completion_tokens,
+                    "call_safety_limit": max_model_calls,
+                    "attempted_calls": len(self._model_call_records),
+                    "token_totals": token_totals,
+                    "calls": self._model_call_records,
+                },
+                "hfss": {
+                    "client_class": type(self.hfss).__name__,
+                    "candidate_attempts": self.iterations_used,
+                    "solve_calls": self._solve_count,
+                    "solve_duration_seconds": round(solve_seconds, 6),
+                    "max_design_iterations": max_iterations,
+                    "max_solve_calls": self.config.max_solve_calls,
+                },
+            }
+            resource_file.write_text(
+                json.dumps(resource_usage, ensure_ascii=False, indent=2, default=str),
+                encoding="utf-8",
+            )
+
             manifest = {
-                "protocol_version": 2,
-                "requirements": self.requirements,
+                "protocol_version": 3,
+                "task_id": self.task_spec.task_id,
+                "task_spec_file": str(task_file.resolve()),
+                "natural_language_supplement": self.requirements,
                 "stop_reason": self._stop_reason,
                 "final_summary": self._final_summary,
                 "max_design_iterations": max_iterations,
                 "iterations_used": self.iterations_used,
                 "model_calls": self.model_calls,
                 "solve_calls": self._solve_count,
+                "resource_usage_file": str(resource_file.resolve()),
+                "resource_summary": {
+                    "model_calls": len(self._model_call_records),
+                    "token_totals": token_totals,
+                    "hfss_solve_calls": self._solve_count,
+                    "hfss_solve_duration_seconds": round(solve_seconds, 6),
+                },
                 "selected_iteration": (
                     self._selected_candidate.get("iteration") if self._selected_candidate else None
                 ),
@@ -427,6 +596,8 @@ class DesignAgent:
             )
             print(f"\n[候选清单已保存] {manifest_file}")
             print(f"[对话日志已保存] {log_file}")
+            print(f"[任务快照已保存] {task_file}")
+            print(f"[资源统计已保存] {resource_file}")
 
         metrics_file = (
             Path(self._selected_candidate["metrics_file"])
@@ -442,6 +613,8 @@ class DesignAgent:
             log_file=log_file,
             metrics_file=metrics_file,
             manifest_file=manifest_file,
+            task_file=task_file,
+            resource_file=resource_file,
             selected_candidate=self._selected_candidate,
             candidates=self._candidates,
         )

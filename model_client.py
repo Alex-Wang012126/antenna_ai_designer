@@ -23,6 +23,33 @@ class ChatResponse:
     """模型返回的结构化响应。"""
     content: Optional[str] = None          # 模型自然语言回复
     tool_calls: List[ToolCall] = field(default_factory=list)
+    usage: Dict[str, Any] = field(default_factory=dict)
+    latency_seconds: Optional[float] = None
+    response_id: Optional[str] = None
+
+
+def _normalized_usage(raw_usage: Any) -> Dict[str, Any]:
+    """Normalize Responses and Chat Completions token accounting."""
+    raw = raw_usage if isinstance(raw_usage, dict) else {}
+    input_details = raw.get("input_tokens_details") or raw.get("prompt_tokens_details") or {}
+    output_details = raw.get("output_tokens_details") or raw.get("completion_tokens_details") or {}
+    if not isinstance(input_details, dict):
+        input_details = {}
+    if not isinstance(output_details, dict):
+        output_details = {}
+    input_tokens = raw.get("input_tokens", raw.get("prompt_tokens"))
+    output_tokens = raw.get("output_tokens", raw.get("completion_tokens"))
+    total_tokens = raw.get("total_tokens")
+    if total_tokens is None and isinstance(input_tokens, int) and isinstance(output_tokens, int):
+        total_tokens = input_tokens + output_tokens
+    return {
+        "input_tokens": input_tokens,
+        "cached_input_tokens": input_details.get("cached_tokens"),
+        "output_tokens": output_tokens,
+        "reasoning_tokens": output_details.get("reasoning_tokens"),
+        "total_tokens": total_tokens,
+        "provider_raw": raw,
+    }
 
 
 class ModelClient(ABC):
@@ -125,15 +152,17 @@ class ResponsesModelClient(ModelClient):
             json=payload,
             timeout=600,  # 推理模型耗时长，超时放宽
         )
-        print(f"[MODEL] <<< HTTP {resp.status_code} | 耗时 {time.time() - t0:.1f}s", flush=True)
+        elapsed = time.time() - t0
+        print(f"[MODEL] <<< HTTP {resp.status_code} | 耗时 {elapsed:.1f}s", flush=True)
         try:
             resp.raise_for_status()
         except requests.HTTPError as e:
             raise requests.HTTPError(f"{e} | 响应内容: {resp.text[:500]}", response=resp) from e
 
+        body = resp.json()
         content_parts: List[str] = []
         tool_calls: List[ToolCall] = []
-        for item in resp.json().get("output", []):
+        for item in body.get("output", []):
             if item.get("type") == "message":
                 for c in item.get("content", []):
                     if c.get("type") == "output_text":
@@ -150,7 +179,13 @@ class ResponsesModelClient(ModelClient):
 
         print(f"[MODEL] <<< 回复: content={sum(len(p) for p in content_parts)} 字符 | "
               f"tool_calls={[tc.name for tc in tool_calls] or '无'}", flush=True)
-        return ChatResponse(content="".join(content_parts) or None, tool_calls=tool_calls)
+        return ChatResponse(
+            content="".join(content_parts) or None,
+            tool_calls=tool_calls,
+            usage=_normalized_usage(body.get("usage")),
+            latency_seconds=elapsed,
+            response_id=body.get("id"),
+        )
 
 class OpenAIModelClient(ModelClient):
     """OpenAI 风格（/chat/completions）真实模型客户端，用 requests 直连。
@@ -208,7 +243,8 @@ class OpenAIModelClient(ModelClient):
         except requests.HTTPError as e:
             # 带上服务端返回体，便于诊断（如 401 key 无效、429 限流）
             raise requests.HTTPError(f"{e} | 响应内容: {resp.text[:500]}", response=resp) from e
-        msg = resp.json()["choices"][0]["message"]
+        body = resp.json()
+        msg = body["choices"][0]["message"]
 
         tool_calls: List[ToolCall] = []
         for tc in (msg.get("tool_calls") or []):
@@ -225,7 +261,13 @@ class OpenAIModelClient(ModelClient):
             tool_calls.append(ToolCall(name=tc["function"]["name"], arguments=arguments))
         print(f"[MODEL] <<< 回复: content={len(msg.get('content') or '')} 字符 | "
               f"tool_calls={[tc.name for tc in tool_calls] or '无'}", flush=True)
-        return ChatResponse(content=msg.get("content"), tool_calls=tool_calls)
+        return ChatResponse(
+            content=msg.get("content"),
+            tool_calls=tool_calls,
+            usage=_normalized_usage(body.get("usage")),
+            latency_seconds=elapsed,
+            response_id=body.get("id"),
+        )
 
 
 class PlaceholderModelClient(ModelClient):
@@ -241,24 +283,14 @@ class PlaceholderModelClient(ModelClient):
                 {
                     "name": "create_patch_antenna",
                     "arguments": {
-                        "center_frequency_ghz": 2.45,
-                        "substrate_material": "Rogers5880_custom",
-                        "substrate_permittivity": 2.2,
-                        "substrate_loss_tangent": 0.0009,
                         "substrate_width_mm": 100.0,
-                        "substrate_length_mm": 100.0,
-                        "substrate_height_mm": 3.175,
-                        "patch_width_mm": 48.5,
-                        "patch_length_mm": 39.0,
-                        "feed_width_mm": 9.6,
-                        "inset_depth_mm": 13.5,
-                        "inset_gap_mm": 1.0,
-                        "air_margin_xy_mm": 40.0,
-                        "air_above_mm": 55.0,
-                        "air_below_mm": 25.0,
-                        "sweep_start_ghz": 2.2,
-                        "sweep_stop_ghz": 2.7,
-                        "sweep_points": 251,
+                        "substrate_length_mm": 85.0,
+                        "substrate_height_mm": 5.0,
+                        "patch_width_mm": 58.0,
+                        "patch_length_mm": 38.4,
+                        "feed_width_mm": 12.0,
+                        "inset_depth_mm": 10.5,
+                        "inset_gap_mm": 1.4,
                     },
                 },
                 {
@@ -283,10 +315,24 @@ class PlaceholderModelClient(ModelClient):
             return ChatResponse(
                 content=None,
                 tool_calls=[ToolCall(name=item["name"], arguments=item["arguments"])],
+                usage={
+                    "input_tokens": 0,
+                    "cached_input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "provider_raw": {},
+                },
+                latency_seconds=0.0,
             )
 
         # 序列结束后，返回终止消息（正常不应进入这里，因为 finalize_design 已结束）
-        return ChatResponse(content="设计序列已结束。", tool_calls=[])
+        return ChatResponse(
+            content="设计序列已结束。",
+            tool_calls=[],
+            usage={"input_tokens": 0, "output_tokens": 0, "total_tokens": 0},
+            latency_seconds=0.0,
+        )
 
 
 class MockErrorModelClient(ModelClient):
@@ -304,7 +350,7 @@ class MockErrorModelClient(ModelClient):
                 tool_calls=[
                     ToolCall(
                         name="create_patch_antenna",
-                        arguments={"center_frequency_ghz": 2.45},
+                        arguments={"patch_length_mm": 38.4},
                     )
                 ],
             )

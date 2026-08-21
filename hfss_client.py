@@ -11,10 +11,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+import traceback
 from typing import Any, Dict, List, Mapping, Optional, Union
 
 from config import Config, cfg
 from design_spec import PatchAntennaSpec
+from task_spec import AntennaTaskSpec
 
 
 def _dbg(msg: str) -> None:
@@ -30,8 +32,16 @@ class HFSSResult:
     message: str = ""
 
 
+class CandidateMetricUnavailableError(RuntimeError):
+    """A metric is unavailable because this candidate lies outside fixed coverage."""
+
+
 class HFSSClient(ABC):
     """HFSS 客户端抽象基类。"""
+
+    def configure_task(self, task_spec: AntennaTaskSpec) -> None:
+        """Install the read-only benchmark contract before building candidates."""
+        self._task_spec = task_spec
 
     @abstractmethod
     def connect(self, config: Optional[Config] = None) -> HFSSResult:
@@ -94,6 +104,7 @@ class PlaceholderHFSSClient(HFSSClient):
         self._project_path: Optional[Path] = None
         self._candidate_index = 0
         self._has_design = False
+        self._task_spec: Optional[AntennaTaskSpec] = None
 
     def connect(self, config: Optional[Config] = None) -> HFSSResult:
         if config is None:
@@ -130,7 +141,11 @@ class PlaceholderHFSSClient(HFSSClient):
     def create_patch_antenna(self, specification: Mapping[str, Any]) -> HFSSResult:
         self._check_connected()
         try:
-            spec = PatchAntennaSpec.from_mapping(specification)
+            spec = (
+                self._task_spec.resolve_patch_spec(specification)
+                if self._task_spec is not None
+                else PatchAntennaSpec.from_mapping(specification)
+            )
         except ValueError as exc:
             return HFSSResult(success=False, message=f"Invalid patch specification: {exc}")
         self._candidate_index += 1
@@ -181,7 +196,13 @@ class PlaceholderHFSSClient(HFSSClient):
                 "s11_db": [-5.0, -9.5, -21.0, -8.0, -4.0],
             }
         elif metric == "far_field":
-            data = {"peak_gain_dbi": 5.2, "radiation_efficiency_percent": 92.0}
+            data = {
+                "peak_gain_dbi": 8.0,
+                "total_efficiency_mean_percent": 90.0,
+                "total_efficiency_min_percent": 88.0,
+                "total_efficiency_max_percent": 92.0,
+                "total_efficiency_sample_count": 51,
+            }
         elif metric == "all":
             data = self.get_metrics().data
         else:
@@ -199,12 +220,20 @@ class PlaceholderHFSSClient(HFSSClient):
 
     def get_metrics(self) -> HFSSResult:
         self._check_connected()
+        center_frequency = (
+            self._task_spec.simulation_value("adaptive_frequency", "GHz")
+            if self._task_spec is not None
+            else 2.45
+        )
         metrics = {
-            "center_freq_ghz": 2.45,
-            "s11_min_db": -21.0,
+            "center_freq_ghz": center_frequency,
+            "s11_min_db": -22.0,
             "bandwidth_mhz": 120.0,
-            "peak_gain_dbi": 5.2,
-            "radiation_efficiency_percent": 92.0,
+            "peak_gain_dbi": 8.0,
+            "total_efficiency_mean_percent": 90.0,
+            "total_efficiency_min_percent": 88.0,
+            "total_efficiency_max_percent": 92.0,
+            "total_efficiency_sample_count": 51,
         }
         print(f"[HFSS 占位] get_metrics: {metrics}")
         return HFSSResult(success=True, data=metrics, message="Metrics computed (placeholder)")
@@ -222,7 +251,12 @@ class PyAEDTHFSSClient(HFSSClient):
         self._candidate_index = 0
         self._setup_name: str = "Setup1"
         self._sweep_name: str = "Sweep1"
+        self._efficiency_sweep_name: str = "EfficiencySweep"
+        self._design_name: str = "antenna"
+        self._solution_type: str = "Modal"
         self._keep_open: bool = True
+        self._postprocessing_unhealthy: bool = False
+        self._task_spec: Optional[AntennaTaskSpec] = None
 
     # ---------- 连接管理 ----------
 
@@ -250,7 +284,9 @@ class PyAEDTHFSSClient(HFSSClient):
         self._candidate_index = 0
         self._setup_name = config.default_setup_name
         self._sweep_name = config.default_sweep_name
+        self._design_name = config.default_design_name
         self._keep_open = config.aedt_keep_open
+        self._postprocessing_unhealthy = False
         _dbg(f"项目文件: {self._project_path.resolve()}")
         _dbg(f">>> 启动 AEDT: version={config.aedt_version}, student={config.aedt_student}, "
              f"non_graphical={config.aedt_non_graphical}, design={config.default_design_name}")
@@ -283,12 +319,18 @@ class PyAEDTHFSSClient(HFSSClient):
         errors: List[str] = []
         _dbg(">>> disconnect: 保存项目并释放自动化连接 ...")
         try:
-            try:
-                saved = self._hfss.save_project()
-                if saved is False:
-                    errors.append("save_project returned False")
-            except Exception as exc:
-                errors.append(f"save_project: {type(exc).__name__}: {exc}")
+            if self._postprocessing_unhealthy:
+                _dbg(
+                    "检测到后处理自动化上下文不健康；工程检查点已在 metrics 前保存，"
+                    "跳过重复 save_project"
+                )
+            else:
+                try:
+                    saved = self._hfss.save_project()
+                    if saved is False:
+                        errors.append("save_project returned False")
+                except Exception as exc:
+                    errors.append(f"save_project: {type(exc).__name__}: {exc}")
             try:
                 released = self._hfss.release_desktop(
                     close_projects=not self._keep_open,
@@ -299,7 +341,11 @@ class PyAEDTHFSSClient(HFSSClient):
             except Exception as exc:
                 errors.append(f"release_desktop: {type(exc).__name__}: {exc}")
             if not errors:
-                if self._keep_open:
+                if self._postprocessing_unhealthy and self._keep_open:
+                    _dbg("<<< 已保留 metrics 前的工程检查点；AEDT 窗口保持打开")
+                elif self._postprocessing_unhealthy:
+                    _dbg("<<< 已保留 metrics 前的工程检查点并关闭 AEDT")
+                elif self._keep_open:
                     _dbg("<<< 项目已保存，AEDT 项目和窗口保持打开")
                 else:
                     _dbg("<<< 项目已保存并关闭 AEDT")
@@ -310,9 +356,17 @@ class PyAEDTHFSSClient(HFSSClient):
         return HFSSResult(
             success=not errors,
             message=(
-                "项目已保存，AEDT 项目和窗口保持打开"
-                if self._keep_open
-                else "项目已保存并关闭 AEDT"
+                (
+                    "已保留 metrics 前的工程检查点，AEDT 项目和窗口保持打开"
+                    if self._keep_open
+                    else "已保留 metrics 前的工程检查点并关闭 AEDT"
+                )
+                if self._postprocessing_unhealthy
+                else (
+                    "项目已保存，AEDT 项目和窗口保持打开"
+                    if self._keep_open
+                    else "项目已保存并关闭 AEDT"
+                )
             ) if not errors else f"释放 AEDT 自动化连接时出错: {'; '.join(errors)}",
         )
 
@@ -373,7 +427,7 @@ class PyAEDTHFSSClient(HFSSClient):
         next_index = self._candidate_index + 1
         next_path = self._project_path.parent / f"candidate_{next_index:03d}.aedt"
         if next_index > 1:
-            saved = self._hfss.save_project(str(next_path))
+            saved = self._hfss.save_project(str(next_path), refresh_ids=False)
             if saved is False:
                 raise RuntimeError(f"PyAEDT failed to create candidate project copy: {next_path}")
             self._project_path = next_path
@@ -399,7 +453,11 @@ class PyAEDTHFSSClient(HFSSClient):
         """Build one complete inset-fed patch from validated numeric parameters."""
         self._check_connected()
         try:
-            spec = PatchAntennaSpec.from_mapping(specification)
+            spec = (
+                self._task_spec.resolve_patch_spec(specification)
+                if self._task_spec is not None
+                else PatchAntennaSpec.from_mapping(specification)
+            )
         except ValueError as exc:
             return HFSSResult(success=False, message=f"参数校验失败: {exc}")
 
@@ -518,7 +576,11 @@ class PyAEDTHFSSClient(HFSSClient):
                 self._hfss.lumped_port(
                     assignment=port_sheet.name,
                     integration_line=self._hfss.axis_directions.ZPos,
-                    impedance=50,
+                    impedance=(
+                        self._task_spec.simulation_value("port_impedance", "ohm")
+                        if self._task_spec is not None
+                        else 50
+                    ),
                     name="Port1",
                     renormalize=True,
                 ),
@@ -547,12 +609,12 @@ class PyAEDTHFSSClient(HFSSClient):
             self._require_created(
                 self._hfss.insert_infinite_sphere(
                     name="InfiniteSphere1",
-                    x_start=0,
-                    x_stop=180,
-                    x_step=5,
-                    y_start=-180,
-                    y_stop=180,
-                    y_step=5,
+                    x_start=(self._task_spec.far_field_value("theta_start") if self._task_spec else 0),
+                    x_stop=(self._task_spec.far_field_value("theta_stop") if self._task_spec else 180),
+                    x_step=(self._task_spec.far_field_value("theta_step") if self._task_spec else 5),
+                    y_start=(self._task_spec.far_field_value("phi_start") if self._task_spec else -180),
+                    y_stop=(self._task_spec.far_field_value("phi_stop") if self._task_spec else 180),
+                    y_step=(self._task_spec.far_field_value("phi_step") if self._task_spec else 5),
                 ),
                 "InfiniteSphere1",
             )
@@ -562,10 +624,21 @@ class PyAEDTHFSSClient(HFSSClient):
                 self._setup_name,
             )
             setup.props["Frequency"] = f"{spec.center_frequency_ghz:.12g}GHz"
-            setup.props["MaxDeltaS"] = 0.02
-            setup.props["MaximumPasses"] = 12
-            setup.props["MinimumPasses"] = 2
-            setup.props["MinimumConvergedPasses"] = 1
+            setup.props["MaxDeltaS"] = (
+                self._task_spec.setup_value("max_delta_s", "1") if self._task_spec else 0.02
+            )
+            setup.props["MaximumPasses"] = int(
+                self._task_spec.setup_value("maximum_passes", "count")
+                if self._task_spec else 12
+            )
+            setup.props["MinimumPasses"] = int(
+                self._task_spec.setup_value("minimum_passes", "count")
+                if self._task_spec else 2
+            )
+            setup.props["MinimumConvergedPasses"] = int(
+                self._task_spec.setup_value("minimum_converged_passes", "count")
+                if self._task_spec else 1
+            )
             self._require_created(setup.update(), f"update {self._setup_name}")
 
             self._require_created(
@@ -576,21 +649,70 @@ class PyAEDTHFSSClient(HFSSClient):
                     stop_frequency=spec.sweep_stop_ghz,
                     num_of_freq_points=spec.sweep_points,
                     name=self._sweep_name,
-                    sweep_type="Interpolating",
-                    save_fields=False,
-                    save_rad_fields=True,
+                    sweep_type=(
+                        self._task_spec.data["simulation_control"]["sweep_type"]
+                        if self._task_spec is not None else "Interpolating"
+                    ),
+                    save_fields=(
+                        self._task_spec.data["simulation_control"]["save_fields"]
+                        if self._task_spec is not None else False
+                    ),
+                    save_rad_fields=(
+                        self._task_spec.data["simulation_control"]["save_rad_fields"]
+                        if self._task_spec is not None else True
+                    ),
                 ),
                 self._sweep_name,
+            )
+
+            if self._task_spec is not None:
+                efficiency_control = self._task_spec.data["simulation_control"][
+                    "efficiency_sweep"
+                ]
+                self._efficiency_sweep_name = str(efficiency_control["name"])
+                efficiency_start = self._task_spec.efficiency_sweep_value("start", "GHz")
+                efficiency_stop = self._task_spec.efficiency_sweep_value("stop", "GHz")
+                efficiency_points = int(
+                    self._task_spec.efficiency_sweep_value("points", "count")
+                )
+                efficiency_type = str(efficiency_control["sweep_type"])
+                efficiency_save_fields = bool(efficiency_control["save_fields"])
+                efficiency_save_rad_fields = bool(efficiency_control["save_rad_fields"])
+            else:
+                efficiency_start = max(spec.sweep_start_ghz, spec.center_frequency_ghz - 0.05)
+                efficiency_stop = min(spec.sweep_stop_ghz, spec.center_frequency_ghz + 0.05)
+                efficiency_points = 11
+                efficiency_type = "Discrete"
+                efficiency_save_fields = False
+                efficiency_save_rad_fields = True
+            self._require_created(
+                self._hfss.create_linear_count_sweep(
+                    setup=self._setup_name,
+                    units="GHz",
+                    start_frequency=efficiency_start,
+                    stop_frequency=efficiency_stop,
+                    num_of_freq_points=efficiency_points,
+                    name=self._efficiency_sweep_name,
+                    sweep_type=efficiency_type,
+                    save_fields=efficiency_save_fields,
+                    save_rad_fields=efficiency_save_rad_fields,
+                ),
+                self._efficiency_sweep_name,
             )
 
             _dbg("<<< create_patch_antenna 建模成功")
             return HFSSResult(
                 success=True,
                 data={"specification": spec.to_dict(), "project_path": str(candidate_path.resolve())},
-                message="贴片天线、Port1、Rad1、InfiniteSphere1、Setup1 和 Sweep1 已创建。",
+                message=(
+                    "贴片天线、Port1、Rad1、InfiniteSphere1、Setup1、Sweep1 和 "
+                    f"{self._efficiency_sweep_name} 已创建。"
+                ),
             )
         except Exception as exc:
             _dbg(f"<<< create_patch_antenna 失败: {type(exc).__name__}: {exc}")
+            failure_traceback = traceback.format_exc()
+            _dbg(failure_traceback)
             aedt_errors = self._recent_aedt_errors()
             detail = f"；AEDT: {' | '.join(aedt_errors)}" if aedt_errors else ""
             return HFSSResult(
@@ -598,6 +720,7 @@ class PyAEDTHFSSClient(HFSSClient):
                 data={
                     "project_path": str(self._project_path.resolve()) if self._project_path else None,
                     "aedt_errors": aedt_errors,
+                    "traceback": failure_traceback,
                 },
                 message=f"建模失败: {type(exc).__name__}: {exc}{detail}",
             )
@@ -633,6 +756,10 @@ class PyAEDTHFSSClient(HFSSClient):
                 "solution_setup": self._setup_name.casefold() in folded_setups,
                 "frequency_sweep": (
                     f"{self._setup_name} : {self._sweep_name}".casefold() in folded_sweeps
+                ),
+                "efficiency_sweep": (
+                    f"{self._setup_name} : {self._efficiency_sweep_name}".casefold()
+                    in folded_sweeps
                 ),
             }
 
@@ -767,14 +894,15 @@ class PyAEDTHFSSClient(HFSSClient):
         try:
             if metric == "far_field":
                 _dbg(">>> get_result: far_field")
-                data = self._antenna_metrics()
-                required = {"peak_gain_dbi", "radiation_efficiency_percent"}
+                freq, s11 = self._s11_curve()
+                data = self._antenna_metrics(freq, s11)
+                required = {"peak_gain_dbi", "total_efficiency_mean_percent"}
                 if not required.issubset(data):
                     _dbg("<<< get_result 失败: 未读取到增益/效率数据")
                     return HFSSResult(
                         success=False,
                         data=data,
-                        message="增益或辐射效率缺失，请确认远场设置与求解结果完整",
+                        message="增益或频带总体效率缺失，请确认扫频远场数据与求解结果完整",
                     )
                 _dbg(f"<<< get_result 增益/效率: {data}")
                 return HFSSResult(success=True, data=data, message="增益/效率读取成功")
@@ -817,7 +945,7 @@ class PyAEDTHFSSClient(HFSSClient):
             _dbg(f"<<< export_design 失败: {type(e).__name__}: {e}")
             return HFSSResult(success=False, message=f"保存失败: {e}")
 
-    # ---------- 远场指标（增益 / 辐射效率） ----------
+    # ---------- 远场指标（增益 / 单端口总体效率） ----------
 
     def _far_field_sphere_name(self) -> Optional[str]:
         """Return the required sphere without mutating a solved design."""
@@ -848,19 +976,165 @@ class PyAEDTHFSSClient(HFSSClient):
             infinite_sphere=sphere,
         )
         if not report:
-            return []
-        return self._finite_real_values(report.get_solution_data(), expression)
+            raise RuntimeError(f"无法创建 Antenna Parameters 报告: {expression}")
+        report.variations = {"Freq": ["All"]}
+        values = self._finite_real_values(report.get_solution_data(), expression)
+        if not values:
+            raise RuntimeError(f"Antenna Parameters 数据为空: {expression}")
+        return values
 
-    def _antenna_metrics(self) -> Dict[str, float]:
-        """读取峰值增益 [dBi] 与辐射效率 [%]。
+    def _antenna_parameter_curve(self, expression: str, sphere: str):
+        """Read one Antenna Parameters expression on the discrete efficiency sweep."""
+        report = self._hfss.post.reports_by_category.antenna_parameters(
+            expressions=expression,
+            setup=f"{self._setup_name} : {self._efficiency_sweep_name}",
+            infinite_sphere=sphere,
+        )
+        if not report:
+            raise RuntimeError(f"无法创建 Antenna Parameters 报告: {expression}")
+        report.variations = {"Freq": ["All"]}
+        data = report.get_solution_data()
+        values = self._finite_real_values(data, expression)
+        if not values:
+            raise RuntimeError(f"Antenna Parameters 数据为空: {expression}")
+        freq_values = getattr(data, "primary_sweep_values", None)
+        if freq_values is None or len(freq_values) == 0:
+            freq_values = data.intrinsics["Freq"]
+        freq_unit = (getattr(data, "units_sweeps", None) or {}).get("Freq")
+        import numpy as np
+
+        freq = np.asarray(self._frequency_values_hz(freq_values, freq_unit), dtype=float)
+        curve = np.asarray(values, dtype=float)
+        if len(freq) != len(curve):
+            raise RuntimeError(
+                f"{expression} 频率点数量不一致: freq={len(freq)}, values={len(curve)}"
+            )
+        if not np.all(np.isfinite(freq)) or not np.all(np.isfinite(curve)):
+            raise RuntimeError(f"{expression} 包含 NaN 或无穷值")
+        order = np.argsort(freq)
+        freq = freq[order]
+        curve = curve[order]
+        if len(freq) < 2 or np.any(np.diff(freq) <= 0.0):
+            raise RuntimeError(f"{expression} 至少需要两个频率严格递增的离散样本")
+        return freq, curve
+
+    def _total_efficiency_metrics(self, s11_freq, s11_db, sphere: str) -> Dict[str, Any]:
+        """Compute single-port total efficiency in a fixed target-frequency window.
+
+        HFSS RadiationEfficiency is a linear ratio and can be slightly above one
+        because of numerical error. For a one-port antenna, mismatch efficiency is
+        1-|S11|^2 = 1-10^(S11_dB/10). The product is clipped to the physical [0, 1]
+        interval before aggregation; raw extrema are retained for diagnostics. The
+        window does not follow a mistuned candidate's measured resonance: mismatch
+        at the intended operating band is part of the score.
+        """
+        import numpy as np
+
+        target_frequency_ghz = (
+            self._task_spec.objective_value("resonant_frequency", "target", "GHz")
+            if self._task_spec is not None
+            else 2.45
+        )
+        window_center_hz = target_frequency_ghz * 1e9
+        half_span_mhz = (
+            self._task_spec.simulation_value("total_efficiency_window_half_span", "MHz")
+            if self._task_spec is not None
+            else 25.0
+        )
+        half_span_hz = half_span_mhz * 1e6
+        requested_start_hz = window_center_hz - half_span_hz
+        requested_stop_hz = window_center_hz + half_span_hz
+        if requested_start_hz < float(s11_freq[0]) or requested_stop_hz > float(s11_freq[-1]):
+            raise CandidateMetricUnavailableError(
+                "总体效率窗口超出 S11 扫频范围，禁止外推: "
+                f"window={requested_start_hz / 1e9:.6g}-{requested_stop_hz / 1e9:.6g} GHz"
+            )
+        coverage_tolerance_hz = 1.0
+        if self._task_spec is not None:
+            configured_start_hz = (
+                self._task_spec.efficiency_sweep_value("start", "GHz") * 1e9
+            )
+            configured_stop_hz = (
+                self._task_spec.efficiency_sweep_value("stop", "GHz") * 1e9
+            )
+            if (
+                requested_start_hz < configured_start_hz - coverage_tolerance_hz
+                or requested_stop_hz > configured_stop_hz + coverage_tolerance_hz
+            ):
+                raise CandidateMetricUnavailableError(
+                    "总体效率窗口超出 EfficiencySweep 配置范围，禁止外推: "
+                    f"window={requested_start_hz / 1e9:.6g}-{requested_stop_hz / 1e9:.6g} GHz, "
+                    f"efficiency_sweep={configured_start_hz / 1e9:.6g}-"
+                    f"{configured_stop_hz / 1e9:.6g} GHz"
+                )
+
+        # Only create the expensive Antenna Parameters report after cheap coverage
+        # checks pass.  A badly tuned candidate must not trigger redundant far-field
+        # post-processing that cannot contribute to its score.
+        eff_freq, radiation_efficiency_samples = self._antenna_parameter_curve(
+            "RadiationEfficiency", sphere
+        )
+        if (
+            requested_start_hz < float(eff_freq[0]) - coverage_tolerance_hz
+            or requested_stop_hz > float(eff_freq[-1]) + coverage_tolerance_hz
+        ):
+            raise RuntimeError(
+                "总体效率窗口超出 EfficiencySweep 覆盖范围，禁止外推: "
+                f"window={requested_start_hz / 1e9:.6g}-{requested_stop_hz / 1e9:.6g} GHz, "
+                f"efficiency_sweep={eff_freq[0] / 1e9:.6g}-{eff_freq[-1] / 1e9:.6g} GHz"
+            )
+
+        window = (s11_freq >= requested_start_hz - 1e-6) & (
+            s11_freq <= requested_stop_hz + 1e-6
+        )
+        if not np.any(window):
+            raise RuntimeError("总体效率窗口内没有 S11 采样点")
+        selected_freq = s11_freq[window]
+        selected_s11_db = s11_db[window]
+        interpolated_radiation_efficiency = np.interp(
+            selected_freq, eff_freq, radiation_efficiency_samples
+        )
+        mismatch_efficiency = 1.0 - np.power(10.0, selected_s11_db / 10.0)
+        raw_total_efficiency = interpolated_radiation_efficiency * mismatch_efficiency
+        physical_total_efficiency = np.clip(raw_total_efficiency, 0.0, 1.0)
+        selected_total = physical_total_efficiency
+        selected_raw = raw_total_efficiency
+        return {
+            "total_efficiency_mean_percent": float(np.mean(selected_total) * 100.0),
+            "total_efficiency_min_percent": float(np.min(selected_total) * 100.0),
+            "total_efficiency_max_percent": float(np.max(selected_total) * 100.0),
+            "total_efficiency_raw_max_percent": float(np.max(selected_raw) * 100.0),
+            "radiation_efficiency_raw_mean_ratio": float(
+                np.mean(interpolated_radiation_efficiency)
+            ),
+            "radiation_efficiency_discrete_sample_count": int(len(eff_freq)),
+            "total_efficiency_sample_count": int(len(selected_total)),
+            "total_efficiency_window_center_ghz": float(window_center_hz / 1e9),
+            "total_efficiency_window_reference": "target_frequency",
+            "total_efficiency_window_start_ghz": float(selected_freq[0] / 1e9),
+            "total_efficiency_window_stop_ghz": float(selected_freq[-1] / 1e9),
+            "total_efficiency_requested_window_start_ghz": float(requested_start_hz / 1e9),
+            "total_efficiency_requested_window_stop_ghz": float(requested_stop_hz / 1e9),
+            "efficiency_sweep_start_ghz": float(eff_freq[0] / 1e9),
+            "efficiency_sweep_stop_ghz": float(eff_freq[-1] / 1e9),
+        }
+
+    def _antenna_metrics(self, s11_freq, s11_db) -> Dict[str, Any]:
+        """读取峰值增益 [dBi] 与目标工作频段单端口总体效率 [%]。
 
         Use the PyAEDT 0.19 Antenna Parameters report so that the infinite-sphere
         context is passed correctly. Missing data remains missing; no value is invented.
         """
-        out: Dict[str, float] = {}
+        out: Dict[str, Any] = {}
+        diagnostic_errors: Dict[str, str] = {}
+        fatal_backend_error = False
         sphere = self._far_field_sphere_name()
         if not sphere:
-            _dbg("缺少 InfiniteSphere1，增益/效率读取中止")
+            _dbg("缺少 InfiniteSphere1，增益/总体效率读取中止")
+            diagnostic_errors["far_field_setup"] = "RuntimeError: 缺少 InfiniteSphere1"
+            out["metric_errors"] = diagnostic_errors
+            out["_fatal_backend_error"] = True
+            self._postprocessing_unhealthy = True
             return out
 
         try:
@@ -870,18 +1144,29 @@ class PyAEDTHFSSClient(HFSSClient):
             _dbg(f"Antenna Parameters/PeakGain: peak_gain={out.get('peak_gain_dbi')}")
         except Exception as e:
             _dbg(f"Antenna Parameters/PeakGain 失败: {type(e).__name__}: {e}")
+            diagnostic_errors["peak_gain"] = f"{type(e).__name__}: {e}"
+            fatal_backend_error = True
 
         try:
-            values = self._antenna_parameter_values("RadiationEfficiency", sphere)
-            if values:
-                eff = values[0]
-                eff_percent = eff * 100.0 if eff <= 1.0 else eff
-                if 0.0 <= eff_percent <= 100.0:
-                    out["radiation_efficiency_percent"] = eff_percent
-            _dbg(f"Antenna Parameters/RadiationEfficiency: "
-                 f"eff={out.get('radiation_efficiency_percent')}")
+            out.update(self._total_efficiency_metrics(s11_freq, s11_db, sphere))
+            _dbg(
+                "Antenna Parameters/TotalEfficiency: "
+                f"mean={out.get('total_efficiency_mean_percent')}%, "
+                f"min={out.get('total_efficiency_min_percent')}%"
+            )
+        except CandidateMetricUnavailableError as e:
+            _dbg(f"Antenna Parameters/TotalEfficiency 失败: {type(e).__name__}: {e}")
+            diagnostic_errors["total_efficiency"] = f"{type(e).__name__}: {e}"
         except Exception as e:
-            _dbg(f"Antenna Parameters/RadiationEfficiency 失败: {type(e).__name__}: {e}")
+            _dbg(f"Antenna Parameters/TotalEfficiency 失败: {type(e).__name__}: {e}")
+            diagnostic_errors["total_efficiency"] = f"{type(e).__name__}: {e}"
+            fatal_backend_error = True
+
+        if diagnostic_errors:
+            out["metric_errors"] = diagnostic_errors
+        if fatal_backend_error:
+            out["_fatal_backend_error"] = True
+            self._postprocessing_unhealthy = True
 
         return out
 
@@ -927,23 +1212,44 @@ class PyAEDTHFSSClient(HFSSClient):
             metrics = {
                 "center_freq_ghz": float(freq[i_min] / 1e9),
                 "s11_min_db": float(s11[i_min]),
-                "bandwidth_mhz": self._bandwidth_hz(freq, s11) / 1e6,
+                "bandwidth_mhz": self._bandwidth_hz(
+                    freq,
+                    s11,
+                    threshold_db=(
+                        self._task_spec.simulation_value("bandwidth_s11_threshold", "dB")
+                        if self._task_spec is not None else -10.0
+                    ),
+                ) / 1e6,
             }
-            # 增益 / 辐射效率（读取失败时键缺失，评测按缺失判不通过）
-            metrics.update(self._antenna_metrics())
+            # 增益 / 单端口总体效率（读取失败时键缺失，评测按缺失判不通过）
+            metrics.update(self._antenna_metrics(freq, s11))
             required = {
                 "center_freq_ghz",
                 "s11_min_db",
                 "bandwidth_mhz",
                 "peak_gain_dbi",
-                "radiation_efficiency_percent",
+                "total_efficiency_mean_percent",
             }
             missing = sorted(required - set(metrics))
             if missing:
+                fatal_backend_error = bool(metrics.get("_fatal_backend_error"))
+                if fatal_backend_error:
+                    return HFSSResult(
+                        success=False,
+                        data=metrics,
+                        message=(
+                            "AEDT 后处理失败，自动化会话不再用于后续候选；缺少: "
+                            + ", ".join(missing)
+                        ),
+                    )
                 return HFSSResult(
-                    success=False,
+                    success=True,
                     data=metrics,
-                    message=f"指标不完整，缺少: {', '.join(missing)}",
+                    message=(
+                        "候选已完整求解，但其响应落在固定评测覆盖范围之外；"
+                        "缺失目标按零分处理，缺少: "
+                        + ", ".join(missing)
+                    ),
                 )
             _dbg(f"<<< get_metrics: {metrics}")
             return HFSSResult(success=True, data=metrics, message="指标计算完成")

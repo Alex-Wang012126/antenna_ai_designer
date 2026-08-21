@@ -1,0 +1,27 @@
+$begin 'ValidationCache'
+	$begin 'OneValidationResult'
+		Variation='feed_w=\'15.199999999999999mm\' freq0=\'2.4500000000000002GHz\' inset_d=\'10.5mm\' inset_gap=\'1mm\' patch_l=\'36.5mm\' patch_w=\'78mm\' sub_h=\'5mm\' sub_l=\'85mm\' sub_w=\'100mm\''
+		Status=true
+		FileName='VI1E201504178728255022.tmp'
+	$end 'OneValidationResult'
+	$begin 'OneValidationResult'
+		Variation='feed_w=\'15mm\' freq0=\'2.4500000000000002GHz\' inset_d=\'11.5mm\' inset_gap=\'1mm\' patch_l=\'37.799999999999997mm\' patch_w=\'80mm\' sub_h=\'5mm\' sub_l=\'85mm\' sub_w=\'100mm\''
+		Status=true
+		FileName='VI20BA1504178728275441.tmp'
+	$end 'OneValidationResult'
+	$begin 'OneValidationResult'
+		Variation='feed_w=\'15mm\' freq0=\'2.4500000000000002GHz\' inset_d=\'8.5mm\' inset_gap=\'1mm\' patch_l=\'37.799999999999997mm\' patch_w=\'80mm\' sub_h=\'5mm\' sub_l=\'85mm\' sub_w=\'100mm\''
+		Status=true
+		FileName='VI22A11504178728290344.tmp'
+	$end 'OneValidationResult'
+	$begin 'OneValidationResult'
+		Variation='feed_w=\'15mm\' freq0=\'2.4500000000000002GHz\' inset_d=\'8mm\' inset_gap=\'1mm\' patch_l=\'36.5mm\' patch_w=\'80mm\' sub_h=\'5mm\' sub_l=\'85mm\' sub_w=\'100mm\''
+		Status=true
+		FileName='VI1EEB1504178728261225.tmp'
+	$end 'OneValidationResult'
+	$begin 'OneValidationResult'
+		Variation='feed_w=\'9.8000000000000007mm\' freq0=\'2.4500000000000002GHz\' inset_d=\'13.5mm\' inset_gap=\'1mm\' patch_l=\'39mm\' patch_w=\'70mm\' sub_h=\'5mm\' sub_l=\'85mm\' sub_w=\'100mm\''
+		Status=true
+		FileName='VI1D01150417872824624.tmp'
+	$end 'OneValidationResult'
+$end 'ValidationCache'

@@ -10,6 +10,74 @@ from typing import Any, ClassVar, Dict, Mapping, Tuple
 
 
 @dataclass(frozen=True)
+class PatchAntennaDesign:
+    """The physical dimensions the model is allowed to choose."""
+
+    substrate_width_mm: float
+    substrate_length_mm: float
+    substrate_height_mm: float
+    patch_width_mm: float
+    patch_length_mm: float
+    feed_width_mm: float
+    inset_depth_mm: float
+    inset_gap_mm: float
+
+    FIELD_NAMES: ClassVar[Tuple[str, ...]] = (
+        "substrate_width_mm",
+        "substrate_length_mm",
+        "substrate_height_mm",
+        "patch_width_mm",
+        "patch_length_mm",
+        "feed_width_mm",
+        "inset_depth_mm",
+        "inset_gap_mm",
+    )
+
+    @classmethod
+    def from_mapping(
+        cls,
+        values: Mapping[str, Any],
+        variable_definitions: Mapping[str, Mapping[str, Any]],
+    ) -> "PatchAntennaDesign":
+        if not isinstance(values, Mapping):
+            raise ValueError("patch antenna design must be a JSON object")
+        supplied = set(values)
+        expected = set(cls.FIELD_NAMES)
+        missing = sorted(expected - supplied)
+        extra = sorted(supplied - expected)
+        if missing:
+            raise ValueError(f"missing required fields: {', '.join(missing)}")
+        if extra:
+            raise ValueError(f"unknown or read-only fields: {', '.join(extra)}")
+
+        converted: Dict[str, float] = {}
+        for field_name in cls.FIELD_NAMES:
+            value = values[field_name]
+            if isinstance(value, bool) or not isinstance(value, Real):
+                raise ValueError(f"{field_name} must be a number")
+            number = float(value)
+            definition = variable_definitions[field_name]
+            minimum = float(definition["minimum"])
+            maximum = float(definition["maximum"])
+            if not math.isfinite(number) or not minimum <= number <= maximum:
+                raise ValueError(f"{field_name} must be between {minimum} and {maximum} mm")
+            converted[field_name] = number
+
+        if converted["patch_width_mm"] >= converted["substrate_width_mm"]:
+            raise ValueError("patch_width_mm must be smaller than substrate_width_mm")
+        if converted["patch_length_mm"] >= converted["substrate_length_mm"]:
+            raise ValueError("patch_length_mm must be smaller than substrate_length_mm")
+        if converted["feed_width_mm"] + 2 * converted["inset_gap_mm"] >= converted["patch_width_mm"]:
+            raise ValueError("feed_width_mm plus both inset gaps must be smaller than patch_width_mm")
+        if converted["inset_depth_mm"] >= converted["patch_length_mm"]:
+            raise ValueError("inset_depth_mm must be smaller than patch_length_mm")
+        return cls(**converted)
+
+    def to_dict(self) -> Dict[str, float]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
 class PatchAntennaSpec:
     """Validated dimensions for one inset-fed rectangular patch antenna."""
 
@@ -128,32 +196,3 @@ class PatchAntennaSpec:
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
-
-
-PATCH_ANTENNA_TOOL_PROPERTIES: Dict[str, Dict[str, Any]] = {
-    "center_frequency_ghz": {"type": "number", "minimum": 0.1, "maximum": 100.0},
-    "substrate_material": {
-        "type": "string",
-        "pattern": r"^[A-Za-z][A-Za-z0-9_. -]{0,63}$",
-        "description": (
-            "Descriptive substrate label, for example Rogers5880. The backend creates its own project material; "
-            "the numeric permittivity and loss tangent fields are authoritative."
-        ),
-    },
-    "substrate_permittivity": {"type": "number", "minimum": 1.0, "maximum": 30.0},
-    "substrate_loss_tangent": {"type": "number", "minimum": 0.0, "maximum": 1.0},
-    "substrate_width_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "substrate_length_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "substrate_height_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "patch_width_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "patch_length_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "feed_width_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "inset_depth_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "inset_gap_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "air_margin_xy_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "air_above_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "air_below_mm": {"type": "number", "exclusiveMinimum": 0.0},
-    "sweep_start_ghz": {"type": "number", "minimum": 0.01, "maximum": 100.0},
-    "sweep_stop_ghz": {"type": "number", "minimum": 0.01, "maximum": 100.0},
-    "sweep_points": {"type": "integer", "minimum": 11, "maximum": 2001},
-}

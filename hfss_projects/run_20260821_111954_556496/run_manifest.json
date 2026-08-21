@@ -1,0 +1,1130 @@
+{
+  "protocol_version": 3,
+  "task_id": "inset_patch_2p45_v5",
+  "task_spec_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\task_spec.json",
+  "natural_language_supplement": "在给定候选与 HFSS 求解预算内，设计一副 2.45 GHz 单端口内嵌馈电矩形微带贴片天线。材料、端口、空气区域、求解设置、扫频和远场设置均由评测端固定。模型只选择基板外形与贴片/馈线几何尺寸。要求谐振频率误差不超过 25 MHz，扫频内最小 S11 不高于 -20 dB，包含该谐振点的连续 -10 dB 带宽不小于 110 MHz，2.45 GHz 自适应解处的 HFSS 峰值增益不低于 7.5 dBi，谐振频率正负 25 MHz 窗口内的平均总体效率不低于 85%。",
+  "stop_reason": "iteration_limit",
+  "final_summary": "已用完 5 次候选设计迭代，提交最后一个完整仿真候选进行独立评测。",
+  "max_design_iterations": 5,
+  "iterations_used": 5,
+  "model_calls": 5,
+  "solve_calls": 3,
+  "resource_usage_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\resource_usage.json",
+  "resource_summary": {
+    "model_calls": 5,
+    "token_totals": {
+      "input_tokens": 42318,
+      "cached_input_tokens": 21504,
+      "output_tokens": 18045,
+      "reasoning_tokens": 17605,
+      "total_tokens": 60363
+    },
+    "hfss_solve_calls": 3,
+    "hfss_solve_duration_seconds": 153.505408
+  },
+  "selected_iteration": 5,
+  "candidates": [
+    {
+      "iteration": 1,
+      "success": true,
+      "status": "completed_with_metric_penalty",
+      "specification": {
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 70.0,
+        "patch_length_mm": 39.0,
+        "feed_width_mm": 9.8,
+        "inset_depth_mm": 13.5,
+        "inset_gap_mm": 1.0
+      },
+      "design_parameters": {
+        "substrate_width_mm": {
+          "value": 100.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane width along x."
+        },
+        "substrate_length_mm": {
+          "value": 85.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane length along y."
+        },
+        "substrate_height_mm": {
+          "value": 5.0,
+          "unit": "mm",
+          "description": "Dielectric substrate thickness."
+        },
+        "patch_width_mm": {
+          "value": 70.0,
+          "unit": "mm",
+          "description": "Rectangular radiating patch width before the centered inset notch."
+        },
+        "patch_length_mm": {
+          "value": 39.0,
+          "unit": "mm",
+          "description": "Rectangular radiating patch resonant length."
+        },
+        "feed_width_mm": {
+          "value": 9.8,
+          "unit": "mm",
+          "description": "Centered microstrip feed-line width."
+        },
+        "inset_depth_mm": {
+          "value": 13.5,
+          "unit": "mm",
+          "description": "Distance that the feed line penetrates into the patch from its radiating edge."
+        },
+        "inset_gap_mm": {
+          "value": 1.0,
+          "unit": "mm",
+          "description": "Gap on each side of the inset feed line."
+        }
+      },
+      "resolved_specification": {
+        "center_frequency_ghz": 2.45,
+        "substrate_material": "Rogers5880_custom",
+        "substrate_permittivity": 2.2,
+        "substrate_loss_tangent": 0.0009,
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 70.0,
+        "patch_length_mm": 39.0,
+        "feed_width_mm": 9.8,
+        "inset_depth_mm": 13.5,
+        "inset_gap_mm": 1.0,
+        "air_margin_xy_mm": 40.0,
+        "air_above_mm": 55.0,
+        "air_below_mm": 30.0,
+        "sweep_start_ghz": 2.3,
+        "sweep_stop_ghz": 2.6,
+        "sweep_points": 301
+      },
+      "project_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_001.aedt",
+      "metrics_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_001_metrics.json",
+      "metrics": {
+        "center_freq_ghz": 2.3,
+        "s11_min_db": -8.191305829779461,
+        "bandwidth_mhz": 0.0,
+        "peak_gain_dbi": 5.54582569981302,
+        "metric_errors": {
+          "total_efficiency": "CandidateMetricUnavailableError: 总体效率窗口超出 S11 扫频范围，禁止外推: window=2.275-2.325 GHz"
+        }
+      },
+      "measured_metrics": {
+        "resonant_frequency": {
+          "metric_key": "center_freq_ghz",
+          "value": 2.3,
+          "unit": "GHz",
+          "value_representation": "linear_frequency",
+          "semantics": "Frequency of the minimum sampled/interpolated dB(S(1,1)) within the fixed 2.30-2.60 GHz sweep. Values are linear GHz, not angular frequency."
+        },
+        "minimum_s11": {
+          "metric_key": "s11_min_db",
+          "value": -8.191305829779461,
+          "unit": "dB",
+          "value_representation": "20_log10_magnitude",
+          "semantics": "Minimum of 20*log10(|S11|) over the fixed sweep. More negative is better; this is dB, not a positive return-loss magnitude and not linear |S11|."
+        },
+        "impedance_bandwidth": {
+          "metric_key": "bandwidth_mhz",
+          "value": 0.0,
+          "unit": "MHz",
+          "value_representation": "linear_frequency_span",
+          "semantics": "Width of the contiguous region containing the minimum-S11 resonance where 20*log10(|S11|) <= -10 dB, with linear interpolation at threshold crossings."
+        },
+        "peak_gain": {
+          "metric_key": "peak_gain_dbi",
+          "value": 5.54582569981302,
+          "unit": "dBi",
+          "value_representation": "10_log10_power_gain_relative_to_isotropic",
+          "semantics": "Maximum HFSS dB(PeakGain) from the InfiniteSphere1 Antenna Parameters report at Setup1:LastAdaptive (2.45 GHz). This is logarithmic dBi, not linear gain and not realized gain."
+        },
+        "band_average_total_efficiency": {
+          "metric_key": "total_efficiency_mean_percent",
+          "value": null,
+          "unit": "%",
+          "value_representation": "linear_percentage",
+          "semantics": "Arithmetic mean on the 1 MHz Setup1:Sweep1 grid over measured resonance +/- 25 MHz of clamp(interp(RadiationEfficiency from the discrete Setup1:EfficiencySweep) * (1 - 10^(dB(S11)/10)), 0, 1), expressed as a linear percentage. Interpolation is allowed only inside the discrete efficiency sweep; extrapolation is forbidden. HFSS RadiationEfficiency is treated as a linear ratio even when numerical error makes it slightly greater than 1. This is single-port total efficiency, including mismatch loss, and is not in dB."
+        }
+      },
+      "stages": {
+        "build": {
+          "success": true,
+          "message": "贴片天线、Port1、Rad1、InfiniteSphere1、Setup1、Sweep1 和 EfficiencySweep 已创建。",
+          "data": {
+            "specification": {
+              "center_frequency_ghz": 2.45,
+              "substrate_material": "Rogers5880_custom",
+              "substrate_permittivity": 2.2,
+              "substrate_loss_tangent": 0.0009,
+              "substrate_width_mm": 100.0,
+              "substrate_length_mm": 85.0,
+              "substrate_height_mm": 5.0,
+              "patch_width_mm": 70.0,
+              "patch_length_mm": 39.0,
+              "feed_width_mm": 9.8,
+              "inset_depth_mm": 13.5,
+              "inset_gap_mm": 1.0,
+              "air_margin_xy_mm": 40.0,
+              "air_above_mm": 55.0,
+              "air_below_mm": 30.0,
+              "sweep_start_ghz": 2.3,
+              "sweep_stop_ghz": 2.6,
+              "sweep_points": 301
+            },
+            "project_path": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_001.aedt"
+          },
+          "duration_seconds": 2.980863
+        },
+        "validation": {
+          "success": true,
+          "message": "设计校验通过",
+          "data": {
+            "checks": {
+              "geometry": true,
+              "port": true,
+              "radiation_boundary": true,
+              "far_field_setup": true,
+              "solution_setup": true,
+              "frequency_sweep": true,
+              "efficiency_sweep": true,
+              "native_validation": true
+            },
+            "objects": [
+              "Substrate",
+              "AirRegion",
+              "Ground",
+              "PatchFeed",
+              "Port1_sheet"
+            ],
+            "excitations": [
+              "Port1:1"
+            ],
+            "boundaries": [
+              "PEC_Metals",
+              "Port1",
+              "Rad1"
+            ],
+            "field_setups": [
+              "InfiniteSphere1"
+            ],
+            "setups": [
+              "Setup1"
+            ],
+            "analysis_sweeps": [
+              "Setup1 : LastAdaptive",
+              "Setup1 : Sweep1",
+              "Setup1 : EfficiencySweep",
+              "Setup1 - feed_w='9.8000000000000007mm' freq0='2.4500000000000002GHz' inset_d='13.5mm' inset_gap='1mm' patch_l='39mm' patch_w='70mm' sub_h='5mm' sub_l='85mm' sub_w='100mm' : Table"
+            ],
+            "native_messages": [
+              "Desktop messages:",
+              "[warning] Renormalizing the port impedance will not impact the field results if the 'Include Port Post Processing Effects' is disabled in Edit Sources. (11:21:01 AM  Aug 21, 2026)",
+              "Design validation check PASSED.",
+              "Design validation messages:",
+              "** End of design validation messages. **",
+              "Excitations check:",
+              "Solution type: Modal",
+              "Ports Requested: 1",
+              "Defined excitations number: 1",
+              "Defined excitations names: ['Port1:1']",
+              "Analysis setup messages:",
+              "Detected setup and sweep: ",
+              "Setup1",
+              " |__ Sweep1",
+              " |__ EfficiencySweep"
+            ]
+          },
+          "duration_seconds": 0.44781
+        },
+        "solve": {
+          "success": true,
+          "message": "求解完成且已验证 S11 数据: Setup1",
+          "data": {
+            "solution": "Setup1",
+            "s11_samples": 301
+          },
+          "duration_seconds": 50.772367
+        },
+        "save": {
+          "success": true,
+          "message": "设计已保存: C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_001.aedt",
+          "data": {
+            "file_path": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_001.aedt"
+          },
+          "duration_seconds": 0.518691
+        },
+        "metrics": {
+          "success": true,
+          "message": "候选已完整求解，但其响应落在固定评测覆盖范围之外；缺失目标按零分处理，缺少: total_efficiency_mean_percent",
+          "data": {
+            "center_freq_ghz": 2.3,
+            "s11_min_db": -8.191305829779461,
+            "bandwidth_mhz": 0.0,
+            "peak_gain_dbi": 5.54582569981302,
+            "metric_errors": {
+              "total_efficiency": "CandidateMetricUnavailableError: 总体效率窗口超出 S11 扫频范围，禁止外推: window=2.275-2.325 GHz"
+            }
+          },
+          "duration_seconds": 0.476562
+        }
+      },
+      "message": "完整仿真成功，但部分指标因候选响应超出固定覆盖范围而不可用，独立评测会将对应目标计为零分。"
+    },
+    {
+      "iteration": 2,
+      "success": false,
+      "status": "validation_failed",
+      "specification": {
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 78.0,
+        "patch_length_mm": 36.5,
+        "feed_width_mm": 15.2,
+        "inset_depth_mm": 10.5,
+        "inset_gap_mm": 1.0
+      },
+      "design_parameters": {
+        "substrate_width_mm": {
+          "value": 100.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane width along x."
+        },
+        "substrate_length_mm": {
+          "value": 85.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane length along y."
+        },
+        "substrate_height_mm": {
+          "value": 5.0,
+          "unit": "mm",
+          "description": "Dielectric substrate thickness."
+        },
+        "patch_width_mm": {
+          "value": 78.0,
+          "unit": "mm",
+          "description": "Rectangular radiating patch width before the centered inset notch."
+        },
+        "patch_length_mm": {
+          "value": 36.5,
+          "unit": "mm",
+          "description": "Rectangular radiating patch resonant length."
+        },
+        "feed_width_mm": {
+          "value": 15.2,
+          "unit": "mm",
+          "description": "Centered microstrip feed-line width."
+        },
+        "inset_depth_mm": {
+          "value": 10.5,
+          "unit": "mm",
+          "description": "Distance that the feed line penetrates into the patch from its radiating edge."
+        },
+        "inset_gap_mm": {
+          "value": 1.0,
+          "unit": "mm",
+          "description": "Gap on each side of the inset feed line."
+        }
+      },
+      "resolved_specification": {
+        "center_frequency_ghz": 2.45,
+        "substrate_material": "Rogers5880_custom",
+        "substrate_permittivity": 2.2,
+        "substrate_loss_tangent": 0.0009,
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 78.0,
+        "patch_length_mm": 36.5,
+        "feed_width_mm": 15.2,
+        "inset_depth_mm": 10.5,
+        "inset_gap_mm": 1.0,
+        "air_margin_xy_mm": 40.0,
+        "air_above_mm": 55.0,
+        "air_below_mm": 30.0,
+        "sweep_start_ghz": 2.3,
+        "sweep_stop_ghz": 2.6,
+        "sweep_points": 301
+      },
+      "project_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_002.aedt",
+      "metrics_file": null,
+      "metrics": {},
+      "measured_metrics": {},
+      "stages": {
+        "build": {
+          "success": true,
+          "message": "贴片天线、Port1、Rad1、InfiniteSphere1、Setup1、Sweep1 和 EfficiencySweep 已创建。",
+          "data": {
+            "specification": {
+              "center_frequency_ghz": 2.45,
+              "substrate_material": "Rogers5880_custom",
+              "substrate_permittivity": 2.2,
+              "substrate_loss_tangent": 0.0009,
+              "substrate_width_mm": 100.0,
+              "substrate_length_mm": 85.0,
+              "substrate_height_mm": 5.0,
+              "patch_width_mm": 78.0,
+              "patch_length_mm": 36.5,
+              "feed_width_mm": 15.2,
+              "inset_depth_mm": 10.5,
+              "inset_gap_mm": 1.0,
+              "air_margin_xy_mm": 40.0,
+              "air_above_mm": 55.0,
+              "air_below_mm": 30.0,
+              "sweep_start_ghz": 2.3,
+              "sweep_stop_ghz": 2.6,
+              "sweep_points": 301
+            },
+            "project_path": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_002.aedt"
+          },
+          "duration_seconds": 4.966784
+        },
+        "validation": {
+          "success": false,
+          "message": "设计校验失败: frequency_sweep, efficiency_sweep",
+          "data": {
+            "checks": {
+              "geometry": true,
+              "port": true,
+              "radiation_boundary": true,
+              "far_field_setup": true,
+              "solution_setup": true,
+              "frequency_sweep": false,
+              "efficiency_sweep": false,
+              "native_validation": true
+            },
+            "objects": [
+              "AirRegion",
+              "Substrate",
+              "Ground",
+              "PatchFeed",
+              "Port1_sheet"
+            ],
+            "excitations": [
+              "Port1:1"
+            ],
+            "boundaries": [
+              "PEC_Metals",
+              "Port1",
+              "Rad1"
+            ],
+            "field_setups": [
+              "InfiniteSphere1"
+            ],
+            "setups": [
+              "Setup1"
+            ],
+            "analysis_sweeps": [
+              "Setup1 : LastAdaptive",
+              "Setup1 : Sweep1_6NUQBB",
+              "Setup1 : EfficiencySweep_CS0EXX",
+              "Setup1 - feed_w='15.199999999999999mm' freq0='2.4500000000000002GHz' inset_d='10.5mm' inset_gap='1mm' patch_l='36.5mm' patch_w='78mm' sub_h='5mm' sub_l='85mm' sub_w='100mm' : Table"
+            ],
+            "native_messages": [
+              "[info] An interpolating frequency sweep with 301 points has been started using HFSS - Solving Distributed. (11:21:51 AM  Aug 21, 2026)",
+              "[info] Interpolating frequency sweep complete. Converged. (11:21:51 AM  Aug 21, 2026)",
+              "[info] Normal completion of simulation on server: Local Machine. (11:21:52 AM  Aug 21, 2026)",
+              "[warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (11:21:53 AM  Aug 21, 2026)",
+              "[warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (11:21:54 AM  Aug 21, 2026)",
+              "[warning] antenna: Solutions have been invalidated. Undo to recover. (11:22:26 AM  Aug 21, 2026)",
+              "[warning] Renormalizing the port impedance will not impact the field results if the 'Include Port Post Processing Effects' is disabled in Edit Sources. (11:22:29 AM  Aug 21, 2026)",
+              "Design validation check PASSED.",
+              "Design validation messages:",
+              "** End of design validation messages. **",
+              "Excitations check:",
+              "Solution type: Modal",
+              "Ports Requested: 1",
+              "Defined excitations number: 1",
+              "Defined excitations names: ['Port1:1']",
+              "Analysis setup messages:",
+              "Detected setup and sweep: ",
+              "Setup1",
+              " |__ Sweep1_6NUQBB",
+              " |__ EfficiencySweep_CS0EXX"
+            ]
+          },
+          "duration_seconds": 0.510167
+        }
+      },
+      "failed_stage": "validation",
+      "message": "设计校验失败: frequency_sweep, efficiency_sweep"
+    },
+    {
+      "iteration": 3,
+      "success": true,
+      "status": "completed_with_metric_penalty",
+      "specification": {
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 80.0,
+        "patch_length_mm": 36.5,
+        "feed_width_mm": 15.0,
+        "inset_depth_mm": 8.0,
+        "inset_gap_mm": 1.0
+      },
+      "design_parameters": {
+        "substrate_width_mm": {
+          "value": 100.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane width along x."
+        },
+        "substrate_length_mm": {
+          "value": 85.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane length along y."
+        },
+        "substrate_height_mm": {
+          "value": 5.0,
+          "unit": "mm",
+          "description": "Dielectric substrate thickness."
+        },
+        "patch_width_mm": {
+          "value": 80.0,
+          "unit": "mm",
+          "description": "Rectangular radiating patch width before the centered inset notch."
+        },
+        "patch_length_mm": {
+          "value": 36.5,
+          "unit": "mm",
+          "description": "Rectangular radiating patch resonant length."
+        },
+        "feed_width_mm": {
+          "value": 15.0,
+          "unit": "mm",
+          "description": "Centered microstrip feed-line width."
+        },
+        "inset_depth_mm": {
+          "value": 8.0,
+          "unit": "mm",
+          "description": "Distance that the feed line penetrates into the patch from its radiating edge."
+        },
+        "inset_gap_mm": {
+          "value": 1.0,
+          "unit": "mm",
+          "description": "Gap on each side of the inset feed line."
+        }
+      },
+      "resolved_specification": {
+        "center_frequency_ghz": 2.45,
+        "substrate_material": "Rogers5880_custom",
+        "substrate_permittivity": 2.2,
+        "substrate_loss_tangent": 0.0009,
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 80.0,
+        "patch_length_mm": 36.5,
+        "feed_width_mm": 15.0,
+        "inset_depth_mm": 8.0,
+        "inset_gap_mm": 1.0,
+        "air_margin_xy_mm": 40.0,
+        "air_above_mm": 55.0,
+        "air_below_mm": 30.0,
+        "sweep_start_ghz": 2.3,
+        "sweep_stop_ghz": 2.6,
+        "sweep_points": 301
+      },
+      "project_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_003.aedt",
+      "metrics_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_003_metrics.json",
+      "metrics": {
+        "center_freq_ghz": 2.6,
+        "s11_min_db": -6.486838618824658,
+        "bandwidth_mhz": 0.0,
+        "peak_gain_dbi": 6.599408491982509,
+        "metric_errors": {
+          "total_efficiency": "CandidateMetricUnavailableError: 总体效率窗口超出 S11 扫频范围，禁止外推: window=2.575-2.625 GHz"
+        }
+      },
+      "measured_metrics": {
+        "resonant_frequency": {
+          "metric_key": "center_freq_ghz",
+          "value": 2.6,
+          "unit": "GHz",
+          "value_representation": "linear_frequency",
+          "semantics": "Frequency of the minimum sampled/interpolated dB(S(1,1)) within the fixed 2.30-2.60 GHz sweep. Values are linear GHz, not angular frequency."
+        },
+        "minimum_s11": {
+          "metric_key": "s11_min_db",
+          "value": -6.486838618824658,
+          "unit": "dB",
+          "value_representation": "20_log10_magnitude",
+          "semantics": "Minimum of 20*log10(|S11|) over the fixed sweep. More negative is better; this is dB, not a positive return-loss magnitude and not linear |S11|."
+        },
+        "impedance_bandwidth": {
+          "metric_key": "bandwidth_mhz",
+          "value": 0.0,
+          "unit": "MHz",
+          "value_representation": "linear_frequency_span",
+          "semantics": "Width of the contiguous region containing the minimum-S11 resonance where 20*log10(|S11|) <= -10 dB, with linear interpolation at threshold crossings."
+        },
+        "peak_gain": {
+          "metric_key": "peak_gain_dbi",
+          "value": 6.599408491982509,
+          "unit": "dBi",
+          "value_representation": "10_log10_power_gain_relative_to_isotropic",
+          "semantics": "Maximum HFSS dB(PeakGain) from the InfiniteSphere1 Antenna Parameters report at Setup1:LastAdaptive (2.45 GHz). This is logarithmic dBi, not linear gain and not realized gain."
+        },
+        "band_average_total_efficiency": {
+          "metric_key": "total_efficiency_mean_percent",
+          "value": null,
+          "unit": "%",
+          "value_representation": "linear_percentage",
+          "semantics": "Arithmetic mean on the 1 MHz Setup1:Sweep1 grid over measured resonance +/- 25 MHz of clamp(interp(RadiationEfficiency from the discrete Setup1:EfficiencySweep) * (1 - 10^(dB(S11)/10)), 0, 1), expressed as a linear percentage. Interpolation is allowed only inside the discrete efficiency sweep; extrapolation is forbidden. HFSS RadiationEfficiency is treated as a linear ratio even when numerical error makes it slightly greater than 1. This is single-port total efficiency, including mismatch loss, and is not in dB."
+        }
+      },
+      "stages": {
+        "build": {
+          "success": true,
+          "message": "贴片天线、Port1、Rad1、InfiniteSphere1、Setup1、Sweep1 和 EfficiencySweep 已创建。",
+          "data": {
+            "specification": {
+              "center_frequency_ghz": 2.45,
+              "substrate_material": "Rogers5880_custom",
+              "substrate_permittivity": 2.2,
+              "substrate_loss_tangent": 0.0009,
+              "substrate_width_mm": 100.0,
+              "substrate_length_mm": 85.0,
+              "substrate_height_mm": 5.0,
+              "patch_width_mm": 80.0,
+              "patch_length_mm": 36.5,
+              "feed_width_mm": 15.0,
+              "inset_depth_mm": 8.0,
+              "inset_gap_mm": 1.0,
+              "air_margin_xy_mm": 40.0,
+              "air_above_mm": 55.0,
+              "air_below_mm": 30.0,
+              "sweep_start_ghz": 2.3,
+              "sweep_stop_ghz": 2.6,
+              "sweep_points": 301
+            },
+            "project_path": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_003.aedt"
+          },
+          "duration_seconds": 5.63331
+        },
+        "validation": {
+          "success": true,
+          "message": "设计校验通过",
+          "data": {
+            "checks": {
+              "geometry": true,
+              "port": true,
+              "radiation_boundary": true,
+              "far_field_setup": true,
+              "solution_setup": true,
+              "frequency_sweep": true,
+              "efficiency_sweep": true,
+              "native_validation": true
+            },
+            "objects": [
+              "AirRegion",
+              "Substrate",
+              "Ground",
+              "PatchFeed",
+              "Port1_sheet"
+            ],
+            "excitations": [
+              "Port1:1"
+            ],
+            "boundaries": [
+              "PEC_Metals",
+              "Port1",
+              "Rad1"
+            ],
+            "field_setups": [
+              "InfiniteSphere1"
+            ],
+            "setups": [
+              "Setup1"
+            ],
+            "analysis_sweeps": [
+              "Setup1 : LastAdaptive",
+              "Setup1 : Sweep1",
+              "Setup1 : EfficiencySweep",
+              "Setup1 - feed_w='15mm' freq0='2.4500000000000002GHz' inset_d='8mm' inset_gap='1mm' patch_l='36.5mm' patch_w='80mm' sub_h='5mm' sub_l='85mm' sub_w='100mm' : Table"
+            ],
+            "native_messages": [
+              "Desktop messages:",
+              "[warning] Renormalizing the port impedance will not impact the field results if the 'Include Port Post Processing Effects' is disabled in Edit Sources. (11:23:31 AM  Aug 21, 2026)",
+              "Design validation check PASSED.",
+              "Design validation messages:",
+              "** End of design validation messages. **",
+              "Excitations check:",
+              "Solution type: Modal",
+              "Ports Requested: 1",
+              "Defined excitations number: 1",
+              "Defined excitations names: ['Port1:1']",
+              "Analysis setup messages:",
+              "Detected setup and sweep: ",
+              "Setup1",
+              " |__ Sweep1",
+              " |__ EfficiencySweep"
+            ]
+          },
+          "duration_seconds": 0.369305
+        },
+        "solve": {
+          "success": true,
+          "message": "求解完成且已验证 S11 数据: Setup1",
+          "data": {
+            "solution": "Setup1",
+            "s11_samples": 301
+          },
+          "duration_seconds": 51.88985
+        },
+        "save": {
+          "success": true,
+          "message": "设计已保存: C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_003.aedt",
+          "data": {
+            "file_path": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_003.aedt"
+          },
+          "duration_seconds": 0.633476
+        },
+        "metrics": {
+          "success": true,
+          "message": "候选已完整求解，但其响应落在固定评测覆盖范围之外；缺失目标按零分处理，缺少: total_efficiency_mean_percent",
+          "data": {
+            "center_freq_ghz": 2.6,
+            "s11_min_db": -6.486838618824658,
+            "bandwidth_mhz": 0.0,
+            "peak_gain_dbi": 6.599408491982509,
+            "metric_errors": {
+              "total_efficiency": "CandidateMetricUnavailableError: 总体效率窗口超出 S11 扫频范围，禁止外推: window=2.575-2.625 GHz"
+            }
+          },
+          "duration_seconds": 0.556012
+        }
+      },
+      "message": "完整仿真成功，但部分指标因候选响应超出固定覆盖范围而不可用，独立评测会将对应目标计为零分。"
+    },
+    {
+      "iteration": 4,
+      "success": false,
+      "status": "validation_failed",
+      "specification": {
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 80.0,
+        "patch_length_mm": 37.8,
+        "feed_width_mm": 15.0,
+        "inset_depth_mm": 11.5,
+        "inset_gap_mm": 1.0
+      },
+      "design_parameters": {
+        "substrate_width_mm": {
+          "value": 100.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane width along x."
+        },
+        "substrate_length_mm": {
+          "value": 85.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane length along y."
+        },
+        "substrate_height_mm": {
+          "value": 5.0,
+          "unit": "mm",
+          "description": "Dielectric substrate thickness."
+        },
+        "patch_width_mm": {
+          "value": 80.0,
+          "unit": "mm",
+          "description": "Rectangular radiating patch width before the centered inset notch."
+        },
+        "patch_length_mm": {
+          "value": 37.8,
+          "unit": "mm",
+          "description": "Rectangular radiating patch resonant length."
+        },
+        "feed_width_mm": {
+          "value": 15.0,
+          "unit": "mm",
+          "description": "Centered microstrip feed-line width."
+        },
+        "inset_depth_mm": {
+          "value": 11.5,
+          "unit": "mm",
+          "description": "Distance that the feed line penetrates into the patch from its radiating edge."
+        },
+        "inset_gap_mm": {
+          "value": 1.0,
+          "unit": "mm",
+          "description": "Gap on each side of the inset feed line."
+        }
+      },
+      "resolved_specification": {
+        "center_frequency_ghz": 2.45,
+        "substrate_material": "Rogers5880_custom",
+        "substrate_permittivity": 2.2,
+        "substrate_loss_tangent": 0.0009,
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 80.0,
+        "patch_length_mm": 37.8,
+        "feed_width_mm": 15.0,
+        "inset_depth_mm": 11.5,
+        "inset_gap_mm": 1.0,
+        "air_margin_xy_mm": 40.0,
+        "air_above_mm": 55.0,
+        "air_below_mm": 30.0,
+        "sweep_start_ghz": 2.3,
+        "sweep_stop_ghz": 2.6,
+        "sweep_points": 301
+      },
+      "project_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_004.aedt",
+      "metrics_file": null,
+      "metrics": {},
+      "measured_metrics": {},
+      "stages": {
+        "build": {
+          "success": true,
+          "message": "贴片天线、Port1、Rad1、InfiniteSphere1、Setup1、Sweep1 和 EfficiencySweep 已创建。",
+          "data": {
+            "specification": {
+              "center_frequency_ghz": 2.45,
+              "substrate_material": "Rogers5880_custom",
+              "substrate_permittivity": 2.2,
+              "substrate_loss_tangent": 0.0009,
+              "substrate_width_mm": 100.0,
+              "substrate_length_mm": 85.0,
+              "substrate_height_mm": 5.0,
+              "patch_width_mm": 80.0,
+              "patch_length_mm": 37.8,
+              "feed_width_mm": 15.0,
+              "inset_depth_mm": 11.5,
+              "inset_gap_mm": 1.0,
+              "air_margin_xy_mm": 40.0,
+              "air_above_mm": 55.0,
+              "air_below_mm": 30.0,
+              "sweep_start_ghz": 2.3,
+              "sweep_stop_ghz": 2.6,
+              "sweep_points": 301
+            },
+            "project_path": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_004.aedt"
+          },
+          "duration_seconds": 4.875929
+        },
+        "validation": {
+          "success": false,
+          "message": "设计校验失败: frequency_sweep, efficiency_sweep",
+          "data": {
+            "checks": {
+              "geometry": true,
+              "port": true,
+              "radiation_boundary": true,
+              "far_field_setup": true,
+              "solution_setup": true,
+              "frequency_sweep": false,
+              "efficiency_sweep": false,
+              "native_validation": true
+            },
+            "objects": [
+              "AirRegion",
+              "Substrate",
+              "Ground",
+              "PatchFeed",
+              "Port1_sheet"
+            ],
+            "excitations": [
+              "Port1:1"
+            ],
+            "boundaries": [
+              "PEC_Metals",
+              "Port1",
+              "Rad1"
+            ],
+            "field_setups": [
+              "InfiniteSphere1"
+            ],
+            "setups": [
+              "Setup1"
+            ],
+            "analysis_sweeps": [
+              "Setup1 : LastAdaptive",
+              "Setup1 : Sweep1_BTI7P3",
+              "Setup1 : EfficiencySweep_DG3ROG",
+              "Setup1 - feed_w='15mm' freq0='2.4500000000000002GHz' inset_d='11.5mm' inset_gap='1mm' patch_l='37.799999999999997mm' patch_w='80mm' sub_h='5mm' sub_l='85mm' sub_w='100mm' : Table"
+            ],
+            "native_messages": [
+              "[info] An interpolating frequency sweep with 301 points has been started using HFSS - Solving Distributed. (11:24:23 AM  Aug 21, 2026)",
+              "[info] Interpolating frequency sweep complete. Converged. (11:24:23 AM  Aug 21, 2026)",
+              "[info] Normal completion of simulation on server: Local Machine. (11:24:23 AM  Aug 21, 2026)",
+              "[warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (11:24:24 AM  Aug 21, 2026)",
+              "[warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (11:24:25 AM  Aug 21, 2026)",
+              "[warning] antenna: Solutions have been invalidated. Undo to recover. (11:25:49 AM  Aug 21, 2026)",
+              "[warning] Renormalizing the port impedance will not impact the field results if the 'Include Port Post Processing Effects' is disabled in Edit Sources. (11:25:52 AM  Aug 21, 2026)",
+              "Design validation check PASSED.",
+              "Design validation messages:",
+              "** End of design validation messages. **",
+              "Excitations check:",
+              "Solution type: Modal",
+              "Ports Requested: 1",
+              "Defined excitations number: 1",
+              "Defined excitations names: ['Port1:1']",
+              "Analysis setup messages:",
+              "Detected setup and sweep: ",
+              "Setup1",
+              " |__ Sweep1_BTI7P3",
+              " |__ EfficiencySweep_DG3ROG"
+            ]
+          },
+          "duration_seconds": 0.497934
+        }
+      },
+      "failed_stage": "validation",
+      "message": "设计校验失败: frequency_sweep, efficiency_sweep"
+    },
+    {
+      "iteration": 5,
+      "success": true,
+      "status": "completed_with_metric_penalty",
+      "specification": {
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 80.0,
+        "patch_length_mm": 37.8,
+        "feed_width_mm": 15.0,
+        "inset_depth_mm": 8.5,
+        "inset_gap_mm": 1.0
+      },
+      "design_parameters": {
+        "substrate_width_mm": {
+          "value": 100.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane width along x."
+        },
+        "substrate_length_mm": {
+          "value": 85.0,
+          "unit": "mm",
+          "description": "Overall substrate and ground-plane length along y."
+        },
+        "substrate_height_mm": {
+          "value": 5.0,
+          "unit": "mm",
+          "description": "Dielectric substrate thickness."
+        },
+        "patch_width_mm": {
+          "value": 80.0,
+          "unit": "mm",
+          "description": "Rectangular radiating patch width before the centered inset notch."
+        },
+        "patch_length_mm": {
+          "value": 37.8,
+          "unit": "mm",
+          "description": "Rectangular radiating patch resonant length."
+        },
+        "feed_width_mm": {
+          "value": 15.0,
+          "unit": "mm",
+          "description": "Centered microstrip feed-line width."
+        },
+        "inset_depth_mm": {
+          "value": 8.5,
+          "unit": "mm",
+          "description": "Distance that the feed line penetrates into the patch from its radiating edge."
+        },
+        "inset_gap_mm": {
+          "value": 1.0,
+          "unit": "mm",
+          "description": "Gap on each side of the inset feed line."
+        }
+      },
+      "resolved_specification": {
+        "center_frequency_ghz": 2.45,
+        "substrate_material": "Rogers5880_custom",
+        "substrate_permittivity": 2.2,
+        "substrate_loss_tangent": 0.0009,
+        "substrate_width_mm": 100.0,
+        "substrate_length_mm": 85.0,
+        "substrate_height_mm": 5.0,
+        "patch_width_mm": 80.0,
+        "patch_length_mm": 37.8,
+        "feed_width_mm": 15.0,
+        "inset_depth_mm": 8.5,
+        "inset_gap_mm": 1.0,
+        "air_margin_xy_mm": 40.0,
+        "air_above_mm": 55.0,
+        "air_below_mm": 30.0,
+        "sweep_start_ghz": 2.3,
+        "sweep_stop_ghz": 2.6,
+        "sweep_points": 301
+      },
+      "project_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_005.aedt",
+      "metrics_file": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_005_metrics.json",
+      "metrics": {
+        "center_freq_ghz": 2.6,
+        "s11_min_db": -7.303737475450643,
+        "bandwidth_mhz": 0.0,
+        "peak_gain_dbi": 6.0172513927076,
+        "metric_errors": {
+          "total_efficiency": "CandidateMetricUnavailableError: 总体效率窗口超出 S11 扫频范围，禁止外推: window=2.575-2.625 GHz"
+        }
+      },
+      "measured_metrics": {
+        "resonant_frequency": {
+          "metric_key": "center_freq_ghz",
+          "value": 2.6,
+          "unit": "GHz",
+          "value_representation": "linear_frequency",
+          "semantics": "Frequency of the minimum sampled/interpolated dB(S(1,1)) within the fixed 2.30-2.60 GHz sweep. Values are linear GHz, not angular frequency."
+        },
+        "minimum_s11": {
+          "metric_key": "s11_min_db",
+          "value": -7.303737475450643,
+          "unit": "dB",
+          "value_representation": "20_log10_magnitude",
+          "semantics": "Minimum of 20*log10(|S11|) over the fixed sweep. More negative is better; this is dB, not a positive return-loss magnitude and not linear |S11|."
+        },
+        "impedance_bandwidth": {
+          "metric_key": "bandwidth_mhz",
+          "value": 0.0,
+          "unit": "MHz",
+          "value_representation": "linear_frequency_span",
+          "semantics": "Width of the contiguous region containing the minimum-S11 resonance where 20*log10(|S11|) <= -10 dB, with linear interpolation at threshold crossings."
+        },
+        "peak_gain": {
+          "metric_key": "peak_gain_dbi",
+          "value": 6.0172513927076,
+          "unit": "dBi",
+          "value_representation": "10_log10_power_gain_relative_to_isotropic",
+          "semantics": "Maximum HFSS dB(PeakGain) from the InfiniteSphere1 Antenna Parameters report at Setup1:LastAdaptive (2.45 GHz). This is logarithmic dBi, not linear gain and not realized gain."
+        },
+        "band_average_total_efficiency": {
+          "metric_key": "total_efficiency_mean_percent",
+          "value": null,
+          "unit": "%",
+          "value_representation": "linear_percentage",
+          "semantics": "Arithmetic mean on the 1 MHz Setup1:Sweep1 grid over measured resonance +/- 25 MHz of clamp(interp(RadiationEfficiency from the discrete Setup1:EfficiencySweep) * (1 - 10^(dB(S11)/10)), 0, 1), expressed as a linear percentage. Interpolation is allowed only inside the discrete efficiency sweep; extrapolation is forbidden. HFSS RadiationEfficiency is treated as a linear ratio even when numerical error makes it slightly greater than 1. This is single-port total efficiency, including mismatch loss, and is not in dB."
+        }
+      },
+      "stages": {
+        "build": {
+          "success": true,
+          "message": "贴片天线、Port1、Rad1、InfiniteSphere1、Setup1、Sweep1 和 EfficiencySweep 已创建。",
+          "data": {
+            "specification": {
+              "center_frequency_ghz": 2.45,
+              "substrate_material": "Rogers5880_custom",
+              "substrate_permittivity": 2.2,
+              "substrate_loss_tangent": 0.0009,
+              "substrate_width_mm": 100.0,
+              "substrate_length_mm": 85.0,
+              "substrate_height_mm": 5.0,
+              "patch_width_mm": 80.0,
+              "patch_length_mm": 37.8,
+              "feed_width_mm": 15.0,
+              "inset_depth_mm": 8.5,
+              "inset_gap_mm": 1.0,
+              "air_margin_xy_mm": 40.0,
+              "air_above_mm": 55.0,
+              "air_below_mm": 30.0,
+              "sweep_start_ghz": 2.3,
+              "sweep_stop_ghz": 2.6,
+              "sweep_points": 301
+            },
+            "project_path": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_005.aedt"
+          },
+          "duration_seconds": 5.146187
+        },
+        "validation": {
+          "success": true,
+          "message": "设计校验通过",
+          "data": {
+            "checks": {
+              "geometry": true,
+              "port": true,
+              "radiation_boundary": true,
+              "far_field_setup": true,
+              "solution_setup": true,
+              "frequency_sweep": true,
+              "efficiency_sweep": true,
+              "native_validation": true
+            },
+            "objects": [
+              "AirRegion",
+              "Substrate",
+              "Ground",
+              "PatchFeed",
+              "Port1_sheet"
+            ],
+            "excitations": [
+              "Port1:1"
+            ],
+            "boundaries": [
+              "PEC_Metals",
+              "Port1",
+              "Rad1"
+            ],
+            "field_setups": [
+              "InfiniteSphere1"
+            ],
+            "setups": [
+              "Setup1"
+            ],
+            "analysis_sweeps": [
+              "Setup1 : LastAdaptive",
+              "Setup1 : Sweep1",
+              "Setup1 : EfficiencySweep",
+              "Setup1 - feed_w='15mm' freq0='2.4500000000000002GHz' inset_d='8.5mm' inset_gap='1mm' patch_l='37.799999999999997mm' patch_w='80mm' sub_h='5mm' sub_l='85mm' sub_w='100mm' : Table"
+            ],
+            "native_messages": [
+              "Desktop messages:",
+              "[warning] Renormalizing the port impedance will not impact the field results if the 'Include Port Post Processing Effects' is disabled in Edit Sources. (11:28:22 AM  Aug 21, 2026)",
+              "Design validation check PASSED.",
+              "Design validation messages:",
+              "** End of design validation messages. **",
+              "Excitations check:",
+              "Solution type: Modal",
+              "Ports Requested: 1",
+              "Defined excitations number: 1",
+              "Defined excitations names: ['Port1:1']",
+              "Analysis setup messages:",
+              "Detected setup and sweep: ",
+              "Setup1",
+              " |__ Sweep1",
+              " |__ EfficiencySweep"
+            ]
+          },
+          "duration_seconds": 0.477905
+        },
+        "solve": {
+          "success": true,
+          "message": "求解完成且已验证 S11 数据: Setup1",
+          "data": {
+            "solution": "Setup1",
+            "s11_samples": 301
+          },
+          "duration_seconds": 50.843191
+        },
+        "save": {
+          "success": true,
+          "message": "设计已保存: C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_005.aedt",
+          "data": {
+            "file_path": "C:\\Users\\user\\Downloads\\antenna_ai_designer\\hfss_projects\\run_20260821_111954_556496\\candidate_005.aedt"
+          },
+          "duration_seconds": 0.634911
+        },
+        "metrics": {
+          "success": true,
+          "message": "候选已完整求解，但其响应落在固定评测覆盖范围之外；缺失目标按零分处理，缺少: total_efficiency_mean_percent",
+          "data": {
+            "center_freq_ghz": 2.6,
+            "s11_min_db": -7.303737475450643,
+            "bandwidth_mhz": 0.0,
+            "peak_gain_dbi": 6.0172513927076,
+            "metric_errors": {
+              "total_efficiency": "CandidateMetricUnavailableError: 总体效率窗口超出 S11 扫频范围，禁止外推: window=2.575-2.625 GHz"
+            }
+          },
+          "duration_seconds": 0.445134
+        }
+      },
+      "message": "完整仿真成功，但部分指标因候选响应超出固定覆盖范围而不可用，独立评测会将对应目标计为零分。"
+    }
+  ]
+}

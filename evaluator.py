@@ -1,16 +1,12 @@
-"""设计评测脚本
+"""Independent structured evaluation for antenna benchmark runs.
 
-读取设计循环落盘的指标文件（或在线 HFSS 客户端），对照需求判定：
-- S11 最小值 / -10 dB 带宽
-- 中心频率 / 谐振频率
-- 增益 / 辐射效率
-
-指标阈值（频率、S11、带宽、增益）从需求文本中解析；解析不到时使用默认值。
-指标缺失一律判不通过，不用默认值放行。
+The natural-language description is never parsed for thresholds. The authoritative
+task contract supplies units, measurement semantics, pass criteria, and scoring.
 """
 
+from __future__ import annotations
+
 import json
-import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -19,107 +15,46 @@ from typing import Any, Dict, List, Optional, Union
 
 from config import Config, cfg
 from hfss_client import HFSSClient
+from task_spec import AntennaTaskSpec, load_default_task
 
 
 @dataclass
 class EvaluationResult:
-    """评测结果。"""
     passed: bool
+    score: float
+    max_score: float
     metrics: Dict[str, Any]
+    measured_metrics: Dict[str, Any]
+    design_parameters: Dict[str, Any]
     checklist: Dict[str, bool]
     summary: str
     selected_iteration: Optional[int] = None
     selected_project_file: Optional[Path] = None
     report_file: Optional[Path] = None
+    verification_file: Optional[Path] = None
     candidate_evaluations: List[Dict[str, Any]] = field(default_factory=list)
 
 
 class Evaluator(ABC):
-    """评测器抽象基类。"""
-
     @abstractmethod
     def evaluate(
         self,
-        requirements: str,
+        requirements: Optional[str] = None,
         design_file: Optional[Union[str, Path]] = None,
         hfss_client: Optional[HFSSClient] = None,
         metrics_file: Optional[Union[str, Path]] = None,
         manifest_file: Optional[Union[str, Path]] = None,
+        task_spec: Optional[AntennaTaskSpec] = None,
     ) -> EvaluationResult:
-        """对设计进行评测。"""
         raise NotImplementedError
 
 
 class AntennaEvaluator(Evaluator):
-    """针对天线指标的评测器。"""
+    """Score only the latest candidate that completed the full trusted pipeline."""
 
-    def __init__(self, config: Config = cfg):
+    def __init__(self, config: Config = cfg, task_spec: Optional[AntennaTaskSpec] = None):
         self.config = config
-
-    def _extract_targets(self, requirements: str) -> Dict[str, Optional[float]]:
-        """从需求文本中解析目标指标阈值；解析不到的项使用保守默认值。"""
-        targets: Dict[str, Optional[float]] = {
-            "target_freq_ghz": None,
-            "max_s11_db": -10.0,
-            "min_bandwidth_mhz": 50.0,
-            "min_gain_dbi": 0.0,
-        }
-        # 目标频率："2.45 GHz"
-        m = re.search(r"(\d+\.?\d*)\s*GHz", requirements, re.IGNORECASE)
-        if m:
-            targets["target_freq_ghz"] = float(m.group(1))
-        # S11 阈值："S11 < -10 dB" / "回波损耗 < 10 dB" / "return loss < 10 dB"
-        m = re.search(
-            r"(?:S\s*11|回波损耗|return\s*loss)\s*[<≤＜]?\s*-?\s*(\d+\.?\d*)\s*dB",
-            requirements,
-            re.IGNORECASE,
-        )
-        if m:
-            targets["max_s11_db"] = -abs(float(m.group(1)))
-        # 带宽阈值："带宽 > 100 MHz" / "bandwidth > 0.1 GHz"
-        m = re.search(
-            r"(?:带宽|bandwidth)\s*[>≥＞]?\s*(\d+\.?\d*)\s*(MHz|GHz)",
-            requirements,
-            re.IGNORECASE,
-        )
-        if m:
-            bw = float(m.group(1))
-            if m.group(2).lower() == "ghz":
-                bw *= 1000.0
-            targets["min_bandwidth_mhz"] = bw
-        # 增益阈值："增益 > 3 dBi" / "gain > 3 dBi"
-        m = re.search(
-            r"(?:增益|gain)\s*[>≥＞]?\s*(-?\d+\.?\d*)\s*dBi",
-            requirements,
-            re.IGNORECASE,
-        )
-        if m:
-            targets["min_gain_dbi"] = float(m.group(1))
-        return targets
-
-    @staticmethod
-    def _check_metrics(
-        metrics: Dict[str, Any],
-        targets: Dict[str, Optional[float]],
-    ) -> Dict[str, bool]:
-        checklist: Dict[str, bool] = {}
-        if targets["target_freq_ghz"] is not None:
-            center = metrics.get("center_freq_ghz")
-            checklist["center_frequency"] = (
-                center is not None and abs(center - targets["target_freq_ghz"]) <= 0.05
-            )
-        else:
-            checklist["center_frequency"] = True
-
-        s11 = metrics.get("s11_min_db")
-        checklist["return_loss"] = s11 is not None and s11 <= targets["max_s11_db"]
-        bandwidth = metrics.get("bandwidth_mhz")
-        checklist["bandwidth"] = (
-            bandwidth is not None and bandwidth >= targets["min_bandwidth_mhz"]
-        )
-        gain = metrics.get("peak_gain_dbi")
-        checklist["gain"] = gain is not None and gain >= targets["min_gain_dbi"]
-        return checklist
+        self.task_spec = task_spec
 
     @staticmethod
     def _candidate_metrics(candidate: Dict[str, Any]) -> Dict[str, Any]:
@@ -129,23 +64,32 @@ class AntennaEvaluator(Evaluator):
         metrics_file = candidate.get("metrics_file")
         if metrics_file:
             try:
-                return json.loads(Path(metrics_file).read_text(encoding="utf-8"))
+                payload = json.loads(Path(metrics_file).read_text(encoding="utf-8"))
+                if isinstance(payload, dict):
+                    return payload.get("raw_metrics") or payload
             except Exception:
                 return {}
         return {}
 
+    @staticmethod
+    def _load_metrics_file(metrics_file: Union[str, Path]) -> Dict[str, Any]:
+        payload = json.loads(Path(metrics_file).read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            return {}
+        return payload.get("raw_metrics") or payload
+
     def evaluate(
         self,
-        requirements: str,
+        requirements: Optional[str] = None,
         design_file: Optional[Union[str, Path]] = None,
         hfss_client: Optional[HFSSClient] = None,
         metrics_file: Optional[Union[str, Path]] = None,
         manifest_file: Optional[Union[str, Path]] = None,
+        task_spec: Optional[AntennaTaskSpec] = None,
     ) -> EvaluationResult:
-        targets = self._extract_targets(requirements)
-
+        task = task_spec or self.task_spec or load_default_task()
         metrics: Dict[str, Any] = {}
-        checklist: Dict[str, bool] = {}
+        design_parameters: Dict[str, Any] = {}
         selected_iteration: Optional[int] = None
         selected_project_file: Optional[Path] = None
         candidate_evaluations: List[Dict[str, Any]] = []
@@ -154,87 +98,123 @@ class AntennaEvaluator(Evaluator):
             try:
                 manifest = json.loads(Path(manifest_file).read_text(encoding="utf-8"))
                 candidates = list(manifest.get("candidates") or [])
-            except Exception as e:
-                print(f"[评测] 读取候选清单失败: {e}")
+            except Exception as exc:
+                print(f"[评测] 读取候选清单失败: {exc}")
                 candidates = []
 
-            latest_completed: Optional[Dict[str, Any]] = None
-            passing_candidate: Optional[Dict[str, Any]] = None
-            for candidate in reversed(candidates):
-                evaluation = {
+            successful: List[Dict[str, Any]] = []
+            for candidate in candidates:
+                evaluation: Dict[str, Any] = {
                     "iteration": candidate.get("iteration"),
                     "pipeline_success": bool(candidate.get("success")),
                     "project_file": candidate.get("project_file"),
                     "status": candidate.get("status"),
-                    "passed": False,
-                    "checklist": {},
+                    "selected_for_scoring": False,
                 }
                 if candidate.get("success"):
-                    latest_completed = latest_completed or candidate
+                    successful.append(candidate)
                     candidate_metrics = self._candidate_metrics(candidate)
-                    candidate_checklist = self._check_metrics(candidate_metrics, targets)
-                    evaluation["metrics"] = candidate_metrics
-                    evaluation["checklist"] = candidate_checklist
-                    evaluation["passed"] = all(candidate_checklist.values())
-                    if evaluation["passed"] and passing_candidate is None:
-                        passing_candidate = candidate
+                    evaluation.update(task.evaluate_metrics(candidate_metrics))
+                    evaluation["measured_metrics"] = task.structured_metrics(candidate_metrics)
                 candidate_evaluations.append(evaluation)
-                if passing_candidate is not None:
-                    break
 
-            selected = passing_candidate or latest_completed
+            # A later fully simulated candidate replaces an earlier one even when worse.
+            # Failed pipelines do not replace the last fully simulated candidate.
+            selected = successful[-1] if successful else None
             if selected is not None:
                 metrics = self._candidate_metrics(selected)
-                checklist = self._check_metrics(metrics, targets)
                 selected_iteration = selected.get("iteration")
                 if selected.get("project_file"):
                     selected_project_file = Path(selected["project_file"])
+                design_parameters = selected.get("design_parameters") or {}
+                if not design_parameters and selected.get("specification"):
+                    try:
+                        design_parameters = task.structured_design(selected["specification"])
+                    except ValueError:
+                        design_parameters = {}
+                for evaluation in candidate_evaluations:
+                    if evaluation.get("iteration") == selected_iteration:
+                        evaluation["selected_for_scoring"] = True
         elif metrics_file is not None:
             try:
-                metrics = json.loads(Path(metrics_file).read_text(encoding="utf-8"))
-            except Exception as e:
-                print(f"[评测] 读取指标文件失败: {e}")
+                metrics = self._load_metrics_file(metrics_file)
+                payload = json.loads(Path(metrics_file).read_text(encoding="utf-8"))
+                if isinstance(payload, dict):
+                    design_parameters = payload.get("design_parameters") or {}
+                    selected_iteration = payload.get("iteration")
+            except Exception as exc:
+                print(f"[评测] 读取指标文件失败: {exc}")
         elif hfss_client is not None:
             metrics_result = hfss_client.get_metrics()
             if metrics_result.success:
                 metrics = metrics_result.data or {}
 
-        if not checklist:
-            checklist = self._check_metrics(metrics, targets)
-
-        passed = all(checklist.values())
-        s11 = metrics.get("s11_min_db")
-        bw = metrics.get("bandwidth_mhz")
+        scored = task.evaluate_metrics(metrics)
+        measured_metrics = task.structured_metrics(metrics)
+        passed = bool(scored["passed"])
+        checklist = scored["checklist"]
+        score = float(scored["score"])
+        max_score = float(scored["max_score"])
         summary = (
             f"评测结果：{'通过' if passed else '未通过'}\n"
+            f"任务: {task.task_id}\n"
+            f"候选选择策略: 最后一个完整成功候选\n"
             f"选中候选: {selected_iteration if selected_iteration is not None else '无'}\n"
-            f"目标频率: {targets['target_freq_ghz']} GHz, "
-            f"实际中心频率: {metrics.get('center_freq_ghz')} GHz\n"
-            f"S11 最小值: {s11} dB\n"
-            f"-10 dB 带宽: {bw} MHz\n"
-            f"峰值增益: {metrics.get('peak_gain_dbi')} dBi\n"
-            f"辐射效率: {metrics.get('radiation_efficiency_percent')}%\n"
-            f"检查项: {checklist}"
+            f"得分: {score:.3f}/{max_score:.0f}\n"
+            f"检查项: {checklist}\n"
+            f"结构化实测指标: {measured_metrics}"
         )
 
         self.config.ensure_dirs()
         report_file = (
             Path(manifest_file).resolve().parent / "evaluation_report.json"
             if manifest_file is not None
-            else self.config.log_dir / f"evaluation_report_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.json"
+            else self.config.log_dir
+            / f"evaluation_report_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.json"
         )
-        report_file.write_text(
+        verification_file = report_file.parent / "manual_verification.json"
+        verification_file.write_text(
             json.dumps(
                 {
-                    "requirements": requirements,
-                    "targets": targets,
-                    "metrics": metrics,
-                    "checklist": checklist,
-                    "passed": passed,
+                    "schema_version": 1,
+                    "task_id": task.task_id,
+                    "calibration": task.data["calibration"],
+                    "purpose": "Human cross-check of the selected candidate in Ansys Electronics Desktop.",
                     "selected_iteration": selected_iteration,
-                    "selected_project_file": str(selected_project_file) if selected_project_file else None,
-                    "candidate_evaluations": candidate_evaluations,
-                    "summary": summary,
+                    "project_file": str(selected_project_file) if selected_project_file else None,
+                    "aedt_objects": {
+                        "design_name": self.config.default_design_name,
+                        "solution_setup": self.config.default_setup_name,
+                        "frequency_sweep": self.config.default_sweep_name,
+                        "efficiency_sweep": task.data["simulation_control"][
+                            "efficiency_sweep"
+                        ]["name"],
+                        "far_field_setup": "InfiniteSphere1",
+                        "port": "Port1",
+                        "substrate_material": "AntennaSubstrate",
+                    },
+                    "verification_steps": [
+                        "Open project_file and select the named HFSS design.",
+                        "Compare model dimensions with design_parameters below.",
+                        "Compare AntennaSubstrate properties with fixed_parameters.",
+                        "Compare Setup1, Sweep1, EfficiencySweep, radiation region, port, and InfiniteSphere1 with simulation_control.",
+                        "Plot dB(S(1,1)) on Setup1:Sweep1 and compare resonance, minimum S11, and contiguous threshold bandwidth.",
+                        "At Setup1:LastAdaptive, open the InfiniteSphere1 Antenna Parameters report and compare dB(PeakGain).",
+                        "Export dB(S(1,1)) from Setup1:Sweep1. Separately export InfiniteSphere1 RadiationEfficiency from the discrete Setup1:EfficiencySweep; treat it as a linear ratio, not a percentage or dB value.",
+                        "Inside the measured-resonance window, linearly interpolate RadiationEfficiency to the Sweep1 frequency grid without extrapolation. Compute clamp(RadiationEfficiency * (1 - 10^(dB(S11)/10)), 0, 1) at each Sweep1 sample, average, and multiply by 100 to compare total_efficiency_mean_percent.",
+                    ],
+                    "derived_metric_formulas": {
+                        "mismatch_efficiency_ratio": "1 - 10^(dB(S11)/10)",
+                        "interpolated_radiation_efficiency_ratio": "linear interpolation of Setup1:EfficiencySweep RadiationEfficiency onto the Setup1:Sweep1 grid; no extrapolation",
+                        "single_port_total_efficiency_ratio": "clamp(interpolated_radiation_efficiency_ratio * mismatch_efficiency_ratio, 0, 1)",
+                        "total_efficiency_mean_percent": "100 * arithmetic_mean(single_port_total_efficiency_ratio on Sweep1 samples within measured resonance +/- configured half span)",
+                    },
+                    "design_parameters": design_parameters,
+                    "fixed_parameters": task.data["fixed_parameters"],
+                    "simulation_control": task.data["simulation_control"],
+                    "raw_metrics": metrics,
+                    "measured_metrics": measured_metrics,
+                    "objective_evaluation": scored["objectives"],
                 },
                 ensure_ascii=False,
                 indent=2,
@@ -242,15 +222,45 @@ class AntennaEvaluator(Evaluator):
             ),
             encoding="utf-8",
         )
+        report = {
+            "schema_version": 1,
+            "task_id": task.task_id,
+            "calibration": task.data["calibration"],
+            "natural_language_supplement": requirements,
+            "selection_policy": "latest_successful_complete_candidate",
+            "selected_iteration": selected_iteration,
+            "selected_project_file": str(selected_project_file) if selected_project_file else None,
+            "manual_verification_file": str(verification_file.resolve()),
+            "design_parameters": design_parameters,
+            "raw_metrics": metrics,
+            "measured_metrics": measured_metrics,
+            "objective_evaluation": scored["objectives"],
+            "checklist": checklist,
+            "passed": passed,
+            "score": score,
+            "max_score": max_score,
+            "candidate_evaluations": candidate_evaluations,
+            "summary": summary,
+        }
+        report_file.write_text(
+            json.dumps(report, ensure_ascii=False, indent=2, default=str),
+            encoding="utf-8",
+        )
         print(f"[评测报告已保存] {report_file}")
+        print(f"[人工核验清单已保存] {verification_file}")
 
         return EvaluationResult(
             passed=passed,
+            score=score,
+            max_score=max_score,
             metrics=metrics,
+            measured_metrics=measured_metrics,
+            design_parameters=design_parameters,
             checklist=checklist,
             summary=summary,
             selected_iteration=selected_iteration,
             selected_project_file=selected_project_file,
             report_file=report_file,
+            verification_file=verification_file,
             candidate_evaluations=candidate_evaluations,
         )
