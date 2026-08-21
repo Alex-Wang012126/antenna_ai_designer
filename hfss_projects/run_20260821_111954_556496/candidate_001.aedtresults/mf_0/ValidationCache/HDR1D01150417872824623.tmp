@@ -1,7 +1,0 @@
-$begin 'ValidationCache'
-	$begin 'OneValidationResult'
-		Variation='feed_w=\'9.8000000000000007mm\' freq0=\'2.4500000000000002GHz\' inset_d=\'13.5mm\' inset_gap=\'1mm\' patch_l=\'39mm\' patch_w=\'70mm\' sub_h=\'5mm\' sub_l=\'85mm\' sub_w=\'100mm\''
-		Status=true
-		FileName='VI1D01150417872824624.tmp'
-	$end 'OneValidationResult'
-$end 'ValidationCache'

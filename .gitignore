@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *.log
 logs/*.json
+hfss_projects/
 hfss_projects/*.aedt
 hfss_projects/*.aedt.lock
 hfss_projects/*.aedtresults/
