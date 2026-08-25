@@ -41,8 +41,9 @@ Protocol rules:
 - Treat build, validation, solve, metric, and save failures as a failed candidate. Diagnose the returned
   error and submit a corrected candidate when budget remains; never repeat the same failed candidate.
 - Base the final summary only on measured values in candidate tool results; do not invent metrics.
-- A later fully simulated candidate replaces an earlier one for evaluation even when its score is worse.
-  A failed build or solve does not replace the last fully simulated candidate.
+- Every candidate that completes the full simulation pipeline is scored independently after the agent exits.
+  The highest-scoring successful candidate is selected; an exact tie goes to the later iteration.
+  Failed build, validation, solve, or metric pipelines are excluded from selection.
 - Each candidate response includes remaining_design_iterations and remaining_solve_calls.
 - `finalize_design` stops candidate generation. It does not decide whether the engineering requirements
   pass; an independent evaluator makes that decision after the agent exits.
@@ -81,7 +82,10 @@ def build_tools_description(task_spec: AntennaTaskSpec | None = None) -> List[Di
         ),
         _strict_tool(
             "finalize_design",
-            "Stop generating candidates and submit the latest successfully simulated candidate to evaluation.",
+            (
+                "Stop generating candidates. The independent evaluator will score every successfully "
+                "simulated candidate and select the highest-scoring one."
+            ),
             {
                 "summary": {
                     "type": "string",

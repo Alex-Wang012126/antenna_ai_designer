@@ -1,0 +1,181 @@
+(pyaedt192) PS C:\Users\user\Downloads\antenna_ai_designer> python main.py
+============================================================
+天线 AI 设计工具 [真实模式（模型 + AEDT）]
+============================================================
+结构化任务: inset_patch_2p45_v6 (C:\Users\user\Downloads\antenna_ai_designer\tasks\inset_patch_2p45.json)
+任务校准状态: uncalibrated
+警告: 该任务尚未验证存在满分见证解，不应直接用于正式排行榜。
+自然语言说明: 在给定候选与 HFSS 求解预算内，设计一副 2.45 GHz 单端口内嵌馈电矩形微带贴片天线。材料、端口、空气区域、求解设置、扫频和远场设置均由评测端固定。模型只选择基板外形与贴片/馈线几何尺寸。要求谐振频率误差不超过 25 MHz，扫频内最小 S11 不高于 -20 dB，包含该谐振点的连续 -10 dB 带宽不小于 110 MHz，2.45 GHz 自适应解处的 HFSS 峰值增益不低于 7.5 dBi，目标频率 2.45 GHz 正负 25 MHz 固定窗口内的平均总体效率不低于 85%。
+候选设计迭代上限: 5
+仿真次数预算: 5
+
+模型: gpt-5.5 @ https://api.apevon.ai/v1
+模型 API key: 已配置
+AEDT: version=2025.2, student=True, non_graphical=False, keep_open=True
+项目目录: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903
+
+[PyAEDT] >>> connect: 导入 ansys.aedt.core ...
+[PyAEDT] pyaedt 版本: 0.19.0
+[PyAEDT] settings.grpc_secure_mode = False
+[PyAEDT] 项目文件: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\candidate_001.aedt
+[PyAEDT] >>> 启动 AEDT: version=2025.2, student=True, non_graphical=False, design=antenna
+PyAEDT INFO: Python version 3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)].
+PyAEDT INFO: PyAEDT version 0.19.0.
+PyAEDT INFO: Initializing new Desktop session.
+PyAEDT INFO: Log on console is enabled.
+PyAEDT INFO: Log on file C:\Users\user\AppData\Local\Temp\pyaedt_user_180372d7-c9d6-4c27-ac48-c84eb250e2a0.log is enabled.
+PyAEDT INFO: Log on AEDT is disabled.
+PyAEDT INFO: Debug logger is disabled. PyAEDT methods will not be logged.
+PyAEDT INFO: Launching PyAEDT with gRPC plugin.
+PyAEDT INFO: New AEDT session is starting on gRPC port 51383.
+PyAEDT INFO: Electronics Desktop started on gRPC port: 51383 after 11.613705396652222 seconds.
+PyAEDT INFO: AEDT installation Path C:\ANSYS Inc\ANSYS Student\v252\AnsysEM
+PyAEDT INFO: Ansoft.ElectronicsDesktop.2025.2 Student version started with process ID 22212.
+PyAEDT INFO: Project candidate_001 has been created.
+PyAEDT INFO: Added design 'antenna' of type HFSS.
+PyAEDT INFO: Aedt Objects correctly read
+[PyAEDT] <<< AEDT 已启动: ANSYSEM_ROOT252
+[MODEL] >>> 请求 https://api.apevon.ai/v1/responses | model=gpt-5.5 | items=1 | tools=2
+[MODEL] <<< HTTP 200 | 耗时 11.7s
+[MODEL] <<< 回复: content=0 字符 | tool_calls=['create_patch_antenna']
+
+[模型调用 1] create_patch_antenna({'feed_width_mm': 9.6, 'inset_depth_mm': 12.0, 'inset_gap_mm': 1.0, 'patch_length_mm': 38.5, 'patch_width_mm': 55.0, 'substrate_height_mm': 5.0, 'substrate_length_mm': 85.0, 'substrate_width_mm': 100.0})
+
+[候选 1] Python 开始完整仿真流水线
+[PyAEDT] >>> create_patch_antenna: {'center_frequency_ghz': 2.45, 'substrate_material': 'Rogers5880_custom', 'substrate_permittivity': 2.2, 'substrate_loss_tangent': 0.0009, 'substrate_width_mm': 100.0, 'substrate_length_mm': 85.0, 'substrate_height_mm': 5.0, 'patch_width_mm': 55.0, 'patch_length_mm': 38.5, 'feed_width_mm': 9.6, 'inset_depth_mm': 12.0, 'inset_gap_mm': 1.0, 'air_margin_xy_mm': 40.0, 'air_above_mm': 55.0, 'air_below_mm': 30.0, 'sweep_start_ghz': 2.3, 'sweep_stop_ghz': 2.6, 'sweep_points': 301}
+PyAEDT INFO: Modeler class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: Materials class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: Adding new material to the Project Library: AntennaSubstrate
+PyAEDT INFO: Material has been added in Desktop.
+PyAEDT INFO: Boundary Perfect E PEC_Metals has been created.
+PyAEDT INFO: Boundary Lumped Port Port1 has been created.
+PyAEDT INFO: Boundary Radiation Rad1 has been created.
+PyAEDT INFO: Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\candidate_001.aedt.
+PyAEDT INFO: File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+PyAEDT INFO: aedt file load time 0.05559897422790527
+PyAEDT INFO: Linear count sweep Sweep1 has been correctly created.
+PyAEDT INFO: Linear count sweep EfficiencySweep has been correctly created.
+[PyAEDT] <<< create_patch_antenna 建模成功
+[PyAEDT] >>> validate_design
+PyAEDT INFO: Design validation checks.
+[PyAEDT] <<< validate_design 通过
+[PyAEDT] >>> validate_design
+PyAEDT INFO: Design validation checks.
+[PyAEDT] <<< validate_design 通过
+[PyAEDT] >>> solve: analyze_setup(Setup1)（阻塞式，可能需要几分钟）...
+PyAEDT INFO: Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+PyAEDT INFO: Solving design setup Setup1
+PyAEDT INFO: Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+PyAEDT INFO: Design setup Setup1 solved correctly in 0.0h 1.0m 12.0s
+[PyAEDT] >>> 读取 S(1,1): setup_sweep='Setup1 : Sweep1'
+PyAEDT INFO: PostProcessor class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: PostProcessor class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: Post class has been initialized! Elapsed time: 0m 0sec
+PyAEDT INFO: Solution Data Correctly Loaded.
+[PyAEDT] <<< S(1,1) 共 301 个采样点，频率范围 2.300 ~ 2.600 GHz，S11 min = -23.43 dB
+[PyAEDT] <<< solve 完成: Setup1，耗时 71.9s
+[PyAEDT] >>> export_design: 保存当前项目 C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\candidate_001.aedt
+PyAEDT INFO: Project candidate_001 Saved correctly
+[PyAEDT] <<< export_design 成功
+[PyAEDT] >>> get_metrics: 计算 S11 指标 + 读取增益/效率
+[PyAEDT] >>> 读取 S(1,1): setup_sweep='Setup1 : Sweep1'
+PyAEDT INFO: Solution Data Correctly Loaded.
+[PyAEDT] <<< S(1,1) 共 301 个采样点，频率范围 2.300 ~ 2.600 GHz，S11 min = -23.43 dB
+PyAEDT INFO: Solution Data Correctly Loaded.
+[PyAEDT] Antenna Parameters/PeakGain: peak_gain=8.053644811054937
+PyAEDT INFO: Solution Data Correctly Loaded.
+[PyAEDT] Antenna Parameters/TotalEfficiency: mean=94.67347642438779%, min=87.7086831920392%
+[PyAEDT] <<< get_metrics: {'center_freq_ghz': 2.407, 's11_min_db': -23.427266062075095, 'bandwidth_mhz': 110.47836838992309, 'peak_gain_dbi': 8.053644811054937, 'total_efficiency_mean_percent': 94.67347642438779, 'total_efficiency_min_percent': 87.7086831920392, 'total_efficiency_max_percent': 99.94719003841634, 'total_efficiency_raw_max_percent': 99.94719003841634, 'radiation_efficiency_raw_mean_ratio': 1.0160864439722923, 'radiation_efficiency_discrete_sample_count': 11, 'total_efficiency_sample_count': 51, 'total_efficiency_window_center_ghz': 2.45, 'total_efficiency_window_reference': 'target_frequency', 'total_efficiency_window_start_ghz': 2.425, 'total_efficiency_window_stop_ghz': 2.475, 'total_efficiency_requested_window_start_ghz': 2.425, 'total_efficiency_requested_window_stop_ghz': 2.475, 'efficiency_sweep_start_ghz': 2.4, 'efficiency_sweep_stop_ghz': 2.5}
+[候选 1] 完整流水线成功: {'center_freq_ghz': 2.407, 's11_min_db': -23.427266062075095, 'bandwidth_mhz': 110.47836838992309, 'peak_gain_dbi': 8.053644811054937, 'total_efficiency_mean_percent': 94.67347642438779, 'total_efficiency_min_percent': 87.7086831920392, 'total_efficiency_max_percent': 99.94719003841634, 'total_efficiency_raw_max_percent': 99.94719003841634, 'radiation_efficiency_raw_mean_ratio': 1.0160864439722923, 'radiation_efficiency_discrete_sample_count': 11, 'total_efficiency_sample_count': 51, 'total_efficiency_window_center_ghz': 2.45, 'total_efficiency_window_reference': 'target_frequency', 'total_efficiency_window_start_ghz': 2.425, 'total_efficiency_window_stop_ghz': 2.475, 'total_efficiency_requested_window_start_ghz': 2.425, 'total_efficiency_requested_window_stop_ghz': 2.475, 'efficiency_sweep_start_ghz': 2.4, 'efficiency_sweep_stop_ghz': 2.5}
+[模型调用 1] create_patch_antenna -> 成功: 候选 1 完整仿真成功，请根据实测指标决定继续修改或结束。
+[MODEL] >>> 请求 https://api.apevon.ai/v1/responses | model=gpt-5.5 | items=3 | tools=2
+[MODEL] <<< HTTP 200 | 耗时 12.7s
+[MODEL] <<< 回复: content=0 字符 | tool_calls=['create_patch_antenna']
+
+[模型调用 2] create_patch_antenna({'feed_width_mm': 9.6, 'inset_depth_mm': 11.8, 'inset_gap_mm': 1.0, 'patch_length_mm': 37.8, 'patch_width_mm': 55.0, 'substrate_height_mm': 5.0, 'substrate_length_mm': 85.0, 'substrate_width_mm': 100.0})
+
+[候选 2] Python 开始完整仿真流水线
+[PyAEDT] >>> create_patch_antenna: {'center_frequency_ghz': 2.45, 'substrate_material': 'Rogers5880_custom', 'substrate_permittivity': 2.2, 'substrate_loss_tangent': 0.0009, 'substrate_width_mm': 100.0, 'substrate_length_mm': 85.0, 'substrate_height_mm': 5.0, 'patch_width_mm': 55.0, 'patch_length_mm': 37.8, 'feed_width_mm': 9.6, 'inset_depth_mm': 11.8, 'inset_gap_mm': 1.0, 'air_margin_xy_mm': 40.0, 'air_above_mm': 55.0, 'air_below_mm': 30.0, 'sweep_start_ghz': 2.3, 'sweep_stop_ghz': 2.6, 'sweep_points': 301}
+PyAEDT INFO: Project candidate_002 Saved correctly
+PyAEDT INFO: Parsing design objects. This operation can take time
+PyAEDT INFO: Refreshing bodies from Object Info
+PyAEDT INFO: Bodies Info Refreshed Elapsed time: 0m 0sec
+PyAEDT INFO: 3D Modeler objects parsed. Elapsed time: 0m 0sec
+PyAEDT INFO: Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+PyAEDT INFO: Boundary Perfect E PEC_Metals has been created.
+PyAEDT INFO: Boundary Lumped Port Port1 has been created.
+PyAEDT INFO: Boundary Radiation Rad1 has been created.
+[PyAEDT] 复用固定分析控制: Setup1/Sweep1/EfficiencySweep
+[PyAEDT] <<< create_patch_antenna 建模成功
+[PyAEDT] >>> validate_design
+PyAEDT INFO: Design validation checks.
+[PyAEDT] <<< validate_design 通过
+[PyAEDT] >>> validate_design
+PyAEDT INFO: Design validation checks.
+[PyAEDT] <<< validate_design 通过
+[PyAEDT] >>> solve: analyze_setup(Setup1)（阻塞式，可能需要几分钟）...
+PyAEDT INFO: Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+PyAEDT INFO: Solving design setup Setup1
+PyAEDT INFO: Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+PyAEDT INFO: Design setup Setup1 solved correctly in 0.0h 1.0m 4.0s
+[PyAEDT] >>> 读取 S(1,1): setup_sweep='Setup1 : Sweep1'
+PyAEDT INFO: Solution Data Correctly Loaded.
+[PyAEDT] <<< S(1,1) 共 301 个采样点，频率范围 2.300 ~ 2.600 GHz，S11 min = -23.62 dB
+[PyAEDT] <<< solve 完成: Setup1，耗时 63.6s
+[PyAEDT] >>> export_design: 保存当前项目 C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\candidate_002.aedt
+PyAEDT INFO: Project candidate_002 Saved correctly
+[PyAEDT] <<< export_design 成功
+[PyAEDT] >>> get_metrics: 计算 S11 指标 + 读取增益/效率
+[PyAEDT] >>> 读取 S(1,1): setup_sweep='Setup1 : Sweep1'
+PyAEDT INFO: Solution Data Correctly Loaded.
+[PyAEDT] <<< S(1,1) 共 301 个采样点，频率范围 2.300 ~ 2.600 GHz，S11 min = -23.62 dB
+PyAEDT INFO: Solution Data Correctly Loaded.
+[PyAEDT] Antenna Parameters/PeakGain: peak_gain=8.177730706504306
+PyAEDT INFO: Solution Data Correctly Loaded.
+[PyAEDT] Antenna Parameters/TotalEfficiency: mean=99.96146264608186%, min=99.27590088044626%
+[PyAEDT] <<< get_metrics: {'center_freq_ghz': 2.446, 's11_min_db': -23.618920908337063, 'bandwidth_mhz': 115.0388813010316, 'peak_gain_dbi': 8.177730706504306, 'total_efficiency_mean_percent': 99.96146264608186, 'total_efficiency_min_percent': 99.27590088044626, 'total_efficiency_max_percent': 100.0, 'total_efficiency_raw_max_percent': 101.8287753706793, 'radiation_efficiency_raw_mean_ratio': 1.0228022812007804, 'radiation_efficiency_discrete_sample_count': 11, 'total_efficiency_sample_count': 51, 'total_efficiency_window_center_ghz': 2.45, 'total_efficiency_window_reference': 'target_frequency', 'total_efficiency_window_start_ghz': 2.425, 'total_efficiency_window_stop_ghz': 2.475, 'total_efficiency_requested_window_start_ghz': 2.425, 'total_efficiency_requested_window_stop_ghz': 2.475, 'efficiency_sweep_start_ghz': 2.4, 'efficiency_sweep_stop_ghz': 2.5}
+[候选 2] 完整流水线成功: {'center_freq_ghz': 2.446, 's11_min_db': -23.618920908337063, 'bandwidth_mhz': 115.0388813010316, 'peak_gain_dbi': 8.177730706504306, 'total_efficiency_mean_percent': 99.96146264608186, 'total_efficiency_min_percent': 99.27590088044626, 'total_efficiency_max_percent': 100.0, 'total_efficiency_raw_max_percent': 101.8287753706793, 'radiation_efficiency_raw_mean_ratio': 1.0228022812007804, 'radiation_efficiency_discrete_sample_count': 11, 'total_efficiency_sample_count': 51, 'total_efficiency_window_center_ghz': 2.45, 'total_efficiency_window_reference': 'target_frequency', 'total_efficiency_window_start_ghz': 2.425, 'total_efficiency_window_stop_ghz': 2.475, 'total_efficiency_requested_window_start_ghz': 2.425, 'total_efficiency_requested_window_stop_ghz': 2.475, 'efficiency_sweep_start_ghz': 2.4, 'efficiency_sweep_stop_ghz': 2.5}
+[模型调用 2] create_patch_antenna -> 成功: 候选 2 完整仿真成功，请根据实测指标决定继续修改或结束。
+[MODEL] >>> 请求 https://api.apevon.ai/v1/responses | model=gpt-5.5 | items=5 | tools=2
+[MODEL] <<< HTTP 200 | 耗时 14.6s
+[MODEL] <<< 回复: content=0 字符 | tool_calls=['finalize_design']
+
+[模型调用 3] finalize_design({'summary': 'Selected successful candidate 2. Design parameters: substrate_width 100.0 mm, substrate_length 85.0 mm, substrate_height 5.0 mm, patch_width 55.0 mm, patch_length 37.8 mm, feed_width 9.6 mm, inset_depth 11.8 mm, inset_gap 1.0 mm. Measured metrics: center_freq_ghz 2.446 GHz, s11_min_db -23.618920908337063 dB, bandwidth_mhz 115.0388813010316 MHz, peak_gain_dbi 8.177730706504306 dBi, total_efficiency_mean_percent 99.96146264608186%.'})
+[模型调用 3] finalize_design -> 成功: Candidate generation finalized; independent evaluation will run next.
+[PyAEDT] >>> disconnect: 保存项目并释放自动化连接 ...
+PyAEDT INFO: Project candidate_002 Saved correctly
+PyAEDT INFO: Desktop has been released.
+[PyAEDT] <<< 项目已保存，AEDT 项目和窗口保持打开
+
+[候选清单已保存] C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\run_manifest.json
+[对话日志已保存] C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\design_log.json
+[任务快照已保存] C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\task_spec.json
+[资源统计已保存] C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\resource_usage.json
+
+============================================================
+设计结果
+============================================================
+是否完成: True
+候选迭代次数: 2
+最终总结:
+Selected successful candidate 2. Design parameters: substrate_width 100.0 mm, substrate_length 85.0 mm, substrate_height 5.0 mm, patch_width 55.0 mm, patch_length 37.8 mm, feed_width 9.6 mm, inset_depth 11.8 mm, inset_gap 1.0 mm. Measured metrics: center_freq_ghz 2.446 GHz, s11_min_db -23.618920908337063 dB, bandwidth_mhz 115.0388813010316 MHz, peak_gain_dbi 8.177730706504306 dBi, total_efficiency_mean_percent 99.96146264608186%.
+日志文件: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\design_log.json
+指标文件: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\candidate_002_metrics.json
+候选清单: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\run_manifest.json
+任务快照: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\task_spec.json
+资源统计: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\resource_usage.json
+[评测报告已保存] C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\evaluation_report.json
+[人工核验清单已保存] C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\manual_verification.json
+
+============================================================
+评测结果
+============================================================
+评测结果：通过
+任务: inset_patch_2p45_v6
+候选选择策略: 历次完整成功候选中总分最高者（同分取较后迭代）
+选中候选: 2
+得分: 100.000/100
+检查项: {'resonant_frequency': True, 'minimum_s11': True, 'impedance_bandwidth': True, 'peak_gain': True, 'band_average_total_efficiency': True}
+结构化实测指标: {'resonant_frequency': {'metric_key': 'center_freq_ghz', 'value': 2.446, 'unit': 'GHz', 'value_representation': 'linear_frequency', 'semantics': 'Frequency of the minimum sampled/interpolated dB(S(1,1)) within the fixed 2.30-2.60 GHz sweep. Values are linear GHz, not angular frequency.'}, 'minimum_s11': {'metric_key': 's11_min_db', 'value': -23.618920908337063, 'unit': 'dB', 'value_representation': '20_log10_magnitude', 'semantics': 'Minimum of 20*log10(|S11|) over the fixed sweep. More negative is better; this is dB, not a positive return-loss magnitude and not linear |S11|.'}, 'impedance_bandwidth': {'metric_key': 'bandwidth_mhz', 'value': 115.0388813010316, 'unit': 'MHz', 'value_representation': 'linear_frequency_span', 'semantics': 'Width of the contiguous region containing the minimum-S11 resonance where 20*log10(|S11|) <= -10 dB, with linear interpolation at threshold crossings.'}, 'peak_gain': {'metric_key': 'peak_gain_dbi', 'value': 8.177730706504306, 'unit': 'dBi', 'value_representation': '10_log10_power_gain_relative_to_isotropic', 'semantics': 'Maximum HFSS dB(PeakGain) from the InfiniteSphere1 Antenna Parameters report at Setup1:LastAdaptive (2.45 GHz). This is logarithmic dBi, not linear gain and not realized gain.'}, 'band_average_total_efficiency': {'metric_key': 'total_efficiency_mean_percent', 'value': 99.96146264608186, 'unit': '%', 'value_representation': 'linear_percentage', 'semantics': 'Arithmetic mean on the 1 MHz Setup1:Sweep1 grid over the fixed objective target 2.45 GHz +/- 25 MHz of clamp(interp(RadiationEfficiency from the discrete Setup1:EfficiencySweep) * (1 - 10^(dB(S11)/10)), 0, 1), expressed as a linear percentage. The window does not follow the measured resonance, so a mistuned candidate is penalized through mismatch loss in the intended operating band. Interpolation is allowed only inside the discrete efficiency sweep; extrapolation is forbidden. HFSS RadiationEfficiency is treated as a linear ratio even when numerical error makes it slightly greater than 1. This is single-port total efficiency, including mismatch loss, and is not in dB.'}}
+最终选中工程: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\candidate_002.aedt
+人工核验清单: C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_115033_352903\manual_verification.json

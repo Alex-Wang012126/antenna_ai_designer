@@ -1,7 +1,7 @@
 .env
 __pycache__/
 *.py[cod]
-*.log
+
 logs/*.json
 hfss_projects/
 hfss_projects/*.aedt

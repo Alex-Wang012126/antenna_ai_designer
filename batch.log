@@ -1517,3 +1517,335 @@ Project directory: C:\Users\user\Documents\Ansoft
           [warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (11:29:15 AM  Aug 21, 2026)
 -- Message Window --
 Stopping Batch Run: 11:54:23 AM  Aug 21, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 9:43:07 AM  Aug 25, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 63341 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 56303 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_100131_318091\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_100131_318091\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.06359243392944336
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 59.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 1sec
+        [info] Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 10.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 59.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 5.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 57.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+      candidate_005 (C:/Users/user/Downloads/antenna_ai_designer/hfss_projects/run_20260825_100131_318091/)
+        antenna (Modal Network)
+          [info] A discrete frequency sweep with 11 point(s) has been started using HFSS - Solving Distributed. (10:13:21 AM  Aug 25, 2026)
+          [info] Discrete frequency sweep complete. (10:13:21 AM  Aug 25, 2026)
+          [info] An interpolating frequency sweep with 301 points has been started using HFSS - Solving Distributed. (10:13:21 AM  Aug 25, 2026)
+          [info] Interpolating frequency sweep complete. Converged. (10:13:21 AM  Aug 25, 2026)
+          [info] Normal completion of simulation on server: Local Machine. (10:13:21 AM  Aug 25, 2026)
+          [warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (10:13:21 AM  Aug 25, 2026)
+          [warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (10:13:22 AM  Aug 25, 2026)
+-- Message Window --
+Stopping Batch Run: 11:19:25 AM  Aug 25, 2026
+p/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 55.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+      candidate_005 (C:/Users/user/Downloads/antenna_ai_designer/hfss_projects/run_20260825_094255_424885/)
+        antenna (Modal Network)
+          [info] A discrete frequency sweep with 11 point(s) has been started using HFSS - Solving Distributed. (09:52:14 AM  Aug 25, 2026)
+          [info] Discrete frequency sweep complete. (09:52:14 AM  Aug 25, 2026)
+          [info] An interpolating frequency sweep with 301 points has been started using HFSS - Solving Distributed. (09:52:14 AM  Aug 25, 2026)
+          [info] Interpolating frequency sweep complete. Converged. (09:52:14 AM  Aug 25, 2026)
+          [info] Normal completion of simulation on server: Local Machine. (09:52:14 AM  Aug 25, 2026)
+          [warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (09:52:14 AM  Aug 25, 2026)
+          [warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (09:52:15 AM  Aug 25, 2026)
+-- Message Window --
+Stopping Batch Run: 10:01:43 AM  Aug 25, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 11:18:53 AM  Aug 25, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+[error] No such feature exists.
+Feature
+hfss_gui
+License path
+C
+\Users\user\AppData\Local\Temp\\c23a63a9-b7bb-431f-8854-e363098eaf8b;
+FlexNet Licensing error
+-5,357
+
+
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 11:20:01 AM  Aug 25, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 63292 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 51285 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_113339_957573\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260825_113339_957573\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.04829525947570801
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 18.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 42.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 4.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 5.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 3.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+      candidate_005 (C:/Users/user/Downloads/antenna_ai_designer/hfss_projects/run_20260825_113339_957573/)
+        antenna (Modal Network)
+          [info] A discrete frequency sweep with 11 point(s) has been started using HFSS - Solving Distributed. (11:43:29 AM  Aug 25, 2026)
+          [info] Discrete frequency sweep complete. (11:43:29 AM  Aug 25, 2026)
+          [info] An interpolating frequency sweep with 301 points has been started using HFSS - Solving Distributed. (11:43:29 AM  Aug 25, 2026)
+          [info] Interpolating frequency sweep complete. Converged. (11:43:29 AM  Aug 25, 2026)
+          [info] Normal completion of simulation on server: Local Machine. (11:43:29 AM  Aug 25, 2026)
+          [warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (11:43:29 AM  Aug 25, 2026)
+          [warning] The variable  'Phase' doesn't have an associated sweep and is excluded from the definition of trace. (11:43:30 AM  Aug 25, 2026)
+-- Message Window --
+Stopping Batch Run: 11:50:09 AM  Aug 25, 2026
+t
+[error] No such feature exists.
+Feature
+hfss_gui
+License path
+C
+\Users\user\AppData\Local\Temp\\d52ea508-4e44-4c63-b05c-ed0fb244eda5;
+FlexNet Licensing error
+-5,357
+
+
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 11:50:36 AM  Aug 25, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft

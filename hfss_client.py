@@ -435,19 +435,44 @@ class PyAEDTHFSSClient(HFSSClient):
         return self._project_path
 
     def _clear_current_design(self) -> None:
-        """Remove the previous candidate before constructing a complete replacement."""
+        """Remove candidate-specific objects while preserving fixed analysis controls.
+
+        AEDT 2025.2 can retain solved sweep names after deleting and recreating a
+        setup in a Save-As project.  Keeping the fixed Setup/Sweeps avoids the ghost
+        names; rebuilding geometry invalidates their old solutions automatically.
+        """
         for field_setup in list(getattr(self._hfss, "field_setups", None) or []):
             self._require_created(field_setup.delete(), f"delete field setup {field_setup.name}")
         for boundary in list(getattr(self._hfss, "boundaries", None) or []):
             self._require_created(boundary.delete(), f"delete boundary {boundary.name}")
-        for setup_name in list(getattr(self._hfss, "setup_names", None) or []):
-            self._require_created(self._hfss.delete_setup(setup_name), f"delete setup {setup_name}")
         object_names = list(getattr(self._hfss.modeler, "object_names", None) or [])
         if object_names:
             self._require_created(self._hfss.modeler.delete(object_names), "delete previous geometry")
 
-        if self._hfss.modeler.object_names or self._hfss.setup_names or self._hfss.excitation_names:
-            raise RuntimeError("AEDT still contains geometry, setups, or excitations after cleanup")
+        if self._hfss.modeler.object_names or self._hfss.excitation_names:
+            raise RuntimeError("AEDT still contains geometry or excitations after cleanup")
+
+        setup_names = self._named(getattr(self._hfss, "setup_names", None))
+        unexpected_setups = [
+            name for name in setup_names if name.casefold() != self._setup_name.casefold()
+        ]
+        if unexpected_setups:
+            raise RuntimeError(f"AEDT contains unexpected analysis setups: {unexpected_setups}")
+        if setup_names:
+            sweeps = {
+                " ".join(name.split()).casefold()
+                for name in self._named(getattr(self._hfss, "existing_analysis_sweeps", None))
+            }
+            required = {
+                f"{self._setup_name} : {self._sweep_name}".casefold(),
+                f"{self._setup_name} : {self._efficiency_sweep_name}".casefold(),
+            }
+            missing = sorted(required - sweeps)
+            if missing:
+                raise RuntimeError(
+                    "fixed analysis setup is incomplete before candidate rebuild; missing: "
+                    + ", ".join(missing)
+                )
 
     def create_patch_antenna(self, specification: Mapping[str, Any]) -> HFSSResult:
         """Build one complete inset-fed patch from validated numeric parameters."""
@@ -619,52 +644,6 @@ class PyAEDTHFSSClient(HFSSClient):
                 "InfiniteSphere1",
             )
 
-            setup = self._require_created(
-                self._hfss.create_setup(name=self._setup_name, setup_type="HFSSDriven"),
-                self._setup_name,
-            )
-            setup.props["Frequency"] = f"{spec.center_frequency_ghz:.12g}GHz"
-            setup.props["MaxDeltaS"] = (
-                self._task_spec.setup_value("max_delta_s", "1") if self._task_spec else 0.02
-            )
-            setup.props["MaximumPasses"] = int(
-                self._task_spec.setup_value("maximum_passes", "count")
-                if self._task_spec else 12
-            )
-            setup.props["MinimumPasses"] = int(
-                self._task_spec.setup_value("minimum_passes", "count")
-                if self._task_spec else 2
-            )
-            setup.props["MinimumConvergedPasses"] = int(
-                self._task_spec.setup_value("minimum_converged_passes", "count")
-                if self._task_spec else 1
-            )
-            self._require_created(setup.update(), f"update {self._setup_name}")
-
-            self._require_created(
-                self._hfss.create_linear_count_sweep(
-                    setup=self._setup_name,
-                    units="GHz",
-                    start_frequency=spec.sweep_start_ghz,
-                    stop_frequency=spec.sweep_stop_ghz,
-                    num_of_freq_points=spec.sweep_points,
-                    name=self._sweep_name,
-                    sweep_type=(
-                        self._task_spec.data["simulation_control"]["sweep_type"]
-                        if self._task_spec is not None else "Interpolating"
-                    ),
-                    save_fields=(
-                        self._task_spec.data["simulation_control"]["save_fields"]
-                        if self._task_spec is not None else False
-                    ),
-                    save_rad_fields=(
-                        self._task_spec.data["simulation_control"]["save_rad_fields"]
-                        if self._task_spec is not None else True
-                    ),
-                ),
-                self._sweep_name,
-            )
-
             if self._task_spec is not None:
                 efficiency_control = self._task_spec.data["simulation_control"][
                     "efficiency_sweep"
@@ -685,28 +664,100 @@ class PyAEDTHFSSClient(HFSSClient):
                 efficiency_type = "Discrete"
                 efficiency_save_fields = False
                 efficiency_save_rad_fields = True
-            self._require_created(
-                self._hfss.create_linear_count_sweep(
-                    setup=self._setup_name,
-                    units="GHz",
-                    start_frequency=efficiency_start,
-                    stop_frequency=efficiency_stop,
-                    num_of_freq_points=efficiency_points,
-                    name=self._efficiency_sweep_name,
-                    sweep_type=efficiency_type,
-                    save_fields=efficiency_save_fields,
-                    save_rad_fields=efficiency_save_rad_fields,
-                ),
-                self._efficiency_sweep_name,
+
+            existing_setups = {
+                name.casefold(): name
+                for name in self._named(getattr(self._hfss, "setup_names", None))
+            }
+            reuse_analysis = self._setup_name.casefold() in existing_setups
+            if reuse_analysis:
+                setup = self._require_created(
+                    self._hfss.get_setup(existing_setups[self._setup_name.casefold()]),
+                    f"existing setup {self._setup_name}",
+                )
+                _dbg(
+                    f"复用固定分析控制: {self._setup_name}/"
+                    f"{self._sweep_name}/{self._efficiency_sweep_name}"
+                )
+            else:
+                if existing_setups:
+                    raise RuntimeError(
+                        f"unexpected analysis setups before creating {self._setup_name}: "
+                        f"{sorted(existing_setups.values())}"
+                    )
+                setup = self._require_created(
+                    self._hfss.create_setup(name=self._setup_name, setup_type="HFSSDriven"),
+                    self._setup_name,
+                )
+            setup.props["Frequency"] = f"{spec.center_frequency_ghz:.12g}GHz"
+            setup.props["MaxDeltaS"] = (
+                self._task_spec.setup_value("max_delta_s", "1") if self._task_spec else 0.02
             )
+            setup.props["MaximumPasses"] = int(
+                self._task_spec.setup_value("maximum_passes", "count")
+                if self._task_spec else 12
+            )
+            setup.props["MinimumPasses"] = int(
+                self._task_spec.setup_value("minimum_passes", "count")
+                if self._task_spec else 2
+            )
+            setup.props["MinimumConvergedPasses"] = int(
+                self._task_spec.setup_value("minimum_converged_passes", "count")
+                if self._task_spec else 1
+            )
+            self._require_created(setup.update(), f"update {self._setup_name}")
+
+            if not reuse_analysis:
+                self._require_created(
+                    self._hfss.create_linear_count_sweep(
+                        setup=self._setup_name,
+                        units="GHz",
+                        start_frequency=spec.sweep_start_ghz,
+                        stop_frequency=spec.sweep_stop_ghz,
+                        num_of_freq_points=spec.sweep_points,
+                        name=self._sweep_name,
+                        sweep_type=(
+                            self._task_spec.data["simulation_control"]["sweep_type"]
+                            if self._task_spec is not None else "Interpolating"
+                        ),
+                        save_fields=(
+                            self._task_spec.data["simulation_control"]["save_fields"]
+                            if self._task_spec is not None else False
+                        ),
+                        save_rad_fields=(
+                            self._task_spec.data["simulation_control"]["save_rad_fields"]
+                            if self._task_spec is not None else True
+                        ),
+                    ),
+                    self._sweep_name,
+                )
+                self._require_created(
+                    self._hfss.create_linear_count_sweep(
+                        setup=self._setup_name,
+                        units="GHz",
+                        start_frequency=efficiency_start,
+                        stop_frequency=efficiency_stop,
+                        num_of_freq_points=efficiency_points,
+                        name=self._efficiency_sweep_name,
+                        sweep_type=efficiency_type,
+                        save_fields=efficiency_save_fields,
+                        save_rad_fields=efficiency_save_rad_fields,
+                    ),
+                    self._efficiency_sweep_name,
+                )
 
             _dbg("<<< create_patch_antenna 建模成功")
             return HFSSResult(
                 success=True,
-                data={"specification": spec.to_dict(), "project_path": str(candidate_path.resolve())},
+                data={
+                    "specification": spec.to_dict(),
+                    "project_path": str(candidate_path.resolve()),
+                    "analysis_setup_reused": reuse_analysis,
+                },
                 message=(
-                    "贴片天线、Port1、Rad1、InfiniteSphere1、Setup1、Sweep1 和 "
-                    f"{self._efficiency_sweep_name} 已创建。"
+                    "贴片天线、Port1、Rad1 和 InfiniteSphere1 已创建；"
+                    f"{self._setup_name}/{self._sweep_name}/{self._efficiency_sweep_name} "
+                    f"已{'复用' if reuse_analysis else '创建'}。"
                 ),
             )
         except Exception as exc:

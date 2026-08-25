@@ -50,7 +50,7 @@ class Evaluator(ABC):
 
 
 class AntennaEvaluator(Evaluator):
-    """Score only the latest candidate that completed the full trusted pipeline."""
+    """Score every complete candidate and select the highest-scoring one."""
 
     def __init__(self, config: Config = cfg, task_spec: Optional[AntennaTaskSpec] = None):
         self.config = config
@@ -93,6 +93,7 @@ class AntennaEvaluator(Evaluator):
         selected_iteration: Optional[int] = None
         selected_project_file: Optional[Path] = None
         candidate_evaluations: List[Dict[str, Any]] = []
+        selection_policy = "direct_metrics_input"
 
         if manifest_file is not None:
             try:
@@ -102,8 +103,8 @@ class AntennaEvaluator(Evaluator):
                 print(f"[评测] 读取候选清单失败: {exc}")
                 candidates = []
 
-            successful: List[Dict[str, Any]] = []
-            for candidate in candidates:
+            successful: List[tuple[Dict[str, Any], Dict[str, Any], int]] = []
+            for manifest_position, candidate in enumerate(candidates):
                 evaluation: Dict[str, Any] = {
                     "iteration": candidate.get("iteration"),
                     "pipeline_success": bool(candidate.get("success")),
@@ -112,16 +113,32 @@ class AntennaEvaluator(Evaluator):
                     "selected_for_scoring": False,
                 }
                 if candidate.get("success"):
-                    successful.append(candidate)
                     candidate_metrics = self._candidate_metrics(candidate)
                     evaluation.update(task.evaluate_metrics(candidate_metrics))
                     evaluation["measured_metrics"] = task.structured_metrics(candidate_metrics)
+                    successful.append((candidate, evaluation, manifest_position))
                 candidate_evaluations.append(evaluation)
 
-            # A later fully simulated candidate replaces an earlier one even when worse.
-            # Failed pipelines do not replace the last fully simulated candidate.
-            selected = successful[-1] if successful else None
-            if selected is not None:
+            # Compare only candidates that completed the trusted pipeline. Higher score
+            # wins; an exact tie goes to the later iteration (then later manifest entry)
+            # so selection remains deterministic without penalizing further refinement.
+            selection_policy = "highest_scoring_successful_candidate_latest_on_tie"
+
+            def selection_key(
+                item: tuple[Dict[str, Any], Dict[str, Any], int]
+            ) -> tuple[float, float, int]:
+                candidate, evaluation, manifest_position = item
+                iteration = candidate.get("iteration")
+                iteration_rank = (
+                    float(iteration)
+                    if isinstance(iteration, (int, float)) and not isinstance(iteration, bool)
+                    else float(manifest_position)
+                )
+                return float(evaluation.get("score", 0.0)), iteration_rank, manifest_position
+
+            selected_entry = max(successful, key=selection_key) if successful else None
+            if selected_entry is not None:
+                selected, selected_evaluation, _ = selected_entry
                 metrics = self._candidate_metrics(selected)
                 selected_iteration = selected.get("iteration")
                 if selected.get("project_file"):
@@ -132,9 +149,7 @@ class AntennaEvaluator(Evaluator):
                         design_parameters = task.structured_design(selected["specification"])
                     except ValueError:
                         design_parameters = {}
-                for evaluation in candidate_evaluations:
-                    if evaluation.get("iteration") == selected_iteration:
-                        evaluation["selected_for_scoring"] = True
+                selected_evaluation["selected_for_scoring"] = True
         elif metrics_file is not None:
             try:
                 metrics = self._load_metrics_file(metrics_file)
@@ -155,10 +170,15 @@ class AntennaEvaluator(Evaluator):
         checklist = scored["checklist"]
         score = float(scored["score"])
         max_score = float(scored["max_score"])
+        selection_description = (
+            "历次完整成功候选中总分最高者（同分取较后迭代）"
+            if manifest_file is not None
+            else "直接评测输入指标"
+        )
         summary = (
             f"评测结果：{'通过' if passed else '未通过'}\n"
             f"任务: {task.task_id}\n"
-            f"候选选择策略: 最后一个完整成功候选\n"
+            f"候选选择策略: {selection_description}\n"
             f"选中候选: {selected_iteration if selected_iteration is not None else '无'}\n"
             f"得分: {score:.3f}/{max_score:.0f}\n"
             f"检查项: {checklist}\n"
@@ -201,13 +221,13 @@ class AntennaEvaluator(Evaluator):
                         "Plot dB(S(1,1)) on Setup1:Sweep1 and compare resonance, minimum S11, and contiguous threshold bandwidth.",
                         "At Setup1:LastAdaptive, open the InfiniteSphere1 Antenna Parameters report and compare dB(PeakGain).",
                         "Export dB(S(1,1)) from Setup1:Sweep1. Separately export InfiniteSphere1 RadiationEfficiency from the discrete Setup1:EfficiencySweep; treat it as a linear ratio, not a percentage or dB value.",
-                        "Inside the measured-resonance window, linearly interpolate RadiationEfficiency to the Sweep1 frequency grid without extrapolation. Compute clamp(RadiationEfficiency * (1 - 10^(dB(S11)/10)), 0, 1) at each Sweep1 sample, average, and multiply by 100 to compare total_efficiency_mean_percent.",
+                        "Inside the fixed target-frequency window, linearly interpolate RadiationEfficiency to the Sweep1 frequency grid without extrapolation. Compute clamp(RadiationEfficiency * (1 - 10^(dB(S11)/10)), 0, 1) at each Sweep1 sample, average, and multiply by 100 to compare total_efficiency_mean_percent.",
                     ],
                     "derived_metric_formulas": {
                         "mismatch_efficiency_ratio": "1 - 10^(dB(S11)/10)",
                         "interpolated_radiation_efficiency_ratio": "linear interpolation of Setup1:EfficiencySweep RadiationEfficiency onto the Setup1:Sweep1 grid; no extrapolation",
                         "single_port_total_efficiency_ratio": "clamp(interpolated_radiation_efficiency_ratio * mismatch_efficiency_ratio, 0, 1)",
-                        "total_efficiency_mean_percent": "100 * arithmetic_mean(single_port_total_efficiency_ratio on Sweep1 samples within measured resonance +/- configured half span)",
+                        "total_efficiency_mean_percent": "100 * arithmetic_mean(single_port_total_efficiency_ratio on Sweep1 samples within objective target frequency +/- configured half span)",
                     },
                     "design_parameters": design_parameters,
                     "fixed_parameters": task.data["fixed_parameters"],
@@ -227,7 +247,7 @@ class AntennaEvaluator(Evaluator):
             "task_id": task.task_id,
             "calibration": task.data["calibration"],
             "natural_language_supplement": requirements,
-            "selection_policy": "latest_successful_complete_candidate",
+            "selection_policy": selection_policy,
             "selected_iteration": selected_iteration,
             "selected_project_file": str(selected_project_file) if selected_project_file else None,
             "manual_verification_file": str(verification_file.resolve()),

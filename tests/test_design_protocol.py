@@ -377,8 +377,8 @@ class ToolProtocolTests(unittest.TestCase):
             self.assertTrue(resources["model"]["calls"][0]["interrupted"])
 
 
-class EvaluatorFallbackTests(unittest.TestCase):
-    def test_evaluator_scores_latest_successful_candidate_even_when_worse(self):
+class EvaluatorSelectionTests(unittest.TestCase):
+    def test_evaluator_selects_highest_scoring_successful_candidate(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             run_dir = Path(temp_dir) / "run"
             run_dir.mkdir()
@@ -436,24 +436,67 @@ class EvaluatorFallbackTests(unittest.TestCase):
                 manifest_file=manifest_file,
             )
 
-            self.assertFalse(result.passed)
-            self.assertEqual(result.selected_iteration, 2)
-            self.assertEqual(result.selected_project_file, projects[1])
-            self.assertLess(result.score, 100.0)
+            self.assertTrue(result.passed)
+            self.assertEqual(result.selected_iteration, 1)
+            self.assertEqual(result.selected_project_file, projects[0])
+            self.assertEqual(result.score, 100.0)
             self.assertEqual(
                 [item["iteration"] for item in result.candidate_evaluations],
                 [1, 2, 3],
             )
-            self.assertTrue(result.candidate_evaluations[1]["selected_for_scoring"])
+            self.assertTrue(result.candidate_evaluations[0]["selected_for_scoring"])
+            self.assertFalse(result.candidate_evaluations[1]["selected_for_scoring"])
+            self.assertGreater(
+                result.candidate_evaluations[0]["score"],
+                result.candidate_evaluations[1]["score"],
+            )
             self.assertFalse(result.candidate_evaluations[2]["pipeline_success"])
             self.assertEqual(result.report_file.parent, run_dir)
             self.assertTrue(result.verification_file.is_file())
             verification = json.loads(result.verification_file.read_text(encoding="utf-8"))
-            self.assertEqual(verification["project_file"], str(projects[1]))
+            self.assertEqual(verification["project_file"], str(projects[0]))
             self.assertEqual(verification["aedt_objects"]["frequency_sweep"], "Sweep1")
             self.assertEqual(
                 verification["aedt_objects"]["efficiency_sweep"], "EfficiencySweep"
             )
+
+    def test_evaluator_selects_later_iteration_when_scores_are_equal(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            run_dir = Path(temp_dir) / "run"
+            run_dir.mkdir()
+            projects = [run_dir / f"candidate_{index:03d}.aedt" for index in (1, 2)]
+            metrics = {
+                "center_freq_ghz": 2.45,
+                "s11_min_db": -22.0,
+                "bandwidth_mhz": 120.0,
+                "peak_gain_dbi": 8.0,
+                "total_efficiency_mean_percent": 90.0,
+            }
+            manifest = {
+                "protocol_version": 2,
+                "candidates": [
+                    {
+                        "iteration": iteration,
+                        "success": True,
+                        "status": "completed",
+                        "project_file": str(project),
+                        "metrics": metrics,
+                        "specification": valid_spec(),
+                    }
+                    for iteration, project in enumerate(projects, start=1)
+                ],
+            }
+            manifest_file = run_dir / "run_manifest.json"
+            manifest_file.write_text(json.dumps(manifest), encoding="utf-8")
+
+            result = AntennaEvaluator(
+                Config(project_dir=run_dir, log_dir=run_dir)
+            ).evaluate(manifest_file=manifest_file)
+
+            self.assertEqual(result.selected_iteration, 2)
+            self.assertEqual(result.selected_project_file, projects[1])
+            self.assertFalse(result.candidate_evaluations[0]["selected_for_scoring"])
+            self.assertTrue(result.candidate_evaluations[1]["selected_for_scoring"])
 
 
 class _FakeNamedObject:
@@ -603,6 +646,8 @@ class _FakeHfss:
         self.sweep_kwargs = None
         self.sweep_calls = []
         self.last_setup = None
+        self.get_setup_calls = []
+        self.delete_setup_calls = []
         self.axis_directions = type("AxisDirections", (), {"ZPos": 5})()
         self.release_calls = []
         self.post = _FakePost()
@@ -696,7 +741,12 @@ class _FakeHfss:
         self.last_setup = _FakeSetup(name)
         return self.last_setup
 
+    def get_setup(self, name):
+        self.get_setup_calls.append(name)
+        return self.last_setup if name in self.setup_names else None
+
     def delete_setup(self, name):
+        self.delete_setup_calls.append(name)
         if name in self.setup_names:
             self.setup_names.remove(name)
         self.existing_analysis_sweeps = [
@@ -793,7 +843,7 @@ class TrustedBuilderTests(unittest.TestCase):
         self.assertEqual(backend.rename_design_calls, [])
         self.assertEqual(backend.close_project_calls, [])
 
-    def test_second_candidate_build_does_not_reuse_previous_sweeps(self):
+    def test_second_candidate_reuses_fixed_sweeps_without_recreating_names(self):
         backend = _FakeHfss()
         client = self._client(backend)
         second_spec = valid_spec()
@@ -804,6 +854,11 @@ class TrustedBuilderTests(unittest.TestCase):
 
         self.assertTrue(first.success, first.message)
         self.assertTrue(second.success, second.message)
+        self.assertFalse(first.data["analysis_setup_reused"])
+        self.assertTrue(second.data["analysis_setup_reused"])
+        self.assertEqual(backend.delete_setup_calls, [])
+        self.assertEqual(backend.get_setup_calls, ["Setup1"])
+        self.assertEqual(len(backend.sweep_calls), 2)
         self.assertEqual(
             backend.existing_analysis_sweeps,
             [

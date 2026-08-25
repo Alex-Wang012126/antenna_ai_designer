@@ -484,7 +484,7 @@ class DesignAgent:
                 self._stop_reason = "iteration_limit"
                 self._finalized = self._selected_candidate is not None
                 self._final_summary = (
-                    f"已用完 {max_iterations} 次候选设计迭代，提交最后一个完整仿真候选进行独立评测。"
+                    f"已用完 {max_iterations} 次候选设计迭代，提交所有完整仿真候选进行独立评测。"
                     if self._selected_candidate is not None
                     else f"已用完 {max_iterations} 次候选设计迭代，但没有候选完成完整仿真流水线。"
                 )
