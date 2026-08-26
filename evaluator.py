@@ -94,11 +94,13 @@ class AntennaEvaluator(Evaluator):
         selected_project_file: Optional[Path] = None
         candidate_evaluations: List[Dict[str, Any]] = []
         selection_policy = "direct_metrics_input"
+        model_metadata: Dict[str, Any] = {}
 
         if manifest_file is not None:
             try:
                 manifest = json.loads(Path(manifest_file).read_text(encoding="utf-8"))
                 candidates = list(manifest.get("candidates") or [])
+                model_metadata = dict(manifest.get("model") or {})
             except Exception as exc:
                 print(f"[评测] 读取候选清单失败: {exc}")
                 candidates = []
@@ -245,6 +247,7 @@ class AntennaEvaluator(Evaluator):
         report = {
             "schema_version": 1,
             "task_id": task.task_id,
+            "model": model_metadata,
             "calibration": task.data["calibration"],
             "natural_language_supplement": requirements,
             "selection_policy": selection_policy,

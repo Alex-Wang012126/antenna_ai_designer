@@ -30,7 +30,7 @@
 
 “存在满分解”不能只靠合理的目标值推断，必须由见证解验证。推荐的出题流程是：先冻结任务合同和 HFSS 版本/设置，再由人工、传统优化器或更大的离线求解预算找到至少一个候选；用与正式评测完全相同的 builder、求解和读数链路独立复算；最后把满分阈值放在见证解性能以内，并预留大于网格与数值波动的余量。参考设计用于证明可达性，不用于比较模型参数是否接近“标准答案”，也不应暴露给参评模型。
 
-任务中的 `calibration` 明确记录校准状态。只有在同一固定环境中验证过满分见证解后，才能设为 `verified`；否则 `main.py` 会显示警告。当前 `inset_patch_2p45_v6` 仍是 `uncalibrated`，适合继续调题和收集结果，尚不适合直接作为正式排行榜题目。
+任务中的 `calibration` 明确记录校准状态。只有在同一固定环境中验证过满分见证解后，才能设为 `verified`；否则 `main.py` 会显示警告。对`uncalibrated`状态的题目，应该继续调整和收集结果，尚不适合直接作为正式排行榜题目。
 
 ## 固定量、约束与设计变量
 
@@ -166,6 +166,25 @@ hfss_projects/
 
 `task_spec.json` 是该次运行实际采用的只读合同快照；`resource_usage.json` 记录逐次模型延迟、API 返回的 token usage、候选/求解次数和求解耗时。`candidate_NNN_metrics.json` 同时保存带单位的设计参数、结构化测量值和后端原始指标。`manual_verification.json` 给出选中工程、AEDT 对象名、固定控制和逐项核验步骤，方便在 AEDT 中人工复现报告。
 
+多模型模式会在同一个批次目录下为每个模型建立隔离子目录：
+
+```text
+hfss_projects/
+  batch_20260825_160000_123456/
+    model_batch.json
+    batch_results.json
+    01_gpt55/
+      candidate_001.aedt
+      run_manifest.json
+      evaluation_report.json
+      resource_usage.json
+      ...
+    02_claude_opus_48/
+      ...
+```
+
+`batch_results.json` 汇总模型名称、配置文件、API 类型、得分排名、选中候选和各结果文件路径，不保存 API key。批次严格串行运行；每个模型结束后关闭其 AEDT 桌面，再启动下一个模型，避免活动工程和求解状态相互污染。某一个模型发生 API 或 AEDT 异常时会在其子目录写入 `run_error.json`，随后继续运行清单中的下一个模型。
+
 ## 安装与配置
 
 建议使用 Python 3.11：
@@ -186,7 +205,33 @@ AEDT_ROOT=C:\ANSYS Inc\ANSYS Student\v252\AnsysEM
 AEDT_KEEP_OPEN=true
 ```
 
-API key 也可以保留在 `job_gpt55.yaml` 的 `agents[0].kwargs.api_key` 中。配置优先级为环境变量或 `.env` 高于 YAML，再高于代码默认值。
+API key 也可以保留在 `job_gpt55.yaml` 的 `agents[0].kwargs.api_key` 中。单模型默认模式的配置优先级为环境变量或 `.env` 高于 YAML，再高于代码默认值；批次模式则以每一项显式引用的 YAML 为准，避免全局 `MODEL_*` 环境变量把所有批次项覆盖成同一个模型。
+
+多模型清单位于 `model_batch.json`，按 `models` 数组顺序执行：
+
+```json
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "id": "gpt55",
+      "config_file": "job_gpt55.yaml",
+      "api_style": "responses",
+      "enabled": true
+    },
+    {
+      "id": "claude_opus_48",
+      "config_file": "job_claude_opus_48.yaml",
+      "api_style": "anthropic_messages",
+      "enabled": true
+    }
+  ]
+}
+```
+
+`api_style` 支持 `responses`、`chat_completions` 和 `anthropic_messages`。该字段可省略，框架会根据 YAML 中的 `llm_import_path` 推断；显式填写更便于审计。`id` 只用于结果子目录和汇总，不会发送给模型。批次 JSON 只引用 YAML 文件，不应复制其中的 API key。
+
+本项目的 `.gitignore` 会忽略 `job_*.yaml`，避免新增的本地 API key 配置被意外提交。已经被 Git 跟踪的旧配置不会因 `.gitignore` 自动移除，仍应在提交前单独检查其中是否含真实密钥。
 
 `AEDT_KEEP_OPEN` 默认为 `true`。无论成功还是失败，程序都会保存当前项目并仅释放 Python 自动化连接，AEDT 项目和窗口保持打开供检查；设置为 `false` 才会关闭项目和桌面。
 
@@ -202,6 +247,18 @@ python verify_min.py
 
 ```powershell
 python main.py --task-spec tasks/inset_patch_2p45.json --max-design-iterations 10 --max-solve-calls 10
+```
+
+运行 `model_batch.json` 中的全部启用模型，每个模型分别获得相同的候选和求解预算：
+
+```powershell
+python main.py --model-batch model_batch.json --task-spec tasks/inset_patch_2p45.json --max-design-iterations 10 --max-solve-calls 10
+```
+
+只测试某一个新增 YAML 配置：
+
+```powershell
+python main.py --model-config job_kimi_k3.yaml --max-design-iterations 5 --max-solve-calls 5
 ```
 
 可用 `--description-supplement "..."`（兼容别名 `--requirements`）附加自然语言说明；它不会改变结构化阈值或评分。
@@ -224,10 +281,11 @@ python -B -m unittest discover -s tests -v
 - `task_spec.py`：结构化任务校验、只读控制解析、指标结构化和评分
 - `tasks/*.json`：可人工阅读并可复现的评测任务合同
 - `prompts.py`：LLM 行为协议和两个工具的 schema
-- `model_client.py`：Responses API / Chat Completions API 适配
+- `model_client.py`：Responses、OpenAI-compatible Chat Completions 和 Anthropic Messages API 适配
+- `model_batch.py` / `model_batch.json`：多模型清单校验与批次定义
 - `design_loop.py`：候选生成循环与 Python 完整仿真流水线
 - `hfss_client.py`：可信 PyAEDT 建模、校验、求解、读数和工程副本管理
-- `evaluator.py`：独立结构化评分与最后完整成功候选选择
-- `main.py`：批次目录创建和两阶段流程入口
+- `evaluator.py`：独立结构化评分与历次最高分成功候选选择
+- `main.py`：单模型/多模型批次目录创建和两阶段流程入口
 
 真实 AEDT 集成依赖本机许可证、安装版本和求解环境。离线测试不会启动 AEDT；修改建模代码后，应先运行离线测试，再用 `verify_min.py` 和一次低迭代真实任务验证。

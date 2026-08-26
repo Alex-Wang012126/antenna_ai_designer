@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "id": "glm-4.5",
+      "config_file": "job_glm_4_5.yaml",
+      "api_style": "chat_completions",
+      "enabled": true
+    },
+    {
+      "id": "glm-4.7",
+      "config_file": "job_glm_4_7.yaml",
+      "api_style": "chat_completions",
+      "enabled": true
+    },
+    {
+      "id": "glm-5",
+      "config_file": "job_glm_5.yaml",
+      "api_style": "chat_completions",
+      "enabled": true
+    },
+    {
+      "id": "glm-5.3",
+      "config_file": "job_glm_5_3.yaml",
+      "api_style": "chat_completions",
+      "enabled": true
+    }
+  ]
+}

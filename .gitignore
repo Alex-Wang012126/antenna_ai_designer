@@ -1,4 +1,5 @@
 .env
+job_*.yaml
 __pycache__/
 *.py[cod]
 

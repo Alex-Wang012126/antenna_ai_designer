@@ -332,7 +332,7 @@ class DesignAgent:
         if response.tool_calls:
             msg["tool_calls"] = [
                 {
-                    "id": f"call_{self.model_calls}_{i}",
+                    "id": tool_call.call_id or f"call_{self.model_calls}_{i}",
                     "type": "function",
                     "function": {
                         "name": tool_call.name,
@@ -448,7 +448,7 @@ class DesignAgent:
                 if len(response.tool_calls) != 1:
                     for i, tool_call in enumerate(response.tool_calls):
                         self._append_tool_result(
-                            f"call_{self.model_calls}_{i}",
+                            tool_call.call_id or f"call_{self.model_calls}_{i}",
                             tool_call.name,
                             HFSSResult(
                                 success=False,
@@ -459,7 +459,7 @@ class DesignAgent:
                     continue
 
                 tool_call = response.tool_calls[0]
-                tool_call_id = f"call_{self.model_calls}_0"
+                tool_call_id = tool_call.call_id or f"call_{self.model_calls}_0"
                 print(
                     f"\n[模型调用 {self.model_calls + 1}] {tool_call.name}({tool_call.arguments})",
                     flush=True,
@@ -534,8 +534,14 @@ class DesignAgent:
                 "model": {
                     "client_class": type(self.model).__name__,
                     "configured_model_name": self.config.model_name,
+                    "configured_api_style": self.config.model_api_style,
+                    "configured_model_config_file": (
+                        str(self.config.model_config_file)
+                        if self.config.model_config_file else None
+                    ),
                     "configured_reasoning_effort": self.config.model_reasoning_effort,
                     "configured_max_completion_tokens_per_call": self.config.model_max_completion_tokens,
+                    "configured_timeout_seconds": self.config.model_timeout_seconds,
                     "call_safety_limit": max_model_calls,
                     "attempted_calls": len(self._model_call_records),
                     "token_totals": token_totals,
@@ -558,6 +564,14 @@ class DesignAgent:
             manifest = {
                 "protocol_version": 3,
                 "task_id": self.task_spec.task_id,
+                "model": {
+                    "name": self.config.model_name,
+                    "api_style": self.config.model_api_style,
+                    "config_file": (
+                        str(self.config.model_config_file)
+                        if self.config.model_config_file else None
+                    ),
+                },
                 "task_spec_file": str(task_file.resolve()),
                 "natural_language_supplement": self.requirements,
                 "stop_reason": self._stop_reason,

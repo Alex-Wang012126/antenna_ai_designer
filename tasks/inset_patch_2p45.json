@@ -9,11 +9,11 @@
     "description": "Single-layer rectangular microstrip patch with a centered inset microstrip feed and one 50-ohm lumped port."
   },
   "calibration": {
-    "status": "uncalibrated",
-    "full_score_witness_verified": false,
-    "verification_date": null,
-    "solver": null,
-    "notes": "This task must not be treated as a calibrated leaderboard item until an independently designed candidate reaches 100/100 under the exact fixed controls with numerical margin."
+    "status": "verified",
+    "full_score_witness_verified": true,
+    "verification_date": "2026-08-25",
+    "solver": "Ansys Electronics Desktop Student 2025 R2 / HFSS 2025.2",
+    "notes": "A full-score witness was independently verified under the exact fixed simulation controls; evidence is retained in run_20260825_115033_352903."
   },
   "fixed_parameters": {
     "substrate_material": {
