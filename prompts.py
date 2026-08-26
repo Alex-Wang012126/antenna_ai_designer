@@ -3,7 +3,6 @@
 import json
 from typing import Any, Dict, List
 
-from design_spec import PatchAntennaDesign
 from task_spec import AntennaTaskSpec, load_default_task
 
 
@@ -19,17 +18,15 @@ AUTHORITATIVE_BENCHMARK_TASK_JSON:
 {task_json}
 
 Supported topology:
-- An inset-fed rectangular microstrip patch with one lumped port.
-- All geometry, boundaries, setup, sweep, and far-field configuration are created by trusted backend code.
-- You choose only the fields exposed by `create_patch_antenna`. Material and simulation controls are fixed.
+{task_spec.framework.prompt_guidance}
 - Never output Python, PyAEDT calls, AEDT macros, file paths, read-only fields, or units inside numeric values.
 
 Strict workflow:
-1. Call `create_patch_antenna` with every required field. Numeric field names state their units.
+1. Call `{task_spec.design_tool_name}` with every required field. Numeric field names state their units.
 2. The Python backend automatically builds, validates, solves, reads all metrics, and saves that candidate.
 3. Review design_parameters and measured_metrics returned by the tool. Each measurement states its unit
    and value representation. If the objectives are not met and the
-   candidate budget remains, call `create_patch_antenna` again with a complete revised specification.
+   candidate budget remains, call `{task_spec.design_tool_name}` again with a complete revised specification.
 4. As soon as you believe the current candidate satisfies the requirements, call `finalize_design`.
 5. Do not call `finalize_design` before at least one candidate has completed the full simulation pipeline.
 
@@ -72,13 +69,10 @@ def build_tools_description(task_spec: AntennaTaskSpec | None = None) -> List[Di
     task_spec = task_spec or load_default_task()
     return [
         _strict_tool(
-            "create_patch_antenna",
-            (
-                "Submit one complete inset-fed patch candidate. Python automatically builds, validates, "
-                "solves, reads all metrics, and saves an isolated project copy before returning."
-            ),
+            task_spec.design_tool_name,
+            task_spec.framework.tool_description,
             task_spec.tool_properties(),
-            list(PatchAntennaDesign.FIELD_NAMES),
+            list(task_spec.data["design_variables"]),
         ),
         _strict_tool(
             "finalize_design",
@@ -109,6 +103,6 @@ def build_initial_message(
         "role": "user",
         "content": (
             f"Human-readable task description (non-authoritative supplement):\n{supplement}\n\n"
-            "Begin with exactly one create_patch_antenna tool call containing a complete specification."
+            f"Begin with exactly one {task_spec.design_tool_name} tool call containing a complete specification."
         ),
     }

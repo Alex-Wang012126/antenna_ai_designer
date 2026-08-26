@@ -35,16 +35,24 @@ from evaluator import AntennaEvaluator, EvaluationResult
 from hfss_client import PlaceholderHFSSClient, PyAEDTHFSSClient
 from model_batch import ModelBatchSpec
 from model_client import PlaceholderModelClient, create_model_client
+from task_batch import TaskBatchSpec
 from task_spec import AntennaTaskSpec, DEFAULT_TASK_FILE
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="AI-driven antenna design with HFSS")
-    parser.add_argument(
+    task_group = parser.add_mutually_exclusive_group()
+    task_group.add_argument(
         "--task-spec",
         type=str,
-        default=str(DEFAULT_TASK_FILE),
+        default=None,
         help="结构化评测任务 JSON；它是参数、单位、仿真控制和评分的唯一权威来源",
+    )
+    task_group.add_argument(
+        "--task-batch",
+        type=str,
+        default=None,
+        help="题目批次 JSON；按列表顺序依次完成每个启用的题目",
     )
     parser.add_argument(
         "--description-supplement",
@@ -181,6 +189,21 @@ def _write_batch_report(report_file: Path, report: Dict[str, Any]) -> None:
 
 def run_model_batch(
     args: argparse.Namespace,
+    task_specs: list[AntennaTaskSpec],
+) -> int:
+    exit_codes = [
+        _run_model_batch_one_task(
+            args,
+            task_spec,
+            args.requirements or task_spec.description,
+        )
+        for task_spec in task_specs
+    ]
+    return 1 if any(code != 0 for code in exit_codes) else 0
+
+
+def _run_model_batch_one_task(
+    args: argparse.Namespace,
     task_spec: AntennaTaskSpec,
     natural_language_supplement: str,
 ) -> int:
@@ -202,7 +225,11 @@ def run_model_batch(
         "started_at_utc": datetime.now(timezone.utc).isoformat(),
         "finished_at_utc": None,
         "task_id": task_spec.task_id,
-        "task_spec_file": str(Path(args.task_spec).expanduser().resolve()),
+        "task_spec_file": (
+            str(task_spec.source_file)
+            if task_spec.source_file is not None
+            else None
+        ),
         "model_batch_file": str(batch_spec.source_file),
         "model_batch_snapshot": str(snapshot_file),
         "max_design_iterations_per_model": args.max_design_iterations,
@@ -404,14 +431,17 @@ def main() -> int:
     if args.max_design_iterations < 1 or args.max_solve_calls < 1:
         raise SystemExit("--max-design-iterations 和 --max-solve-calls 必须大于 0")
     try:
-        task_spec = AntennaTaskSpec.load(args.task_spec)
+        if args.task_batch:
+            task_specs = TaskBatchSpec.load(args.task_batch).load_enabled_tasks()
+        else:
+            task_specs = [AntennaTaskSpec.load(args.task_spec or DEFAULT_TASK_FILE)]
     except (OSError, ValueError, TypeError) as exc:
-        raise SystemExit(f"无法加载结构化任务 {args.task_spec}: {exc}") from exc
-    natural_language_supplement = args.requirements or task_spec.description
+        task_source = args.task_batch or args.task_spec or DEFAULT_TASK_FILE
+        raise SystemExit(f"无法加载结构化任务 {task_source}: {exc}") from exc
 
     if args.model_batch:
         try:
-            return run_model_batch(args, task_spec, natural_language_supplement)
+            return run_model_batch(args, task_specs)
         except (OSError, ValueError, TypeError) as exc:
             raise SystemExit(f"无法运行模型批次 {args.model_batch}: {exc}") from exc
 
@@ -421,23 +451,26 @@ def main() -> int:
             model_config = config_from_model_yaml(cfg, args.model_config)
         except (OSError, ValueError, TypeError) as exc:
             raise SystemExit(f"无法加载模型配置 {args.model_config}: {exc}") from exc
-    run_id = datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
-    run_dir = cfg.project_dir.expanduser().resolve() / run_id
-    runtime_config = replace(
-        model_config,
-        project_dir=run_dir,
-        log_dir=run_dir,
-        max_design_iterations=args.max_design_iterations,
-        max_solve_calls=args.max_solve_calls,
-    )
-    design_result, eval_result = run_single_model(
-        runtime_config,
-        task_spec,
-        natural_language_supplement,
-        use_placeholder=args.use_placeholder,
-    )
+    completed = True
+    for task_spec in task_specs:
+        run_id = datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
+        run_dir = cfg.project_dir.expanduser().resolve() / run_id
+        runtime_config = replace(
+            model_config,
+            project_dir=run_dir,
+            log_dir=run_dir,
+            max_design_iterations=args.max_design_iterations,
+            max_solve_calls=args.max_solve_calls,
+        )
+        design_result, eval_result = run_single_model(
+            runtime_config,
+            task_spec,
+            args.requirements or task_spec.description,
+            use_placeholder=args.use_placeholder,
+        )
+        completed = completed and design_result.success and eval_result.passed
 
-    return 0 if design_result.success and eval_result.passed else 1
+    return 0 if completed else 1
 
 
 if __name__ == "__main__":

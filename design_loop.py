@@ -177,12 +177,12 @@ class DesignAgent:
 
         try:
             design = self.task_spec.validate_design(arguments)
-            resolved = self.task_spec.resolve_patch_spec(arguments)
+            resolved = self.task_spec.resolve_design_spec(arguments)
             record["specification"] = design.to_dict()
             record["design_parameters"] = self.task_spec.structured_design(arguments)
             record["resolved_specification"] = resolved.to_dict()
         except ValueError as exc:
-            result = HFSSResult(success=False, message=f"Invalid patch specification: {exc}")
+            result = HFSSResult(success=False, message=f"Invalid design specification: {exc}")
             record["stages"]["parameter_validation"] = self._stage_result(result)
             return self._finish_failed_candidate(record, "parameter_validation", result)
 
@@ -191,7 +191,7 @@ class DesignAgent:
         build = self._run_stage(
             record,
             "build",
-            lambda: self.hfss.create_patch_antenna(record["specification"]),
+            lambda: self.task_spec.create_candidate(self.hfss, record["specification"]),
         )
         if isinstance(build.data, dict) and build.data.get("project_path"):
             record["project_file"] = str(build.data["project_path"])
@@ -300,7 +300,7 @@ class DesignAgent:
         if not isinstance(args, dict):
             return HFSSResult(success=False, message="Tool arguments must be a JSON object.")
 
-        if name == "create_patch_antenna":
+        if name == self.task_spec.design_tool_name:
             return self._run_candidate_pipeline(args)
 
         if name == "finalize_design":

@@ -17,6 +17,10 @@
 
 `tasks/inset_patch_2p45.json` 同时定义拓扑、只读固定参数、模型可调变量、HFSS 仿真控制、指标单位/语义、阈值和分值。自然语言不会被反向解析为阈值。
 
+题目清单通过 `task_batch.json` 声明。`--task-batch` 会按列表顺序加载启用的题目；每个题目拥有独立的 `task_id`、结果目录、任务快照和评测报告。`--task-batch` 与 `--model-batch` 可以组合使用，执行顺序为“逐题、题内逐模型”，每个题目-模型组合都获得独立的候选与求解预算。
+
+拓扑专属校验、参数解析、模型工具名称和提示词约束存放在 `frameworks/` 中，并由任务 JSON 的 `topology.id` 自动发现和选择。`task_spec.py` 只保留任务公共合同、指标通用结构和评分调度；新增题型不会改变现有题目的字段集合、约束或仿真控制。
+
 模型只会看到两个工具：
 
 - `create_patch_antenna({...})`：提交一个完整候选。一次调用会由 Python 自动完成整条仿真流水线。
@@ -44,7 +48,7 @@
 
 当前后端只注册了内嵌馈电矩形贴片。增加一种可公平评测的新天线，至少需要同步增加：
 
-1. 拓扑 ID、模型可调参数 schema 和几何约束。
+1. `frameworks/` 下的拓扑框架：拓扑 ID、模型可调参数 schema、几何约束、仿真控制校验和设计参数解析。
 2. 只接受结构化参数的可信 PyAEDT builder。
 3. 端口、边界、材料、网格和求解设置校验。
 4. 与题型匹配的指标读取器，例如圆极化的轴比、MIMO 的 S 参数矩阵/隔离度/ECC。
@@ -255,6 +259,18 @@ python main.py --task-spec tasks/inset_patch_2p45.json --max-design-iterations 1
 python main.py --model-batch model_batch.json --task-spec tasks/inset_patch_2p45.json --max-design-iterations 10 --max-solve-calls 10
 ```
 
+按 `task_batch.json` 的顺序完成全部启用题目：
+
+```powershell
+python main.py --task-batch task_batch.json --max-design-iterations 10 --max-solve-calls 10
+```
+
+让每个模型依次完成题目清单中的每个题目：
+
+```powershell
+python main.py --model-batch model_batch.json --task-batch task_batch.json --max-design-iterations 10 --max-solve-calls 10
+```
+
 只测试某一个新增 YAML 配置：
 
 ```powershell
@@ -278,8 +294,10 @@ python -B -m unittest discover -s tests -v
 ## 主要文件
 
 - `design_spec.py`：严格参数模型及 JSON Schema 字段定义
-- `task_spec.py`：结构化任务校验、只读控制解析、指标结构化和评分
+- `task_spec.py`：任务公共合同校验、只读控制解析、指标结构化和评分
+- `frameworks/`：按拓扑独立存放的设计框架、专属约束和参数解析
 - `tasks/*.json`：可人工阅读并可复现的评测任务合同
+- `task_batch.py` / `task_batch.json`：多题目清单校验、加载与顺序定义
 - `prompts.py`：LLM 行为协议和两个工具的 schema
 - `model_client.py`：Responses、OpenAI-compatible Chat Completions 和 Anthropic Messages API 适配
 - `model_batch.py` / `model_batch.json`：多模型清单校验与批次定义
