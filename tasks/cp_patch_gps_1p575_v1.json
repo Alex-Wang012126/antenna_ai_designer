@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "task_id": "cp_patch_gps_1p575_v1",
+  "title": "Single-feed right-hand circularly polarized GPS L1 patch antenna",
+  "natural_language_description": "Design a single-layer, single-port rectangular microstrip patch that receives right-hand circular polarization at 1.575 GHz. The antenna must resonate near the GPS L1 center frequency, maintain acceptable S11, achieve a boresight axial ratio at or below 2 dB, dominate in RHCP rather than LHCP, and provide usable axial-ratio bandwidth and RHCP gain. The structured thresholds and measurement semantics below are authoritative.",
+  "topology": {
+    "id": "single_feed_cp_coax_patch",
+    "port_count": 1
+  },
+  "calibration": {
+    "status": "uncalibrated",
+    "full_score_witness_verified": false,
+    "verification_date": null,
+    "solver": null,
+    "notes": "Full-score thresholds are placeholders pending witness-solution calibration and perturbation-box verification."
+  },
+  "fixed_parameters": {
+    "substrate_material": {
+      "value": "FR4 Epoxy",
+      "unit": "label",
+      "description": "Read-only substrate label."
+    },
+    "substrate_relative_permittivity": {
+      "value": 4.4,
+      "unit": "1",
+      "description": "Relative permittivity used by the trusted backend material."
+    },
+    "substrate_loss_tangent": {
+      "value": 0.02,
+      "unit": "1",
+      "description": "Dielectric loss tangent."
+    },
+    "substrate_width_mm": {
+      "value": 100.0,
+      "unit": "mm",
+      "description": "Fixed ground and substrate size along x."
+    },
+    "substrate_length_mm": {
+      "value": 100.0,
+      "unit": "mm",
+      "description": "Fixed ground and substrate size along y."
+    },
+    "substrate_height_mm": {
+      "value": 1.6,
+      "unit": "mm",
+      "description": "Fixed substrate thickness."
+    },
+    "coax_probe_radius_mm": {
+      "value": 0.6,
+      "unit": "mm",
+      "description": "Read-only coaxial inner-conductor radius."
+    },
+    "coax_port_radius_mm": {
+      "value": 1.5,
+      "unit": "mm",
+      "description": "Read-only circular lumped-port radius."
+    }
+  },
+  "design_variables": {
+    "patch_length_mm": {
+      "minimum": 42.0,
+      "maximum": 48.0,
+      "unit": "mm",
+      "description": "Patch dimension along x."
+    },
+    "patch_width_mm": {
+      "minimum": 42.0,
+      "maximum": 48.0,
+      "unit": "mm",
+      "description": "Patch dimension along y."
+    },
+    "feed_x_mm": {
+      "minimum": -12.0,
+      "maximum": 12.0,
+      "unit": "mm",
+      "description": "Signed coax-probe x offset from the patch center."
+    },
+    "feed_y_mm": {
+      "minimum": -12.0,
+      "maximum": 12.0,
+      "unit": "mm",
+      "description": "Signed coax-probe y offset from the patch center."
+    }
+  },
+  "simulation_control": {
+    "adaptive_frequency": {
+      "value": 1.575,
+      "unit": "GHz"
+    },
+    "sweep_start": {
+      "value": 1.45,
+      "unit": "GHz"
+    },
+    "sweep_stop": {
+      "value": 1.7,
+      "unit": "GHz"
+    },
+    "sweep_points": {
+      "value": 501,
+      "unit": "count"
+    },
+    "sweep_type": "Interpolating",
+    "save_fields": true,
+    "save_rad_fields": true,
+    "axial_ratio_threshold": {
+      "value": 3.0,
+      "unit": "dB"
+    },
+    "air_margin_xy": {
+      "value": 60.0,
+      "unit": "mm"
+    },
+    "air_above": {
+      "value": 70.0,
+      "unit": "mm"
+    },
+    "air_below": {
+      "value": 35.0,
+      "unit": "mm"
+    },
+    "port_impedance": {
+      "value": 50.0,
+      "unit": "ohm"
+    },
+    "setup": {
+      "max_delta_s": {
+        "value": 0.02,
+        "unit": "1"
+      },
+      "maximum_passes": {
+        "value": 12,
+        "unit": "count"
+      },
+      "minimum_passes": {
+        "value": 2,
+        "unit": "count"
+      },
+      "minimum_converged_passes": {
+        "value": 1,
+        "unit": "count"
+      }
+    },
+    "far_field": {
+      "theta_start": {
+        "value": 0.0,
+        "unit": "deg"
+      },
+      "theta_stop": {
+        "value": 180.0,
+        "unit": "deg"
+      },
+      "theta_step": {
+        "value": 5.0,
+        "unit": "deg"
+      },
+      "phi_start": {
+        "value": -180.0,
+        "unit": "deg"
+      },
+      "phi_stop": {
+        "value": 180.0,
+        "unit": "deg"
+      },
+      "phi_step": {
+        "value": 5.0,
+        "unit": "deg"
+      }
+    }
+  },
+  "objectives": {
+    "resonance": {
+      "metric_key": "resonant_freq_ghz",
+      "display_name": "Resonance frequency",
+      "unit": "GHz",
+      "value_representation": "linear_frequency",
+      "goal": "target_with_tolerance",
+      "target": {
+        "value": 1.575,
+        "unit": "GHz"
+      },
+      "tolerance": {
+        "value": 0.012,
+        "unit": "GHz"
+      },
+      "full_score_tolerance": {
+        "value": 0.005,
+        "unit": "GHz"
+      },
+      "zero_score_tolerance": {
+        "value": 0.075,
+        "unit": "GHz"
+      },
+      "points": 15,
+      "semantics": "Frequency of minimum dB(S(1,1)) within the fixed 1.425-1.725 GHz detection window."
+    },
+    "s11_center": {
+      "metric_key": "s11_center_db",
+      "display_name": "Center-frequency S11",
+      "unit": "dB",
+      "value_representation": "20_log10_magnitude",
+      "goal": "at_most",
+      "pass_threshold": {
+        "value": -15.0,
+        "unit": "dB"
+      },
+      "full_score_threshold": {
+        "value": -22.0,
+        "unit": "dB"
+      },
+      "zero_score_threshold": {
+        "value": -5.0,
+        "unit": "dB"
+      },
+      "points": 15,
+      "semantics": "Interpolated dB(S(1,1)) at exactly 1.575 GHz."
+    },
+    "axial_ratio_center": {
+      "metric_key": "axial_ratio_center_db",
+      "display_name": "Boresight axial ratio",
+      "unit": "dB",
+      "value_representation": "20_log10_axial_ratio",
+      "goal": "at_most",
+      "pass_threshold": {
+        "value": 2.0,
+        "unit": "dB"
+      },
+      "full_score_threshold": {
+        "value": 0.8,
+        "unit": "dB"
+      },
+      "zero_score_threshold": {
+        "value": 8.0,
+        "unit": "dB"
+      },
+      "points": 25,
+      "semantics": "dB(AxialRatioValue) at theta=0 degrees and phi=0 degrees at 1.575 GHz."
+    },
+    "rhcp_dominance": {
+      "metric_key": "rhcp_dominance_db",
+      "display_name": "RHCP dominance",
+      "unit": "dB",
+      "value_representation": "logarithmic_gain_difference",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 6.0,
+        "unit": "dB"
+      },
+      "full_score_threshold": {
+        "value": 15.0,
+        "unit": "dB"
+      },
+      "zero_score_threshold": {
+        "value": 0.0,
+        "unit": "dB"
+      },
+      "points": 15,
+      "semantics": "Boresight dB(GainRHCP) minus dB(GainLHCP) at 1.575 GHz."
+    },
+    "axial_ratio_bandwidth": {
+      "metric_key": "axial_ratio_bandwidth_mhz",
+      "display_name": "3 dB axial-ratio bandwidth",
+      "unit": "MHz",
+      "value_representation": "linear_frequency_span",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 6.0,
+        "unit": "MHz"
+      },
+      "full_score_threshold": {
+        "value": 12.0,
+        "unit": "MHz"
+      },
+      "zero_score_threshold": {
+        "value": 2.0,
+        "unit": "MHz"
+      },
+      "points": 15,
+      "semantics": "Contiguous boresight frequency span containing 1.575 GHz where dB(AxialRatioValue) is at or below 3 dB; edge truncation is recorded in raw metrics."
+    },
+    "gain_rhcp": {
+      "metric_key": "gain_rhcp_dbi",
+      "display_name": "Boresight RHCP gain",
+      "unit": "dBi",
+      "value_representation": "10_log10_power_gain_relative_to_isotropic",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 0.0,
+        "unit": "dBi"
+      },
+      "full_score_threshold": {
+        "value": 1.2,
+        "unit": "dBi"
+      },
+      "zero_score_threshold": {
+        "value": -5.0,
+        "unit": "dBi"
+      },
+      "points": 15,
+      "semantics": "Boresight dB(GainRHCP) at 1.575 GHz."
+    }
+  }
+}

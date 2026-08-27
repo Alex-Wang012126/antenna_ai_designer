@@ -196,3 +196,156 @@ class PatchAntennaSpec:
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
+
+
+@dataclass(frozen=True)
+class CoaxFedPatchDesign:
+    """The four model-controlled dimensions of a coax-fed rectangular patch."""
+
+    patch_length_mm: float
+    patch_width_mm: float
+    feed_x_mm: float
+    feed_y_mm: float
+
+    FIELD_NAMES: ClassVar[Tuple[str, ...]] = (
+        "patch_length_mm",
+        "patch_width_mm",
+        "feed_x_mm",
+        "feed_y_mm",
+    )
+
+    @classmethod
+    def from_mapping(
+        cls,
+        values: Mapping[str, Any],
+        variable_definitions: Mapping[str, Mapping[str, Any]],
+    ) -> "CoaxFedPatchDesign":
+        if not isinstance(values, Mapping):
+            raise ValueError("coax-fed patch design must be a JSON object")
+        supplied = set(values)
+        expected = set(cls.FIELD_NAMES)
+        missing = sorted(expected - supplied)
+        extra = sorted(supplied - expected)
+        if missing:
+            raise ValueError(f"missing required fields: {', '.join(missing)}")
+        if extra:
+            raise ValueError(f"unknown or read-only fields: {', '.join(extra)}")
+
+        converted: Dict[str, float] = {}
+        for field_name in cls.FIELD_NAMES:
+            value = values[field_name]
+            if isinstance(value, bool) or not isinstance(value, Real):
+                raise ValueError(f"{field_name} must be a number")
+            number = float(value)
+            definition = variable_definitions[field_name]
+            minimum = float(definition["minimum"])
+            maximum = float(definition["maximum"])
+            if not math.isfinite(number) or not minimum <= number <= maximum:
+                raise ValueError(f"{field_name} must be between {minimum} and {maximum} mm")
+            converted[field_name] = number
+
+        if converted["patch_length_mm"] <= 0 or converted["patch_width_mm"] <= 0:
+            raise ValueError("patch dimensions must be positive")
+        if abs(converted["feed_x_mm"]) < 2.0 or abs(converted["feed_y_mm"]) < 2.0:
+            raise ValueError("feed_x_mm and feed_y_mm must each be at least 2 mm from the patch center")
+        if converted["patch_length_mm"] / 2.0 - abs(converted["feed_x_mm"]) < 2.0:
+            raise ValueError("feed_x_mm must be at least 2 mm from the patch x edge")
+        if converted["patch_width_mm"] / 2.0 - abs(converted["feed_y_mm"]) < 2.0:
+            raise ValueError("feed_y_mm must be at least 2 mm from the patch y edge")
+        return cls(**converted)
+
+    def to_dict(self) -> Dict[str, float]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class CoaxFedPatchSpec:
+    """Resolved read-only and model-controlled parameters for a coax-fed patch."""
+
+    substrate_material: str
+    substrate_permittivity: float
+    substrate_loss_tangent: float
+    substrate_width_mm: float
+    substrate_length_mm: float
+    substrate_height_mm: float
+    patch_length_mm: float
+    patch_width_mm: float
+    feed_x_mm: float
+    feed_y_mm: float
+    probe_radius_mm: float
+    port_radius_mm: float
+    port_impedance_ohm: float
+    adaptive_frequency_ghz: float
+    sweep_start_ghz: float
+    sweep_stop_ghz: float
+    sweep_points: int
+    air_margin_xy_mm: float
+    air_above_mm: float
+    air_below_mm: float
+
+    FIELD_NAMES: ClassVar[Tuple[str, ...]] = (
+        "substrate_material",
+        "substrate_permittivity",
+        "substrate_loss_tangent",
+        "substrate_width_mm",
+        "substrate_length_mm",
+        "substrate_height_mm",
+        "patch_length_mm",
+        "patch_width_mm",
+        "feed_x_mm",
+        "feed_y_mm",
+        "probe_radius_mm",
+        "port_radius_mm",
+        "port_impedance_ohm",
+        "adaptive_frequency_ghz",
+        "sweep_start_ghz",
+        "sweep_stop_ghz",
+        "sweep_points",
+        "air_margin_xy_mm",
+        "air_above_mm",
+        "air_below_mm",
+    )
+
+    @classmethod
+    def from_mapping(cls, values: Mapping[str, Any]) -> "CoaxFedPatchSpec":
+        if not isinstance(values, Mapping):
+            raise ValueError("coax-fed patch specification must be a JSON object")
+        supplied = set(values)
+        expected = set(cls.FIELD_NAMES)
+        missing = sorted(expected - supplied)
+        extra = sorted(supplied - expected)
+        if missing:
+            raise ValueError(f"missing required fields: {', '.join(missing)}")
+        if extra:
+            raise ValueError(f"unknown fields: {', '.join(extra)}")
+
+        converted: Dict[str, Any] = {}
+        for field_name in cls.FIELD_NAMES:
+            value = values[field_name]
+            if field_name == "substrate_material":
+                if not isinstance(value, str) or not value.strip():
+                    raise ValueError("substrate_material must be a non-empty string")
+                converted[field_name] = value
+                continue
+            if isinstance(value, bool) or not isinstance(value, Real):
+                raise ValueError(f"{field_name} must be a number")
+            number = float(value)
+            if not math.isfinite(number):
+                raise ValueError(f"{field_name} must be a finite number")
+            if field_name not in {"feed_x_mm", "feed_y_mm"} and number <= 0:
+                raise ValueError(f"{field_name} must be a finite positive number")
+            converted[field_name] = number
+        converted["sweep_points"] = int(converted["sweep_points"])
+
+        patch_length = converted["patch_length_mm"]
+        patch_width = converted["patch_width_mm"]
+        if patch_length + 10.0 > converted["substrate_width_mm"]:
+            raise ValueError("patch_length_mm must leave at least 5 mm margin on each x edge")
+        if patch_width + 10.0 > converted["substrate_length_mm"]:
+            raise ValueError("patch_width_mm must leave at least 5 mm margin on each y edge")
+        if not converted["sweep_start_ghz"] < converted["adaptive_frequency_ghz"] < converted["sweep_stop_ghz"]:
+            raise ValueError("adaptive_frequency_ghz must lie inside the sweep")
+        return cls(**converted)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)

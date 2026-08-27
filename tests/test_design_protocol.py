@@ -181,8 +181,7 @@ class ToolProtocolTests(unittest.TestCase):
             config = Config(
                 project_dir=root / "run",
                 log_dir=root / "run",
-                max_design_iterations=2,
-                max_solve_calls=2,
+                max_iterations=2,
             )
             second_spec = valid_spec()
             second_spec["patch_width_mm"] = 49.0
@@ -209,7 +208,7 @@ class ToolProtocolTests(unittest.TestCase):
             )
             self.assertEqual(result.selected_candidate["iteration"], 2)
             tool_result = json.loads(result.messages[-1]["content"])
-            self.assertEqual(tool_result["remaining_design_iterations"], 0)
+            self.assertEqual(tool_result["remaining_iterations"], 0)
             manifest = json.loads(result.manifest_file.read_text(encoding="utf-8"))
             self.assertEqual(manifest["stop_reason"], "iteration_limit")
             self.assertEqual(manifest["solve_calls"], 2)
@@ -254,7 +253,7 @@ class ToolProtocolTests(unittest.TestCase):
     def test_failed_candidate_does_not_discard_previous_success(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             run_dir = Path(temp_dir) / "run"
-            config = Config(project_dir=run_dir, log_dir=run_dir, max_design_iterations=2)
+            config = Config(project_dir=run_dir, log_dir=run_dir, max_iterations=2)
             hfss = PlaceholderHFSSClient()
             hfss.connect(config)
             agent = DesignAgent(
@@ -293,8 +292,7 @@ class ToolProtocolTests(unittest.TestCase):
             config = Config(
                 project_dir=run_dir,
                 log_dir=run_dir,
-                max_design_iterations=2,
-                max_solve_calls=2,
+                max_iterations=2,
             )
             hfss = FailSecondSolveClient()
             hfss.connect(config)

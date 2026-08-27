@@ -198,9 +198,7 @@ class Config:
 
     # ---------------- 运行控制 ----------------
     # Maximum number of complete candidate designs proposed by the model.
-    max_design_iterations: int = int(os.getenv("MAX_DESIGN_ITERATIONS", "5"))
-    # 仿真次数预算：限制 solve 工具的调用次数，防止模型无限求解
-    max_solve_calls: int = int(os.getenv("MAX_SOLVE_CALLS", "5"))
+    max_iterations: int = int(os.getenv("MAX_ITERATIONS", "5"))
     log_dir: Path = Path(os.getenv("LOG_DIR", "./logs"))
 
     def ensure_dirs(self) -> None:

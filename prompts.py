@@ -6,9 +6,18 @@ from typing import Any, Dict, List
 from task_spec import AntennaTaskSpec, load_default_task
 
 
+def redact_task_for_model(task_spec: AntennaTaskSpec) -> Dict[str, Any]:
+    """Remove evaluator-only full-score calibration lines from model-visible data."""
+    data = task_spec.to_dict()
+    for objective in data.get("objectives", {}).values():
+        objective.pop("full_score_threshold", None)
+        objective.pop("full_score_tolerance", None)
+    return data
+
+
 def build_system_prompt(task_spec: AntennaTaskSpec) -> str:
     """Build the operating contract given to the antenna design model."""
-    task_json = json.dumps(task_spec.to_dict(), ensure_ascii=False, indent=2)
+    task_json = json.dumps(redact_task_for_model(task_spec), ensure_ascii=False, indent=2)
     return f"""You are an expert antenna engineer controlling Ansys HFSS through a constrained tool API.
 The structured benchmark contract below is authoritative. Its fixed_parameters, simulation_control,
 objective definitions, units, and semantics are read-only. The natural-language description is only a
@@ -41,7 +50,7 @@ Protocol rules:
 - Every candidate that completes the full simulation pipeline is scored independently after the agent exits.
   The highest-scoring successful candidate is selected; an exact tie goes to the later iteration.
   Failed build, validation, solve, or metric pipelines are excluded from selection.
-- Each candidate response includes remaining_design_iterations and remaining_solve_calls.
+- Each candidate response includes remaining_iterations.
 - `finalize_design` stops candidate generation. It does not decide whether the engineering requirements
   pass; an independent evaluator makes that decision after the agent exits.
 """

@@ -68,6 +68,10 @@ class HFSSClient(ABC):
         """Create a complete patch antenna from a validated specification."""
         raise NotImplementedError
 
+    def create_coax_fed_patch_antenna(self, specification: Mapping[str, Any]) -> HFSSResult:
+        """Create a complete coax-fed patch antenna from a validated specification."""
+        raise NotImplementedError
+
     @abstractmethod
     def validate_design(self) -> HFSSResult:
         """Validate all required model, excitation, boundary, and setup state."""
@@ -159,6 +163,25 @@ class PlaceholderHFSSClient(HFSSClient):
             message="Patch antenna created (placeholder)",
         )
 
+    def create_coax_fed_patch_antenna(self, specification: Mapping[str, Any]) -> HFSSResult:
+        self._check_connected()
+        if self._task_spec is None:
+            return HFSSResult(success=False, message="No coax patch task is configured")
+        try:
+            spec = self._task_spec.resolve_design_spec(specification)
+        except ValueError as exc:
+            return HFSSResult(success=False, message=f"Invalid coax patch specification: {exc}")
+        self._candidate_index += 1
+        self._project_path = self._project_dir / f"candidate_{self._candidate_index:03d}.aedt"
+        self._has_design = True
+        self._variables = spec.to_dict()
+        print(f"[HFSS 占位] create_coax_fed_patch_antenna: {spec.to_dict()}")
+        return HFSSResult(
+            success=True,
+            data={"specification": spec.to_dict(), "project_path": str(self._project_path.resolve())},
+            message="Coax-fed patch antenna created (placeholder)",
+        )
+
     def validate_design(self) -> HFSSResult:
         self._check_connected()
         checks = {
@@ -220,6 +243,31 @@ class PlaceholderHFSSClient(HFSSClient):
 
     def get_metrics(self) -> HFSSResult:
         self._check_connected()
+        if self._task_spec is not None:
+            if self._task_spec.topology_id == "dual_band_coax_patch":
+                metrics = {
+                    "resonance_low_ghz": 1.9,
+                    "resonance_high_ghz": 2.45,
+                    "s11_low_db": -22.0,
+                    "s11_high_db": -33.0,
+                    "bandwidth_low_mhz": 14.0,
+                    "bandwidth_high_mhz": 35.0,
+                    "gain_min_dbi": 3.0,
+                    "efficiency_min_percent": 55.0,
+                }
+                print(f"[HFSS 占位] get_metrics: {metrics}")
+                return HFSSResult(success=True, data=metrics, message="Metrics computed (placeholder)")
+            if self._task_spec.topology_id == "single_feed_cp_coax_patch":
+                metrics = {
+                    "resonant_freq_ghz": 1.575,
+                    "s11_center_db": -15.5,
+                    "axial_ratio_center_db": 0.75,
+                    "rhcp_dominance_db": 18.0,
+                    "axial_ratio_bandwidth_mhz": 8.0,
+                    "gain_rhcp_dbi": 1.1,
+                }
+                print(f"[HFSS 占位] get_metrics: {metrics}")
+                return HFSSResult(success=True, data=metrics, message="Metrics computed (placeholder)")
         center_frequency = (
             self._task_spec.simulation_value("adaptive_frequency", "GHz")
             if self._task_spec is not None
@@ -374,6 +422,24 @@ class PyAEDTHFSSClient(HFSSClient):
         if self._hfss is None:
             raise RuntimeError("HFSS client is not connected. Call connect() first.")
 
+    def _assign_perfect_e_to_object(self, object_name: str, boundary_name: str):
+        """Assign Perfect E across PyAEDT versions for a 3-D conductor."""
+        assign_to_objects = getattr(self._hfss, "assign_perfecte_to_objects", None)
+        if callable(assign_to_objects):
+            return assign_to_objects([object_name], name=boundary_name)
+
+        assign_to_sheets = getattr(self._hfss, "assign_perfecte_to_sheets", None)
+        if callable(assign_to_sheets):
+            return assign_to_sheets(
+                [object_name],
+                name=boundary_name,
+                is_infinite_ground=False,
+            )
+        raise AttributeError(
+            "PyAEDT Hfss provides neither assign_perfecte_to_objects nor "
+            "assign_perfecte_to_sheets"
+        )
+
     # ---------- 变量读写 ----------
 
     def set_design_variable(self, name: str, value) -> HFSSResult:
@@ -463,16 +529,287 @@ class PyAEDTHFSSClient(HFSSClient):
                 " ".join(name.split()).casefold()
                 for name in self._named(getattr(self._hfss, "existing_analysis_sweeps", None))
             }
-            required = {
-                f"{self._setup_name} : {self._sweep_name}".casefold(),
-                f"{self._setup_name} : {self._efficiency_sweep_name}".casefold(),
-            }
+            required = {f"{self._setup_name} : {self._sweep_name}".casefold()}
+            if self._task_spec is None or "efficiency_sweep" in self._task_spec.data[
+                "simulation_control"
+            ]:
+                required.add(f"{self._setup_name} : {self._efficiency_sweep_name}".casefold())
             missing = sorted(required - sweeps)
             if missing:
                 raise RuntimeError(
                     "fixed analysis setup is incomplete before candidate rebuild; missing: "
                     + ", ".join(missing)
                 )
+
+    def create_coax_fed_patch_antenna(self, specification: Mapping[str, Any]) -> HFSSResult:
+        """Build one complete coax-fed rectangular patch from validated parameters."""
+        self._check_connected()
+        if self._task_spec is None:
+            return HFSSResult(success=False, message="No coax-fed patch task is configured")
+        try:
+            spec = self._task_spec.resolve_design_spec(specification)
+        except ValueError as exc:
+            return HFSSResult(success=False, message=f"参数校验失败: {exc}")
+
+        _dbg(f">>> create_coax_fed_patch_antenna: {spec.to_dict()}")
+        try:
+            candidate_path = self._prepare_candidate_project()
+            self._clear_current_design()
+            self._hfss.modeler.model_units = "mm"
+
+            variables = {
+                "sub_w": f"{spec.substrate_width_mm:.12g}mm",
+                "sub_l": f"{spec.substrate_length_mm:.12g}mm",
+                "sub_h": f"{spec.substrate_height_mm:.12g}mm",
+                "patch_l": f"{spec.patch_length_mm:.12g}mm",
+                "patch_w": f"{spec.patch_width_mm:.12g}mm",
+                "feed_x": f"{spec.feed_x_mm:.12g}mm",
+                "feed_y": f"{spec.feed_y_mm:.12g}mm",
+            }
+            for name, value in variables.items():
+                self._hfss[name] = value
+
+            backend_material_name = "AntennaSubstrate"
+            material_keys = {
+                str(name).casefold(): str(name)
+                for name in self._hfss.materials.material_keys
+            }
+            material_key = material_keys.get(backend_material_name.casefold())
+            if material_key:
+                material = self._hfss.materials[material_key]
+            else:
+                material = self._require_created(
+                    self._hfss.materials.add_material(backend_material_name),
+                    f"material {backend_material_name}",
+                )
+            material.permittivity = spec.substrate_permittivity
+            material.dielectric_loss_tangent = spec.substrate_loss_tangent
+
+            substrate = self._require_created(
+                self._hfss.modeler.create_box(
+                    origin=[-spec.substrate_width_mm / 2, -spec.substrate_length_mm / 2, 0],
+                    sizes=[
+                        spec.substrate_width_mm,
+                        spec.substrate_length_mm,
+                        spec.substrate_height_mm,
+                    ],
+                    name="Substrate",
+                    material=backend_material_name,
+                ),
+                "Substrate",
+            )
+            ground = self._require_created(
+                self._hfss.modeler.create_rectangle(
+                    orientation="XY",
+                    origin=[
+                        -spec.substrate_width_mm / 2,
+                        -spec.substrate_length_mm / 2,
+                        0,
+                    ],
+                    sizes=[spec.substrate_width_mm, spec.substrate_length_mm],
+                    name="Ground",
+                    material="copper",
+                ),
+                "Ground",
+            )
+            patch = self._require_created(
+                self._hfss.modeler.create_rectangle(
+                    orientation="XY",
+                    origin=[
+                        -spec.patch_length_mm / 2,
+                        -spec.patch_width_mm / 2,
+                        spec.substrate_height_mm,
+                    ],
+                    sizes=[spec.patch_length_mm, spec.patch_width_mm],
+                    name="Patch",
+                    material="copper",
+                ),
+                "Patch",
+            )
+            probe = self._require_created(
+                self._hfss.modeler.create_cylinder(
+                    orientation="Z",
+                    origin=[spec.feed_x_mm, spec.feed_y_mm, 0],
+                    radius=spec.probe_radius_mm,
+                    height=spec.substrate_height_mm,
+                    name="CoaxProbe",
+                    material="copper",
+                ),
+                "CoaxProbe",
+            )
+            self._require_created(
+                self._hfss.assign_perfecte_to_sheets(
+                    [ground.name, patch.name],
+                    name="PEC_Metals",
+                    is_infinite_ground=False,
+                ),
+                "PEC_Metals",
+            )
+            self._require_created(
+                self._assign_perfect_e_to_object(probe.name, "CoaxProbePEC"),
+                "CoaxProbePEC",
+            )
+
+            port_sheet = self._require_created(
+                self._hfss.modeler.create_circle(
+                    orientation="XY",
+                    origin=[spec.feed_x_mm, spec.feed_y_mm, 0],
+                    radius=spec.port_radius_mm,
+                    name="Port1_sheet",
+                    material="vacuum",
+                ),
+                "Port1_sheet",
+            )
+            self._require_created(
+                self._hfss.lumped_port(
+                    assignment=port_sheet.name,
+                    integration_line=[
+                        [spec.feed_x_mm, spec.feed_y_mm, 0],
+                        [spec.feed_x_mm + spec.port_radius_mm, spec.feed_y_mm, 0],
+                    ],
+                    impedance=spec.port_impedance_ohm,
+                    name="Port1",
+                    renormalize=True,
+                ),
+                "Port1",
+            )
+
+            region = self._require_created(
+                self._hfss.modeler.create_region(
+                    pad_value=[
+                        spec.air_margin_xy_mm,
+                        spec.air_margin_xy_mm,
+                        spec.air_margin_xy_mm,
+                        spec.air_margin_xy_mm,
+                        spec.air_above_mm,
+                        spec.air_below_mm,
+                    ],
+                    pad_type="Absolute Offset",
+                    name="AirRegion",
+                ),
+                "AirRegion",
+            )
+            self._require_created(
+                self._hfss.assign_radiation_boundary_to_objects(region.name, name="Rad1"),
+                "Rad1",
+            )
+            self._require_created(
+                self._hfss.insert_infinite_sphere(
+                    name="InfiniteSphere1",
+                    x_start=self._task_spec.far_field_value("theta_start"),
+                    x_stop=self._task_spec.far_field_value("theta_stop"),
+                    x_step=self._task_spec.far_field_value("theta_step"),
+                    y_start=self._task_spec.far_field_value("phi_start"),
+                    y_stop=self._task_spec.far_field_value("phi_stop"),
+                    y_step=self._task_spec.far_field_value("phi_step"),
+                ),
+                "InfiniteSphere1",
+            )
+
+            existing_setups = {
+                name.casefold(): name
+                for name in self._named(getattr(self._hfss, "setup_names", None))
+            }
+            reuse_analysis = self._setup_name.casefold() in existing_setups
+            if reuse_analysis:
+                setup = self._require_created(
+                    self._hfss.get_setup(existing_setups[self._setup_name.casefold()]),
+                    f"existing setup {self._setup_name}",
+                )
+                _dbg(
+                    f"复用固定分析控制: {self._setup_name}/{self._sweep_name}"
+                    + (
+                        f"/{self._efficiency_sweep_name}"
+                        if "efficiency_sweep" in self._task_spec.data["simulation_control"]
+                        else ""
+                    )
+                )
+            else:
+                if existing_setups:
+                    raise RuntimeError(
+                        f"unexpected analysis setups before creating {self._setup_name}: "
+                        f"{sorted(existing_setups.values())}"
+                    )
+                setup = self._require_created(
+                    self._hfss.create_setup(name=self._setup_name, setup_type="HFSSDriven"),
+                    self._setup_name,
+                )
+            setup.props["Frequency"] = f"{spec.adaptive_frequency_ghz:.12g}GHz"
+            setup.props["MaxDeltaS"] = self._task_spec.setup_value("max_delta_s", "1")
+            setup.props["MaximumPasses"] = int(
+                self._task_spec.setup_value("maximum_passes", "count")
+            )
+            setup.props["MinimumPasses"] = int(
+                self._task_spec.setup_value("minimum_passes", "count")
+            )
+            setup.props["MinimumConvergedPasses"] = int(
+                self._task_spec.setup_value("minimum_converged_passes", "count")
+            )
+            self._require_created(setup.update(), f"update {self._setup_name}")
+
+            if not reuse_analysis:
+                simulation = self._task_spec.data["simulation_control"]
+                self._require_created(
+                    self._hfss.create_linear_count_sweep(
+                        setup=self._setup_name,
+                        units="GHz",
+                        start_frequency=spec.sweep_start_ghz,
+                        stop_frequency=spec.sweep_stop_ghz,
+                        num_of_freq_points=spec.sweep_points,
+                        name=self._sweep_name,
+                        sweep_type=simulation["sweep_type"],
+                        save_fields=simulation["save_fields"],
+                        save_rad_fields=simulation["save_rad_fields"],
+                    ),
+                    self._sweep_name,
+                )
+                if "efficiency_sweep" in simulation:
+                    efficiency = simulation["efficiency_sweep"]
+                    self._efficiency_sweep_name = str(efficiency["name"])
+                    self._require_created(
+                        self._hfss.create_linear_count_sweep(
+                            setup=self._setup_name,
+                            units="GHz",
+                            start_frequency=efficiency["start"]["value"],
+                            stop_frequency=efficiency["stop"]["value"],
+                            num_of_freq_points=int(efficiency["points"]["value"]),
+                            name=self._efficiency_sweep_name,
+                            sweep_type=efficiency["sweep_type"],
+                            save_fields=efficiency["save_fields"],
+                            save_rad_fields=efficiency["save_rad_fields"],
+                        ),
+                        self._efficiency_sweep_name,
+                    )
+
+            _dbg("<<< create_coax_fed_patch_antenna 建模成功")
+            return HFSSResult(
+                success=True,
+                data={
+                    "specification": spec.to_dict(),
+                    "project_path": str(candidate_path.resolve()),
+                    "analysis_setup_reused": reuse_analysis,
+                },
+                message=(
+                    "同轴馈电贴片、Port1、Rad1 和 InfiniteSphere1 已创建；"
+                    f"{self._setup_name}/{self._sweep_name} 已"
+                    f"{'复用' if reuse_analysis else '创建'}。"
+                ),
+            )
+        except Exception as exc:
+            _dbg(f"<<< create_coax_fed_patch_antenna 失败: {type(exc).__name__}: {exc}")
+            failure_traceback = traceback.format_exc()
+            _dbg(failure_traceback)
+            aedt_errors = self._recent_aedt_errors()
+            detail = f"；AEDT: {' | '.join(aedt_errors)}" if aedt_errors else ""
+            return HFSSResult(
+                success=False,
+                data={
+                    "project_path": str(self._project_path.resolve()) if self._project_path else None,
+                    "aedt_errors": aedt_errors,
+                    "traceback": failure_traceback,
+                },
+                message=f"建模失败: {type(exc).__name__}: {exc}{detail}",
+            )
 
     def create_patch_antenna(self, specification: Mapping[str, Any]) -> HFSSResult:
         """Build one complete inset-fed patch from validated numeric parameters."""
@@ -797,7 +1134,14 @@ class PyAEDTHFSSClient(HFSSClient):
             folded_fields = {name.casefold() for name in field_setups}
             folded_setups = {name.casefold() for name in setups}
             folded_sweeps = {" ".join(name.split()).casefold() for name in sweeps}
-            required_objects = {"substrate", "ground", "patchfeed", "port1_sheet", "airregion"}
+            required_objects = {"substrate", "ground", "port1_sheet", "airregion"}
+            if self._task_spec is not None and self._task_spec.topology_id in {
+                "dual_band_coax_patch",
+                "single_feed_cp_coax_patch",
+            }:
+                required_objects.update({"patch", "coaxprobe"})
+            else:
+                required_objects.add("patchfeed")
 
             checks = {
                 "geometry": required_objects.issubset(folded_objects),
@@ -811,6 +1155,9 @@ class PyAEDTHFSSClient(HFSSClient):
                 "efficiency_sweep": (
                     f"{self._setup_name} : {self._efficiency_sweep_name}".casefold()
                     in folded_sweeps
+                    if self._task_spec is None
+                    or "efficiency_sweep" in self._task_spec.data["simulation_control"]
+                    else True
                 ),
             }
 
@@ -1034,16 +1381,22 @@ class PyAEDTHFSSClient(HFSSClient):
             raise RuntimeError(f"Antenna Parameters 数据为空: {expression}")
         return values
 
-    def _antenna_parameter_curve(self, expression: str, sphere: str):
-        """Read one Antenna Parameters expression on the discrete efficiency sweep."""
+    def _antenna_parameter_curve(
+        self,
+        expression: str,
+        sphere: str,
+        setup_sweep_name: Optional[str] = None,
+        variations: Optional[Dict[str, Any]] = None,
+    ):
+        """Read one Antenna Parameters expression on a solved frequency sweep."""
         report = self._hfss.post.reports_by_category.antenna_parameters(
             expressions=expression,
-            setup=f"{self._setup_name} : {self._efficiency_sweep_name}",
+            setup=setup_sweep_name or f"{self._setup_name} : {self._efficiency_sweep_name}",
             infinite_sphere=sphere,
         )
         if not report:
             raise RuntimeError(f"无法创建 Antenna Parameters 报告: {expression}")
-        report.variations = {"Freq": ["All"]}
+        report.variations = variations or {"Freq": ["All"]}
         data = report.get_solution_data()
         values = self._finite_real_values(data, expression)
         if not values:
@@ -1068,6 +1421,184 @@ class PyAEDTHFSSClient(HFSSClient):
         if len(freq) < 2 or np.any(np.diff(freq) <= 0.0):
             raise RuntimeError(f"{expression} 至少需要两个频率严格递增的离散样本")
         return freq, curve
+
+    @staticmethod
+    def _anchored_resonance(freq, s11, center_ghz: float, half_span_ghz: float):
+        """Find a credible S11 dip in a target-anchored window."""
+        import numpy as np
+
+        center_hz = center_ghz * 1e9
+        half_span_hz = half_span_ghz * 1e9
+        mask = (freq >= center_hz - half_span_hz) & (freq <= center_hz + half_span_hz)
+        if not np.any(mask):
+            return None, None
+        window_freq = freq[mask]
+        window_s11 = s11[mask]
+        index = int(np.argmin(window_s11))
+        if float(window_s11[index]) > -5.0:
+            return None, None
+        return float(window_freq[index] / 1e9), float(window_s11[index])
+
+    @staticmethod
+    def _bandwidth_around_index_hz(freq, s11, resonance_index: int, threshold_db: float = -10.0):
+        if s11[resonance_index] > threshold_db:
+            return 0.0
+        lo = float(freq[0])
+        for index in range(resonance_index, 0, -1):
+            if s11[index - 1] > threshold_db:
+                fraction = (threshold_db - s11[index - 1]) / (
+                    s11[index] - s11[index - 1]
+                )
+                lo = float(freq[index - 1] + fraction * (freq[index] - freq[index - 1]))
+                break
+        hi = float(freq[-1])
+        for index in range(resonance_index, len(s11) - 1):
+            if s11[index + 1] > threshold_db:
+                fraction = (threshold_db - s11[index]) / (
+                    s11[index + 1] - s11[index]
+                )
+                hi = float(freq[index] + fraction * (freq[index + 1] - freq[index]))
+                break
+        return max(0.0, hi - lo)
+
+    @staticmethod
+    def _threshold_bandwidth_hz(freq, values, center_hz: float, threshold: float):
+        """Contiguous bandwidth around a center for a threshold-below curve."""
+        import numpy as np
+
+        center_index = int(np.argmin(np.abs(np.asarray(freq) - center_hz)))
+        if float(values[center_index]) > threshold:
+            return 0.0, False
+        lo = float(freq[0])
+        for index in range(center_index, 0, -1):
+            if float(values[index - 1]) > threshold:
+                fraction = (threshold - values[index - 1]) / (
+                    values[index] - values[index - 1]
+                )
+                lo = float(freq[index - 1] + fraction * (freq[index] - freq[index - 1]))
+                break
+        hi = float(freq[-1])
+        for index in range(center_index, len(values) - 1):
+            if float(values[index + 1]) > threshold:
+                fraction = (threshold - values[index]) / (
+                    values[index + 1] - values[index]
+                )
+                hi = float(freq[index] + fraction * (freq[index + 1] - freq[index]))
+                break
+        truncated = bool(
+            lo <= float(freq[0]) + 1e-6 and values[0] <= threshold
+        ) or bool(hi >= float(freq[-1]) - 1e-6 and values[-1] <= threshold)
+        return max(0.0, hi - lo), truncated
+
+    def _dual_band_metrics(self) -> Dict[str, Any]:
+        import numpy as np
+
+        freq, s11 = self._s11_curve()
+        sphere = self._far_field_sphere_name()
+        if not sphere:
+            raise RuntimeError("缺少 InfiniteSphere1")
+        windows = self._task_spec.data["simulation_control"]["efficiency_windows"]
+        metrics: Dict[str, Any] = {}
+        resonance_indices: Dict[str, int] = {}
+        for band in ("low", "high"):
+            center_ghz = float(windows[band]["target"]["value"])
+            half_span_hz = 0.3e9
+            mask = (freq >= center_ghz * 1e9 - half_span_hz) & (
+                freq <= center_ghz * 1e9 + half_span_hz
+            )
+            indices = np.flatnonzero(mask)
+            if len(indices) == 0:
+                metrics[f"no_resonance_in_window_{band}"] = True
+                continue
+            local_index = int(np.argmin(s11[indices]))
+            global_index = int(indices[local_index])
+            if float(s11[global_index]) > -5.0:
+                metrics[f"no_resonance_in_window_{band}"] = True
+                continue
+            resonance_indices[band] = global_index
+            metrics[f"resonance_{band}_ghz"] = float(freq[global_index] / 1e9)
+            metrics[f"s11_{band}_db"] = float(s11[global_index])
+            metrics[f"bandwidth_{band}_mhz"] = self._bandwidth_around_index_hz(
+                freq,
+                s11,
+                global_index,
+                threshold_db=self._task_spec.simulation_value(
+                    "bandwidth_s11_threshold", "dB"
+                ),
+            ) / 1e6
+
+        gain_freq, gain = self._antenna_parameter_curve("dB(PeakGain)", sphere)
+        efficiency_freq, radiation_efficiency = self._antenna_parameter_curve(
+            "RadiationEfficiency", sphere
+        )
+        gains = []
+        efficiencies = []
+        for band in ("low", "high"):
+            target_hz = float(windows[band]["target"]["value"]) * 1e9
+            gains.append(float(np.interp(target_hz, gain_freq, gain)))
+            half_span_hz = float(windows[band]["half_span"]["value"]) * 1e6
+            selected = (freq >= target_hz - half_span_hz) & (
+                freq <= target_hz + half_span_hz
+            )
+            selected_freq = freq[selected]
+            selected_s11 = s11[selected]
+            selected_radiation_efficiency = np.interp(
+                selected_freq, efficiency_freq, radiation_efficiency
+            )
+            mismatch_efficiency = 1.0 - np.power(10.0, selected_s11 / 10.0)
+            total_efficiency = np.clip(
+                selected_radiation_efficiency * mismatch_efficiency, 0.0, 1.0
+            )
+            efficiencies.append(float(np.mean(total_efficiency) * 100.0))
+            metrics[f"efficiency_{band}_mean_percent"] = efficiencies[-1]
+        metrics["gain_min_dbi"] = min(gains)
+        metrics["efficiency_min_percent"] = min(efficiencies)
+        return metrics
+
+    def _circular_polarization_metrics(self) -> Dict[str, Any]:
+        import numpy as np
+
+        freq, s11 = self._s11_curve()
+        sphere = self._far_field_sphere_name()
+        if not sphere:
+            raise RuntimeError("缺少 InfiniteSphere1")
+        center_hz = self._task_spec.simulation_value("adaptive_frequency", "GHz") * 1e9
+        mask = (freq >= center_hz - 0.15e9) & (freq <= center_hz + 0.15e9)
+        indices = np.flatnonzero(mask)
+        if len(indices) == 0:
+            raise RuntimeError("S11 扫频未覆盖谐振检测窗口")
+        local_index = int(np.argmin(s11[indices]))
+        resonance_index = int(indices[local_index])
+        metrics: Dict[str, Any] = {
+            "resonant_freq_ghz": float(freq[resonance_index] / 1e9),
+            "s11_center_db": float(np.interp(center_hz, freq, s11)),
+        }
+        setup_sweep = f"{self._setup_name} : {self._sweep_name}"
+        variations = {"Freq": ["All"], "Theta": ["0deg"], "Phi": ["0deg"]}
+        ar_freq, axial_ratio = self._antenna_parameter_curve(
+            "dB(AxialRatioValue)", sphere, setup_sweep, variations
+        )
+        rhcp_freq, rhcp_gain = self._antenna_parameter_curve(
+            "dB(GainRHCP)", sphere, setup_sweep, variations
+        )
+        lhcp_freq, lhcp_gain = self._antenna_parameter_curve(
+            "dB(GainLHCP)", sphere, setup_sweep, variations
+        )
+        metrics["axial_ratio_center_db"] = float(
+            np.interp(center_hz, ar_freq, axial_ratio)
+        )
+        metrics["rhcp_dominance_db"] = float(
+            np.interp(center_hz, rhcp_freq, rhcp_gain)
+            - np.interp(center_hz, lhcp_freq, lhcp_gain)
+        )
+        metrics["gain_rhcp_dbi"] = float(np.interp(center_hz, rhcp_freq, rhcp_gain))
+        threshold = self._task_spec.simulation_value("axial_ratio_threshold", "dB")
+        bandwidth_hz, truncated = self._threshold_bandwidth_hz(
+            ar_freq, axial_ratio, center_hz, threshold
+        )
+        metrics["axial_ratio_bandwidth_mhz"] = bandwidth_hz / 1e6
+        metrics["axial_ratio_bandwidth_truncated"] = truncated
+        return metrics
 
     def _total_efficiency_metrics(self, s11_freq, s11_db, sphere: str) -> Dict[str, Any]:
         """Compute single-port total efficiency in a fixed target-frequency window.
@@ -1257,6 +1788,51 @@ class PyAEDTHFSSClient(HFSSClient):
         self._check_connected()
         _dbg(">>> get_metrics: 计算 S11 指标 + 读取增益/效率")
         try:
+            if self._task_spec is not None:
+                topology_id = self._task_spec.topology_id
+                if topology_id == "dual_band_coax_patch":
+                    metrics = self._dual_band_metrics()
+                    required = {
+                        "resonance_low_ghz",
+                        "resonance_high_ghz",
+                        "s11_low_db",
+                        "s11_high_db",
+                        "bandwidth_low_mhz",
+                        "bandwidth_high_mhz",
+                        "gain_min_dbi",
+                        "efficiency_min_percent",
+                    }
+                    missing = sorted(required - set(metrics))
+                    if missing:
+                        return HFSSResult(
+                            success=True,
+                            data=metrics,
+                            message=(
+                                "候选已完整求解，但部分目标邻域没有有效谐振；"
+                                "对应目标按零分处理，缺少: " + ", ".join(missing)
+                            ),
+                        )
+                    _dbg(f"<<< get_metrics: {metrics}")
+                    return HFSSResult(success=True, data=metrics, message="指标计算完成")
+                if topology_id == "single_feed_cp_coax_patch":
+                    metrics = self._circular_polarization_metrics()
+                    required = {
+                        "resonant_freq_ghz",
+                        "s11_center_db",
+                        "axial_ratio_center_db",
+                        "rhcp_dominance_db",
+                        "axial_ratio_bandwidth_mhz",
+                        "gain_rhcp_dbi",
+                    }
+                    missing = sorted(required - set(metrics))
+                    if missing:
+                        return HFSSResult(
+                            success=True,
+                            data=metrics,
+                            message="候选指标不完整，缺少: " + ", ".join(missing),
+                        )
+                    _dbg(f"<<< get_metrics: {metrics}")
+                    return HFSSResult(success=True, data=metrics, message="指标计算完成")
             import numpy as np
             freq, s11 = self._s11_curve()
             i_min = int(np.argmin(s11))

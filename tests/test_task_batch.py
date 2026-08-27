@@ -12,7 +12,7 @@ class TaskBatchTests(unittest.TestCase):
         batch = TaskBatchSpec.load("task_batch.json")
         tasks = batch.load_enabled_tasks()
 
-        self.assertEqual(len(tasks), 1)
+        self.assertEqual(len(tasks), 3)
         self.assertEqual(tasks[0].task_id, "inset_patch_2p45_v6")
         self.assertEqual(
             batch.public_snapshot()["tasks"][0]["spec_file"],

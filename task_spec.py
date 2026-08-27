@@ -166,11 +166,21 @@ class AntennaTaskSpec:
         goal = objective["goal"]
         if goal == "target_with_tolerance":
             names = ("target", "tolerance", "zero_score_tolerance")
+            full_name = "full_score_tolerance"
         else:
             names = ("pass_threshold", "zero_score_threshold")
+            full_name = "full_score_threshold"
         for name in names:
             value, _ = _quantity(objective.get(name), f"objectives.{objective_id}.{name}", unit)
             _finite_number(value, f"objectives.{objective_id}.{name}.value")
+        has_full_score_threshold = full_name in objective
+        if has_full_score_threshold:
+            full_value, _ = _quantity(
+                objective.get(full_name),
+                f"objectives.{objective_id}.{full_name}",
+                unit,
+            )
+            _finite_number(full_value, f"objectives.{objective_id}.{full_name}.value")
         if goal == "target_with_tolerance":
             tolerance = float(objective["tolerance"]["value"])
             zero_tolerance = float(objective["zero_score_tolerance"]["value"])
@@ -178,6 +188,13 @@ class AntennaTaskSpec:
                 raise ValueError(
                     f"objective {objective_id} requires 0 <= tolerance < zero_score_tolerance"
                 )
+            if has_full_score_threshold:
+                full_tolerance = float(objective[full_name]["value"])
+                if not 0 <= full_tolerance < tolerance:
+                    raise ValueError(
+                        f"objective {objective_id} requires "
+                        "0 <= full_score_tolerance < tolerance < zero_score_tolerance"
+                    )
         elif goal == "at_most":
             threshold = float(objective["pass_threshold"]["value"])
             zero = float(objective["zero_score_threshold"]["value"])
@@ -185,6 +202,13 @@ class AntennaTaskSpec:
                 raise ValueError(
                     f"objective {objective_id} at_most requires zero_score_threshold > pass_threshold"
                 )
+            if has_full_score_threshold:
+                full = float(objective[full_name]["value"])
+                if not threshold > full:
+                    raise ValueError(
+                        f"objective {objective_id} at_most requires "
+                        "full_score_threshold < pass_threshold < zero_score_threshold"
+                    )
         elif goal == "at_least":
             threshold = float(objective["pass_threshold"]["value"])
             zero = float(objective["zero_score_threshold"]["value"])
@@ -192,6 +216,13 @@ class AntennaTaskSpec:
                 raise ValueError(
                     f"objective {objective_id} at_least requires zero_score_threshold < pass_threshold"
                 )
+            if has_full_score_threshold:
+                full = float(objective[full_name]["value"])
+                if not threshold < full:
+                    raise ValueError(
+                        f"objective {objective_id} at_least requires "
+                        "zero_score_threshold < pass_threshold < full_score_threshold"
+                    )
 
     @property
     def task_id(self) -> str:
@@ -334,28 +365,60 @@ class AntennaTaskSpec:
                         target = float(objective["target"]["value"])
                         tolerance = float(objective["tolerance"]["value"])
                         zero_tolerance = float(objective["zero_score_tolerance"]["value"])
+                        full_tolerance = (
+                            float(objective["full_score_tolerance"]["value"])
+                            if "full_score_tolerance" in objective
+                            else tolerance
+                        )
+                        below_pass_scale = 0.6 if "full_score_tolerance" in objective else 1.0
                         error = abs(value - target)
                         passed = error <= tolerance
-                        if error <= tolerance:
+                        if error <= full_tolerance:
                             fraction = 1.0
+                        elif error <= tolerance:
+                            fraction = 0.6 + 0.4 * (tolerance - error) / (
+                                tolerance - full_tolerance
+                            )
                         elif error < zero_tolerance:
-                            fraction = (zero_tolerance - error) / (zero_tolerance - tolerance)
+                            fraction = below_pass_scale * (zero_tolerance - error) / (
+                                zero_tolerance - tolerance
+                            )
                     elif goal == "at_most":
                         threshold = float(objective["pass_threshold"]["value"])
                         zero = float(objective["zero_score_threshold"]["value"])
+                        full = (
+                            float(objective["full_score_threshold"]["value"])
+                            if "full_score_threshold" in objective
+                            else threshold
+                        )
+                        below_pass_scale = 0.6 if "full_score_threshold" in objective else 1.0
                         passed = value <= threshold
-                        if passed:
+                        if value <= full:
                             fraction = 1.0
+                        elif value <= threshold:
+                            fraction = 0.6 + 0.4 * (threshold - value) / (
+                                threshold - full
+                            )
                         elif value < zero:
-                            fraction = (zero - value) / (zero - threshold)
+                            fraction = below_pass_scale * (zero - value) / (zero - threshold)
                     elif goal == "at_least":
                         threshold = float(objective["pass_threshold"]["value"])
                         zero = float(objective["zero_score_threshold"]["value"])
+                        full = (
+                            float(objective["full_score_threshold"]["value"])
+                            if "full_score_threshold" in objective
+                            else threshold
+                        )
+                        below_pass_scale = 0.6 if "full_score_threshold" in objective else 1.0
                         passed = value >= threshold
-                        if passed:
+                        if value >= full:
                             fraction = 1.0
+                        elif value >= threshold:
+                            fraction = 0.6 + 0.4 * (value - threshold) / (
+                                full - threshold
+                            )
                         elif value > zero:
-                            fraction = (value - zero) / (threshold - zero)
+                            fraction = below_pass_scale * (value - zero) / (threshold - zero)
             fraction = max(0.0, min(1.0, fraction))
             points_awarded = fraction * float(objective["points"])
             total_score += points_awarded
@@ -368,16 +431,43 @@ class AntennaTaskSpec:
                 },
                 "goal": objective["goal"],
                 "passed": passed,
+                "score_fraction": round(fraction, 9),
                 "points_awarded": round(points_awarded, 6),
                 "points_available": objective["points"],
                 "semantics": objective["semantics"],
+                "scoring_model": (
+                    "three_stage"
+                    if (
+                        "full_score_threshold" in objective
+                        or "full_score_tolerance" in objective
+                    )
+                    else "legacy_single_stage"
+                ),
             }
+        fractions = [
+            float(evaluation["score_fraction"])
+            for evaluation in objective_evaluations.values()
+        ]
+        geometric_mean = (
+            math.prod(fractions) ** (1.0 / len(fractions)) * 100.0
+            if fractions
+            else 0.0
+        )
+        weakest_objective = min(
+            objective_evaluations,
+            key=lambda name: float(objective_evaluations[name]["score_fraction"]),
+            default=None,
+        )
         return {
             "passed": all(checklist.values()),
+            "engineering_passed": all(checklist.values()),
             "score": round(total_score, 6),
+            "benchmark_score": round(total_score, 6),
             "max_score": 100.0,
             "checklist": checklist,
             "objectives": objective_evaluations,
+            "weakest_objective": weakest_objective,
+            "geometric_mean_score": round(geometric_mean, 6),
         }
 
 

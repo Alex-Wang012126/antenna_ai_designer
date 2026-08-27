@@ -30,6 +30,12 @@ class TopologyFramework(Protocol):
     def create_candidate(self, hfss_client: Any, values: Mapping[str, Any]) -> Any:
         ...
 
+    def manual_verification_steps(self) -> list[str]:
+        ...
+
+    def manual_verification_formulas(self) -> dict[str, str]:
+        ...
+
 
 _FRAMEWORK_MODULES = {}
 
@@ -39,13 +45,16 @@ def _discover_frameworks():
         return _FRAMEWORK_MODULES
     for module_info in iter_modules(__path__):
         module = import_module(f"{__name__}.{module_info.name}")
-        framework = getattr(module, "framework", None)
-        topology_id = getattr(framework, "topology_id", None)
-        if topology_id is None:
-            continue
-        if topology_id in _FRAMEWORK_MODULES:
-            raise ValueError(f"duplicate topology framework: {topology_id}")
-        _FRAMEWORK_MODULES[topology_id] = framework
+        exported = getattr(module, "frameworks", None)
+        if exported is None:
+            exported = [getattr(module, "framework", None)]
+        for framework in exported:
+            topology_id = getattr(framework, "topology_id", None)
+            if topology_id is None:
+                continue
+            if topology_id in _FRAMEWORK_MODULES:
+                raise ValueError(f"duplicate topology framework: {topology_id}")
+            _FRAMEWORK_MODULES[topology_id] = framework
     return _FRAMEWORK_MODULES
 
 

@@ -186,6 +186,19 @@ class AntennaEvaluator(Evaluator):
             f"检查项: {checklist}\n"
             f"结构化实测指标: {measured_metrics}"
         )
+        best_score_trajectory: List[float] = []
+        best_score = 0.0
+        if manifest_file is not None:
+            for evaluation in candidate_evaluations:
+                candidate_score = (
+                    float(evaluation.get("benchmark_score", 0.0))
+                    if evaluation.get("pipeline_success")
+                    else 0.0
+                )
+                best_score = max(best_score, candidate_score)
+                best_score_trajectory.append(round(best_score, 6))
+        else:
+            best_score_trajectory.append(round(score, 6))
 
         self.config.ensure_dirs()
         report_file = (
@@ -208,9 +221,9 @@ class AntennaEvaluator(Evaluator):
                         "design_name": self.config.default_design_name,
                         "solution_setup": self.config.default_setup_name,
                         "frequency_sweep": self.config.default_sweep_name,
-                        "efficiency_sweep": task.data["simulation_control"][
-                            "efficiency_sweep"
-                        ]["name"],
+                        "efficiency_sweep": task.data["simulation_control"].get(
+                            "efficiency_sweep", {}
+                        ).get("name"),
                         "far_field_setup": "InfiniteSphere1",
                         "port": "Port1",
                         "substrate_material": "AntennaSubstrate",
@@ -219,18 +232,12 @@ class AntennaEvaluator(Evaluator):
                         "Open project_file and select the named HFSS design.",
                         "Compare model dimensions with design_parameters below.",
                         "Compare AntennaSubstrate properties with fixed_parameters.",
-                        "Compare Setup1, Sweep1, EfficiencySweep, radiation region, port, and InfiniteSphere1 with simulation_control.",
-                        "Plot dB(S(1,1)) on Setup1:Sweep1 and compare resonance, minimum S11, and contiguous threshold bandwidth.",
-                        "At Setup1:LastAdaptive, open the InfiniteSphere1 Antenna Parameters report and compare dB(PeakGain).",
-                        "Export dB(S(1,1)) from Setup1:Sweep1. Separately export InfiniteSphere1 RadiationEfficiency from the discrete Setup1:EfficiencySweep; treat it as a linear ratio, not a percentage or dB value.",
-                        "Inside the fixed target-frequency window, linearly interpolate RadiationEfficiency to the Sweep1 frequency grid without extrapolation. Compute clamp(RadiationEfficiency * (1 - 10^(dB(S11)/10)), 0, 1) at each Sweep1 sample, average, and multiply by 100 to compare total_efficiency_mean_percent.",
+                        "Compare the trusted port, radiation region, Setup, sweeps, and InfiniteSphere1 with simulation_control.",
+                        *(getattr(task.framework, "manual_verification_steps", lambda: [])()),
                     ],
-                    "derived_metric_formulas": {
-                        "mismatch_efficiency_ratio": "1 - 10^(dB(S11)/10)",
-                        "interpolated_radiation_efficiency_ratio": "linear interpolation of Setup1:EfficiencySweep RadiationEfficiency onto the Setup1:Sweep1 grid; no extrapolation",
-                        "single_port_total_efficiency_ratio": "clamp(interpolated_radiation_efficiency_ratio * mismatch_efficiency_ratio, 0, 1)",
-                        "total_efficiency_mean_percent": "100 * arithmetic_mean(single_port_total_efficiency_ratio on Sweep1 samples within objective target frequency +/- configured half span)",
-                    },
+                    "derived_metric_formulas": getattr(
+                        task.framework, "manual_verification_formulas", lambda: {}
+                    )(),
                     "design_parameters": design_parameters,
                     "fixed_parameters": task.data["fixed_parameters"],
                     "simulation_control": task.data["simulation_control"],
@@ -260,7 +267,12 @@ class AntennaEvaluator(Evaluator):
             "objective_evaluation": scored["objectives"],
             "checklist": checklist,
             "passed": passed,
+            "engineering_passed": bool(scored["engineering_passed"]),
             "score": score,
+            "benchmark_score": float(scored["benchmark_score"]),
+            "weakest_objective": scored["weakest_objective"],
+            "geometric_mean_score": float(scored["geometric_mean_score"]),
+            "best_score_trajectory": best_score_trajectory,
             "max_score": max_score,
             "candidate_evaluations": candidate_evaluations,
             "summary": summary,

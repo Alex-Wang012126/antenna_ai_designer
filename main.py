@@ -3,7 +3,7 @@
 用法示例（在本目录下运行）：
     python main.py \
         --task-spec tasks/inset_patch_2p45.json \
-        --max-design-iterations 10
+        --max-iterations 10
 
 默认使用真实模型 + 真实 AEDT；加 --use-placeholder 可切换到占位演示模式。
 
@@ -63,18 +63,11 @@ def parse_args() -> argparse.Namespace:
         help="可选自然语言补充，仅供模型和人工阅读，不参与阈值解析或评分",
     )
     parser.add_argument(
-        "--max-design-iterations",
-        "--max-rounds",
-        dest="max_design_iterations",
+        "--max-iterations",
+        dest="max_iterations",
         type=int,
-        default=cfg.max_design_iterations,
-        help="最多生成并完整仿真的候选设计数量（--max-rounds 为兼容别名）",
-    )
-    parser.add_argument(
-        "--max-solve-calls",
-        type=int,
-        default=cfg.max_solve_calls,
-        help="最大 HFSS 求解次数",
+        default=cfg.max_iterations,
+        help="最多完整处理的候选设计迭代数量（每轮包含建模和求解）",
     )
     model_group = parser.add_mutually_exclusive_group()
     model_group.add_argument(
@@ -119,8 +112,7 @@ def run_single_model(
     if calibration_status != "verified":
         print("警告: 该任务尚未验证存在满分见证解，不应直接用于正式排行榜。")
     print(f"自然语言说明: {natural_language_supplement}")
-    print(f"候选设计迭代上限: {runtime_config.max_design_iterations}")
-    print(f"仿真次数预算: {runtime_config.max_solve_calls}\n")
+    print(f"候选设计迭代上限: {runtime_config.max_iterations}\n")
 
     if use_placeholder:
         model_client = PlaceholderModelClient()
@@ -145,7 +137,7 @@ def run_single_model(
         config=runtime_config,
         task_spec=task_spec,
     )
-    design_result = agent.run(max_iterations=runtime_config.max_design_iterations)
+    design_result = agent.run(max_iterations=runtime_config.max_iterations)
 
     print("\n" + "=" * 60)
     print("设计结果")
@@ -232,8 +224,7 @@ def _run_model_batch_one_task(
         ),
         "model_batch_file": str(batch_spec.source_file),
         "model_batch_snapshot": str(snapshot_file),
-        "max_design_iterations_per_model": args.max_design_iterations,
-        "max_solve_calls_per_model": args.max_solve_calls,
+        "max_iterations_per_model": args.max_iterations,
         "models": [],
     }
     _write_batch_report(report_file, report)
@@ -287,8 +278,7 @@ def _run_model_batch_one_task(
                 model_config,
                 project_dir=run_dir,
                 log_dir=run_dir,
-                max_design_iterations=args.max_design_iterations,
-                max_solve_calls=args.max_solve_calls,
+                max_iterations=args.max_iterations,
                 # A retained desktop from one model can poison the next model's
                 # active-project context. Saved projects remain available on disk.
                 aedt_keep_open=False,
@@ -428,8 +418,8 @@ def _run_model_batch_one_task(
 
 def main() -> int:
     args = parse_args()
-    if args.max_design_iterations < 1 or args.max_solve_calls < 1:
-        raise SystemExit("--max-design-iterations 和 --max-solve-calls 必须大于 0")
+    if args.max_iterations < 1:
+        raise SystemExit("--max-iterations 必须大于 0")
     try:
         if args.task_batch:
             task_specs = TaskBatchSpec.load(args.task_batch).load_enabled_tasks()
@@ -459,8 +449,10 @@ def main() -> int:
             model_config,
             project_dir=run_dir,
             log_dir=run_dir,
-            max_design_iterations=args.max_design_iterations,
-            max_solve_calls=args.max_solve_calls,
+            max_iterations=args.max_iterations,
+            # Sequential tasks must not leave a desktop session holding an active
+            # project. Saved projects remain available on disk for verification.
+            aedt_keep_open=False,
         )
         design_result, eval_result = run_single_model(
             runtime_config,

@@ -63,7 +63,7 @@ class DesignAgent:
         self.messages: List[Dict[str, Any]] = []
         self.iterations_used = 0
         self.model_calls = 0
-        self._iteration_limit = config.max_design_iterations
+        self._iteration_limit = config.max_iterations
         self._solve_count = 0
         self._finalized = False
         self._stop_reason = ""
@@ -73,11 +73,7 @@ class DesignAgent:
         self._model_call_records: List[Dict[str, Any]] = []
 
     @property
-    def remaining_solve_calls(self) -> int:
-        return max(0, self.config.max_solve_calls - self._solve_count)
-
-    @property
-    def remaining_design_iterations(self) -> int:
+    def remaining_iterations(self) -> int:
         return max(0, self._iteration_limit - self.iterations_used)
 
     def _append_tool_result(self, tool_call_id: str, name: str, result: HFSSResult) -> None:
@@ -89,8 +85,7 @@ class DesignAgent:
                 "data": result.data,
                 "message": result.message,
                 "iterations_used": self.iterations_used,
-                "remaining_design_iterations": self.remaining_design_iterations,
-                "remaining_solve_calls": self.remaining_solve_calls,
+                "remaining_iterations": self.remaining_iterations,
                 "latest_successful_iteration": (
                     self._selected_candidate.get("iteration") if self._selected_candidate else None
                 ),
@@ -201,11 +196,6 @@ class DesignAgent:
         validation = self._run_stage(record, "validation", self.hfss.validate_design)
         if not validation.success:
             return self._finish_failed_candidate(record, "validation", validation)
-
-        if self.remaining_solve_calls <= 0:
-            result = HFSSResult(success=False, message="HFSS 求解次数预算已用完。")
-            record["stages"]["solve"] = self._stage_result(result)
-            return self._finish_failed_candidate(record, "solve", result)
 
         self._solve_count += 1
         solve = self._run_stage(record, "solve", self.hfss.solve)
@@ -345,7 +335,7 @@ class DesignAgent:
 
     def run(self, max_iterations: Optional[int] = None) -> DesignLoopResult:
         if max_iterations is None:
-            max_iterations = self.config.max_design_iterations
+            max_iterations = self.config.max_iterations
         if max_iterations < 1:
             raise ValueError("max_iterations must be greater than zero")
 
@@ -552,8 +542,7 @@ class DesignAgent:
                     "candidate_attempts": self.iterations_used,
                     "solve_calls": self._solve_count,
                     "solve_duration_seconds": round(solve_seconds, 6),
-                    "max_design_iterations": max_iterations,
-                    "max_solve_calls": self.config.max_solve_calls,
+                    "max_iterations": max_iterations,
                 },
             }
             resource_file.write_text(
@@ -576,7 +565,7 @@ class DesignAgent:
                 "natural_language_supplement": self.requirements,
                 "stop_reason": self._stop_reason,
                 "final_summary": self._final_summary,
-                "max_design_iterations": max_iterations,
+                "max_iterations": max_iterations,
                 "iterations_used": self.iterations_used,
                 "model_calls": self.model_calls,
                 "solve_calls": self._solve_count,

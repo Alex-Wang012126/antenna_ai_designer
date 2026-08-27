@@ -1,0 +1,388 @@
+{
+  "schema_version": 1,
+  "task_id": "dual_band_patch_1p9_2p45_v1",
+  "title": "Dual-band coax-fed rectangular patch antenna at 1.9 and 2.45 GHz",
+  "natural_language_description": "Design a single-layer, single-port rectangular microstrip patch that operates at both 1.9 GHz and 2.45 GHz. Each intended resonance must be near its target frequency, both S11 dips must be at or below -20 dB, each operating band must have usable -10 dB bandwidth, and the weaker of the two bands must meet the gain and total-efficiency requirements. The structured thresholds and measurement semantics below are authoritative.",
+  "topology": {
+    "id": "dual_band_coax_patch",
+    "port_count": 1
+  },
+  "calibration": {
+    "status": "uncalibrated",
+    "full_score_witness_verified": false,
+    "verification_date": null,
+    "solver": null,
+    "notes": "Full-score thresholds are placeholders pending witness-solution calibration and perturbation-box verification."
+  },
+  "fixed_parameters": {
+    "substrate_material": {
+      "value": "FR4 Epoxy",
+      "unit": "label",
+      "description": "Read-only substrate label."
+    },
+    "substrate_relative_permittivity": {
+      "value": 4.4,
+      "unit": "1",
+      "description": "Relative permittivity used by the trusted backend material."
+    },
+    "substrate_loss_tangent": {
+      "value": 0.02,
+      "unit": "1",
+      "description": "Dielectric loss tangent."
+    },
+    "substrate_width_mm": {
+      "value": 60.0,
+      "unit": "mm",
+      "description": "Fixed ground and substrate size along x."
+    },
+    "substrate_length_mm": {
+      "value": 60.0,
+      "unit": "mm",
+      "description": "Fixed ground and substrate size along y."
+    },
+    "substrate_height_mm": {
+      "value": 1.6,
+      "unit": "mm",
+      "description": "Fixed substrate thickness."
+    },
+    "coax_probe_radius_mm": {
+      "value": 0.6,
+      "unit": "mm",
+      "description": "Read-only coaxial inner-conductor radius."
+    },
+    "coax_port_radius_mm": {
+      "value": 1.5,
+      "unit": "mm",
+      "description": "Read-only circular lumped-port radius."
+    }
+  },
+  "design_variables": {
+    "patch_length_mm": {
+      "minimum": 24.0,
+      "maximum": 32.0,
+      "unit": "mm",
+      "description": "Patch dimension along x."
+    },
+    "patch_width_mm": {
+      "minimum": 32.0,
+      "maximum": 42.0,
+      "unit": "mm",
+      "description": "Patch dimension along y."
+    },
+    "feed_x_mm": {
+      "minimum": 2.0,
+      "maximum": 12.0,
+      "unit": "mm",
+      "description": "Signed coax-probe x offset from the patch center."
+    },
+    "feed_y_mm": {
+      "minimum": 2.0,
+      "maximum": 15.0,
+      "unit": "mm",
+      "description": "Signed coax-probe y offset from the patch center."
+    }
+  },
+  "simulation_control": {
+    "adaptive_frequency": {
+      "value": 2.45,
+      "unit": "GHz"
+    },
+    "sweep_start": {
+      "value": 1.5,
+      "unit": "GHz"
+    },
+    "sweep_stop": {
+      "value": 3.0,
+      "unit": "GHz"
+    },
+    "sweep_points": {
+      "value": 301,
+      "unit": "count"
+    },
+    "bandwidth_s11_threshold": {
+      "value": -10.0,
+      "unit": "dB"
+    },
+    "sweep_type": "Interpolating",
+    "save_fields": false,
+    "save_rad_fields": true,
+    "efficiency_sweep": {
+      "name": "EfficiencySweep",
+      "start": {
+        "value": 1.875,
+        "unit": "GHz"
+      },
+      "stop": {
+        "value": 2.465,
+        "unit": "GHz"
+      },
+      "points": {
+        "value": 13,
+        "unit": "count"
+      },
+      "sweep_type": "Discrete",
+      "save_fields": true,
+      "save_rad_fields": true
+    },
+    "efficiency_windows": {
+      "low": {
+        "target": {
+          "value": 1.9,
+          "unit": "GHz"
+        },
+        "half_span": {
+          "value": 15.0,
+          "unit": "MHz"
+        }
+      },
+      "high": {
+        "target": {
+          "value": 2.45,
+          "unit": "GHz"
+        },
+        "half_span": {
+          "value": 15.0,
+          "unit": "MHz"
+        }
+      }
+    },
+    "air_margin_xy": {
+      "value": 40.0,
+      "unit": "mm"
+    },
+    "air_above": {
+      "value": 55.0,
+      "unit": "mm"
+    },
+    "air_below": {
+      "value": 30.0,
+      "unit": "mm"
+    },
+    "port_impedance": {
+      "value": 50.0,
+      "unit": "ohm"
+    },
+    "setup": {
+      "max_delta_s": {
+        "value": 0.02,
+        "unit": "1"
+      },
+      "maximum_passes": {
+        "value": 12,
+        "unit": "count"
+      },
+      "minimum_passes": {
+        "value": 2,
+        "unit": "count"
+      },
+      "minimum_converged_passes": {
+        "value": 1,
+        "unit": "count"
+      }
+    },
+    "far_field": {
+      "theta_start": {
+        "value": 0.0,
+        "unit": "deg"
+      },
+      "theta_stop": {
+        "value": 180.0,
+        "unit": "deg"
+      },
+      "theta_step": {
+        "value": 5.0,
+        "unit": "deg"
+      },
+      "phi_start": {
+        "value": -180.0,
+        "unit": "deg"
+      },
+      "phi_stop": {
+        "value": 180.0,
+        "unit": "deg"
+      },
+      "phi_step": {
+        "value": 5.0,
+        "unit": "deg"
+      }
+    }
+  },
+  "objectives": {
+    "resonance_low": {
+      "metric_key": "resonance_low_ghz",
+      "display_name": "Low-band resonance frequency",
+      "unit": "GHz",
+      "value_representation": "linear_frequency",
+      "goal": "target_with_tolerance",
+      "target": {
+        "value": 1.9,
+        "unit": "GHz"
+      },
+      "tolerance": {
+        "value": 0.02,
+        "unit": "GHz"
+      },
+      "full_score_tolerance": {
+        "value": 0.008,
+        "unit": "GHz"
+      },
+      "zero_score_tolerance": {
+        "value": 0.15,
+        "unit": "GHz"
+      },
+      "points": 15,
+      "semantics": "Frequency of the minimum dB(S(1,1)) within the fixed 1.6-2.2 GHz detection window. A window without a dip below -5 dB is unavailable and scores zero."
+    },
+    "resonance_high": {
+      "metric_key": "resonance_high_ghz",
+      "display_name": "High-band resonance frequency",
+      "unit": "GHz",
+      "value_representation": "linear_frequency",
+      "goal": "target_with_tolerance",
+      "target": {
+        "value": 2.45,
+        "unit": "GHz"
+      },
+      "tolerance": {
+        "value": 0.02,
+        "unit": "GHz"
+      },
+      "full_score_tolerance": {
+        "value": 0.008,
+        "unit": "GHz"
+      },
+      "zero_score_tolerance": {
+        "value": 0.15,
+        "unit": "GHz"
+      },
+      "points": 15,
+      "semantics": "Frequency of the minimum dB(S(1,1)) within the fixed 2.15-2.75 GHz detection window. A window without a dip below -5 dB is unavailable and scores zero."
+    },
+    "s11_low": {
+      "metric_key": "s11_low_db",
+      "display_name": "Low-band minimum S11",
+      "unit": "dB",
+      "value_representation": "20_log10_magnitude",
+      "goal": "at_most",
+      "pass_threshold": {
+        "value": -20.0,
+        "unit": "dB"
+      },
+      "full_score_threshold": {
+        "value": -25.0,
+        "unit": "dB"
+      },
+      "zero_score_threshold": {
+        "value": -6.0,
+        "unit": "dB"
+      },
+      "points": 15,
+      "semantics": "Minimum dB(S(1,1)) at the detected low-band resonance."
+    },
+    "s11_high": {
+      "metric_key": "s11_high_db",
+      "display_name": "High-band minimum S11",
+      "unit": "dB",
+      "value_representation": "20_log10_magnitude",
+      "goal": "at_most",
+      "pass_threshold": {
+        "value": -20.0,
+        "unit": "dB"
+      },
+      "full_score_threshold": {
+        "value": -30.0,
+        "unit": "dB"
+      },
+      "zero_score_threshold": {
+        "value": -6.0,
+        "unit": "dB"
+      },
+      "points": 15,
+      "semantics": "Minimum dB(S(1,1)) at the detected high-band resonance."
+    },
+    "bandwidth_low": {
+      "metric_key": "bandwidth_low_mhz",
+      "display_name": "Low-band -10 dB bandwidth",
+      "unit": "MHz",
+      "value_representation": "linear_frequency_span",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 12.0,
+        "unit": "MHz"
+      },
+      "full_score_threshold": {
+        "value": 20.0,
+        "unit": "MHz"
+      },
+      "zero_score_threshold": {
+        "value": 4.0,
+        "unit": "MHz"
+      },
+      "points": 10,
+      "semantics": "Contiguous span containing the detected low-band resonance where dB(S(1,1)) is at or below -10 dB, with interpolated threshold crossings."
+    },
+    "bandwidth_high": {
+      "metric_key": "bandwidth_high_mhz",
+      "display_name": "High-band -10 dB bandwidth",
+      "unit": "MHz",
+      "value_representation": "linear_frequency_span",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 30.0,
+        "unit": "MHz"
+      },
+      "full_score_threshold": {
+        "value": 50.0,
+        "unit": "MHz"
+      },
+      "zero_score_threshold": {
+        "value": 10.0,
+        "unit": "MHz"
+      },
+      "points": 10,
+      "semantics": "Contiguous span containing the detected high-band resonance where dB(S(1,1)) is at or below -10 dB, with interpolated threshold crossings."
+    },
+    "gain_min": {
+      "metric_key": "gain_min_dbi",
+      "display_name": "Worst-band peak gain",
+      "unit": "dBi",
+      "value_representation": "10_log10_power_gain_relative_to_isotropic",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 1.0,
+        "unit": "dBi"
+      },
+      "full_score_threshold": {
+        "value": 2.5,
+        "unit": "dBi"
+      },
+      "zero_score_threshold": {
+        "value": -3.0,
+        "unit": "dBi"
+      },
+      "points": 10,
+      "semantics": "Minimum of HFSS dB(PeakGain) at 1.9 GHz and 2.45 GHz."
+    },
+    "efficiency_min": {
+      "metric_key": "efficiency_min_percent",
+      "display_name": "Worst-band total efficiency",
+      "unit": "%",
+      "value_representation": "linear_percentage",
+      "goal": "at_least",
+      "pass_threshold": {
+        "value": 45.0,
+        "unit": "%"
+      },
+      "full_score_threshold": {
+        "value": 60.0,
+        "unit": "%"
+      },
+      "zero_score_threshold": {
+        "value": 15.0,
+        "unit": "%"
+      },
+      "points": 10,
+      "semantics": "Minimum of the fixed-window single-port total-efficiency means at 1.9 GHz +/- 15 MHz and 2.45 GHz +/- 15 MHz."
+    }
+  }
+}

@@ -523,31 +523,43 @@ class PlaceholderModelClient(ModelClient):
     """
 
     def __init__(self, demo_sequence: Optional[List[Dict[str, Any]]] = None):
-        # 演示用的默认“设计”序列
-        if demo_sequence is None:
-            demo_sequence = [
-                {
-                    "name": "create_patch_antenna",
-                    "arguments": {
-                        "substrate_width_mm": 100.0,
-                        "substrate_length_mm": 85.0,
-                        "substrate_height_mm": 5.0,
-                        "patch_width_mm": 58.0,
-                        "patch_length_mm": 38.4,
-                        "feed_width_mm": 12.0,
-                        "inset_depth_mm": 10.5,
-                        "inset_gap_mm": 1.4,
-                    },
-                },
-                {
-                    "name": "finalize_design",
-                    "arguments": {
-                        "summary": "Validated 2.45 GHz inset-fed patch; measured S11 -21 dB and 120 MHz bandwidth."
-                    },
-                },
-            ]
         self._demo_sequence = demo_sequence
         self._step = 0
+
+    @staticmethod
+    def _default_sequence(tool_name: str) -> List[Dict[str, Any]]:
+        if tool_name == "create_dual_band_patch_antenna":
+            arguments = {
+                "patch_length_mm": 28.0,
+                "patch_width_mm": 37.0,
+                "feed_x_mm": 7.0,
+                "feed_y_mm": 8.0,
+            }
+            summary = "Submitted a complete dual-band coax-fed patch candidate."
+        elif tool_name == "create_cp_patch_antenna":
+            arguments = {
+                "patch_length_mm": 45.0,
+                "patch_width_mm": 44.0,
+                "feed_x_mm": -8.0,
+                "feed_y_mm": 8.0,
+            }
+            summary = "Submitted a complete circularly polarized coax-fed patch candidate."
+        else:
+            arguments = {
+                "substrate_width_mm": 100.0,
+                "substrate_length_mm": 85.0,
+                "substrate_height_mm": 5.0,
+                "patch_width_mm": 58.0,
+                "patch_length_mm": 38.4,
+                "feed_width_mm": 12.0,
+                "inset_depth_mm": 10.5,
+                "inset_gap_mm": 1.4,
+            }
+            summary = "Validated 2.45 GHz inset-fed patch; measured S11 -21 dB and 120 MHz bandwidth."
+        return [
+            {"name": tool_name, "arguments": arguments},
+            {"name": "finalize_design", "arguments": {"summary": summary}},
+        ]
 
     def chat(
         self,
@@ -555,6 +567,13 @@ class PlaceholderModelClient(ModelClient):
         tools: Optional[List[Dict[str, Any]]] = None,
     ) -> ChatResponse:
         """按顺序返回预设工具调用，循环结束后返回自然语言总结。"""
+        if self._demo_sequence is None:
+            tool_name = (
+                tools[0]["function"]["name"]
+                if tools
+                else "create_patch_antenna"
+            )
+            self._demo_sequence = self._default_sequence(tool_name)
         if self._step < len(self._demo_sequence):
             item = self._demo_sequence[self._step]
             self._step += 1

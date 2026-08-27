@@ -278,5 +278,20 @@ class InsetFedRectangularPatchFramework:
     def create_candidate(self, hfss_client: Any, values: Mapping[str, Any]):
         return hfss_client.create_patch_antenna(values)
 
+    def manual_verification_steps(self) -> list[str]:
+        return [
+            "Plot dB(S(1,1)) on Setup1:Sweep1 and compare resonance, minimum S11, and contiguous threshold bandwidth.",
+            "At Setup1:LastAdaptive, open the InfiniteSphere1 Antenna Parameters report and compare dB(PeakGain).",
+            "Export InfiniteSphere1 RadiationEfficiency from the discrete Setup1:EfficiencySweep and verify the fixed-window total-efficiency mean.",
+        ]
+
+    def manual_verification_formulas(self) -> dict[str, str]:
+        return {
+            "mismatch_efficiency_ratio": "1 - 10^(dB(S11)/10)",
+            "interpolated_radiation_efficiency_ratio": "linear interpolation of Setup1:EfficiencySweep RadiationEfficiency onto the Setup1:Sweep1 grid; no extrapolation",
+            "single_port_total_efficiency_ratio": "clamp(interpolated_radiation_efficiency_ratio * mismatch_efficiency_ratio, 0, 1)",
+            "total_efficiency_mean_percent": "100 * arithmetic_mean(single_port_total_efficiency_ratio on Sweep1 samples within objective target frequency +/- configured half span)",
+        }
+
 
 framework = InsetFedRectangularPatchFramework()

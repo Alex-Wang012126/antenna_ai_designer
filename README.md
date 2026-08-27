@@ -21,6 +21,10 @@
 
 拓扑专属校验、参数解析、模型工具名称和提示词约束存放在 `frameworks/` 中，并由任务 JSON 的 `topology.id` 自动发现和选择。`task_spec.py` 只保留任务公共合同、指标通用结构和评分调度；新增题型不会改变现有题目的字段集合、约束或仿真控制。
 
+当前题目清单包含三道题：原内嵌馈电 2.45 GHz 贴片、同轴馈电 1.9/2.45 GHz 双频贴片、单馈同轴圆极化 GPS L1 贴片。两道新增题目均为 `uncalibrated`，其 `full_score_threshold` / `full_score_tolerance` 是校准前占位线，不能用于正式排行榜。
+
+含满分线的 objective 使用三段计分：零分线到合格线贡献 0–60%，合格线到满分线贡献 60–100%。未提供满分线的旧 objective 保持原单段计分。注入模型的任务 JSON 会删除所有满分线字段，避免向模型泄露见证解性能；评测报告则保留完整校准信息并记录 `engineering_passed`、`benchmark_score`、`weakest_objective`、`geometric_mean_score` 和 `best_score_trajectory`。
+
 模型只会看到两个工具：
 
 - `create_patch_antenna({...})`：提交一个完整候选。一次调用会由 Python 自动完成整条仿真流水线。
@@ -28,7 +32,7 @@
 
 模型不参与 `validate_design`、`solve`、`get_result` 或 `export_design` 的调度。这些步骤不会再消耗模型轮次，也不会因模型调用上限而把最后一个候选停在未求解状态。
 
-`--max-design-iterations` 表示允许提交并完整处理的候选数量，而不是模型调用次数。`--max-rounds` 仍可作为兼容别名。模型可以在认为当前候选已满足要求时提前调用 `finalize_design`；Python 不会根据指标替模型提前停止。达到迭代上限时，生成阶段自动结束，且不会额外补做一个隐藏候选或隐藏求解。
+`--max-iterations` 表示允许提交并完整处理的候选数量，而不是模型调用次数。每一轮候选都统一包含建模、求解和读指标；不再单独限制模型调用次数或求解次数。模型可以在认为当前候选已满足要求时提前调用 `finalize_design`；Python 不会根据指标替模型提前停止。达到迭代上限时，生成阶段自动结束，且不会额外补做一个隐藏候选或隐藏求解。
 
 ## 满分解校准
 
@@ -120,8 +124,7 @@
     }
   },
   "iterations_used": 1,
-  "remaining_design_iterations": 4,
-  "remaining_solve_calls": 4,
+  "remaining_iterations": 4,
   "latest_successful_iteration": 1
 }
 ```
@@ -203,8 +206,7 @@ python -m pip install -r requirements.txt
 MODEL_API_KEY=your-key
 MODEL_BASE_URL=https://api.apevon.ai/v1
 MODEL_NAME=gpt-5.5
-MAX_DESIGN_ITERATIONS=5
-MAX_SOLVE_CALLS=5
+MAX_ITERATIONS=5
 AEDT_ROOT=C:\ANSYS Inc\ANSYS Student\v252\AnsysEM
 AEDT_KEEP_OPEN=true
 ```
@@ -250,31 +252,31 @@ python verify_min.py
 运行真实设计。通常让求解预算不低于候选迭代上限：
 
 ```powershell
-python main.py --task-spec tasks/inset_patch_2p45.json --max-design-iterations 10 --max-solve-calls 10
+python main.py --task-spec tasks/inset_patch_2p45.json --max-iterations 10
 ```
 
 运行 `model_batch.json` 中的全部启用模型，每个模型分别获得相同的候选和求解预算：
 
 ```powershell
-python main.py --model-batch model_batch.json --task-spec tasks/inset_patch_2p45.json --max-design-iterations 10 --max-solve-calls 10
+python main.py --model-batch model_batch.json --task-spec tasks/inset_patch_2p45.json --max-iterations 10
 ```
 
 按 `task_batch.json` 的顺序完成全部启用题目：
 
 ```powershell
-python main.py --task-batch task_batch.json --max-design-iterations 10 --max-solve-calls 10
+python main.py --task-batch task_batch.json --max-iterations 10
 ```
 
 让每个模型依次完成题目清单中的每个题目：
 
 ```powershell
-python main.py --model-batch model_batch.json --task-batch task_batch.json --max-design-iterations 10 --max-solve-calls 10
+python main.py --model-batch model_batch.json --task-batch task_batch.json --max-iterations 10
 ```
 
 只测试某一个新增 YAML 配置：
 
 ```powershell
-python main.py --model-config job_kimi_k3.yaml --max-design-iterations 5 --max-solve-calls 5
+python main.py --model-config job_kimi_k3.yaml --max-iterations 5
 ```
 
 可用 `--description-supplement "..."`（兼容别名 `--requirements`）附加自然语言说明；它不会改变结构化阈值或评分。
