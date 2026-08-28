@@ -8,11 +8,11 @@
     "port_count": 1
   },
   "calibration": {
-    "status": "uncalibrated",
-    "full_score_witness_verified": false,
-    "verification_date": null,
-    "solver": null,
-    "notes": "Full-score thresholds are placeholders pending witness-solution calibration and perturbation-box verification."
+    "status": "verified",
+    "full_score_witness_verified": true,
+    "verification_date": "2026-08-28",
+    "solver": "Ansys Electronics Desktop Student 2025 R2 / HFSS 2025.2",
+    "notes": "A full-score witness was independently verified under the exact fixed simulation controls; evidence is retained in full_score_example/02_dual_band_patch_1p9_2p45_v1."
   },
   "fixed_parameters": {
     "substrate_material": {

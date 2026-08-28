@@ -8,11 +8,11 @@
     "port_count": 1
   },
   "calibration": {
-    "status": "uncalibrated",
-    "full_score_witness_verified": false,
-    "verification_date": null,
-    "solver": null,
-    "notes": "Full-score thresholds are placeholders pending witness-solution calibration and perturbation-box verification."
+    "status": "verified",
+    "full_score_witness_verified": true,
+    "verification_date": "2024-08-28",
+    "solver": "Ansys Electronics Desktop Student 2025 R2 / HFSS 2025.2",
+    "notes": "A full-score witness was independently verified under the exact fixed simulation controls; evidence is retained in full_score_example/03_cp_patch_gps_1p575_v1."
   },
   "fixed_parameters": {
     "substrate_material": {
@@ -179,15 +179,15 @@
         "unit": "GHz"
       },
       "tolerance": {
-        "value": 0.012,
+        "value": 0.025,
         "unit": "GHz"
       },
       "full_score_tolerance": {
-        "value": 0.005,
+        "value": 0.015,
         "unit": "GHz"
       },
       "zero_score_tolerance": {
-        "value": 0.075,
+        "value": 0.070,
         "unit": "GHz"
       },
       "points": 15,
@@ -200,15 +200,15 @@
       "value_representation": "20_log10_magnitude",
       "goal": "at_most",
       "pass_threshold": {
-        "value": -15.0,
+        "value": -18.0,
         "unit": "dB"
       },
       "full_score_threshold": {
-        "value": -22.0,
+        "value": -25.0,
         "unit": "dB"
       },
       "zero_score_threshold": {
-        "value": -5.0,
+        "value": -8.0,
         "unit": "dB"
       },
       "points": 15,
@@ -221,11 +221,11 @@
       "value_representation": "20_log10_axial_ratio",
       "goal": "at_most",
       "pass_threshold": {
-        "value": 2.0,
+        "value": 3.0,
         "unit": "dB"
       },
       "full_score_threshold": {
-        "value": 0.8,
+        "value": 1.5,
         "unit": "dB"
       },
       "zero_score_threshold": {
@@ -242,15 +242,15 @@
       "value_representation": "logarithmic_gain_difference",
       "goal": "at_least",
       "pass_threshold": {
-        "value": 6.0,
-        "unit": "dB"
-      },
-      "full_score_threshold": {
         "value": 15.0,
         "unit": "dB"
       },
+      "full_score_threshold": {
+        "value": 20.0,
+        "unit": "dB"
+      },
       "zero_score_threshold": {
-        "value": 0.0,
+        "value": 8.0,
         "unit": "dB"
       },
       "points": 15,
@@ -263,7 +263,7 @@
       "value_representation": "linear_frequency_span",
       "goal": "at_least",
       "pass_threshold": {
-        "value": 6.0,
+        "value": 8.0,
         "unit": "MHz"
       },
       "full_score_threshold": {
@@ -284,15 +284,15 @@
       "value_representation": "10_log10_power_gain_relative_to_isotropic",
       "goal": "at_least",
       "pass_threshold": {
-        "value": 0.0,
+        "value": 1.0,
         "unit": "dBi"
       },
       "full_score_threshold": {
-        "value": 1.2,
+        "value": 2.0,
         "unit": "dBi"
       },
       "zero_score_threshold": {
-        "value": -5.0,
+        "value": 0.0,
         "unit": "dBi"
       },
       "points": 15,

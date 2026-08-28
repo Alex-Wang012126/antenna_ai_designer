@@ -1,0 +1,81 @@
+$begin 'DesignData'
+	Version=242
+	$begin 'VariableValues'
+	$end 'VariableValues'
+	$begin 'PartsInfo'
+		Part(73, true, 'AirRegion', true, 'air', 6, 74, 76, 77, 78, 75, 79, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 143, 175, 143, false)
+		Part(645, true, 'Substrate', true, 'FR4_epoxy', 6, 646, 648, 649, 650, 647, 651, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 132, 132, 193, false)
+		Part(673, false, 'Ground', false, 'copper', 1, 683, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 242, 140, 102, false)
+		Part(685, false, 'Patch', false, 'copper', 1, 695, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 242, 140, 102, false)
+		Part(697, true, 'CoaxProbe', false, 'copper', 3, 700, 699, 698, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 242, 140, 102, false)
+		Part(706, false, 'Port1_sheet', true, 'vacuum', 1, 710, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 230, 230, 230, false)
+	$end 'PartsInfo'
+	$begin 'FacesInfo'
+		Face(74, 73, 0.0484, 880, true, 0, 0, 71.6, 0, 0, 1, 4, 0.11, -0.11, 0.0716, 0.11, 0.11, 0.0716, -0.11, 0.11, 0.0716, -0.11, -0.11, 0.0716)
+		Face(75, 73, 0.0484, 880, true, 0, 0, -35, -0, -0, -1, 4, 0.11, -0.11, -0.035, -0.11, -0.11, -0.035, -0.11, 0.11, -0.035, 0.11, 0.11, -0.035)
+		Face(76, 73, 0.023452, 653.2, true, 0, -110, 18.3, -0, -1, -0, 4, 0.11, -0.11, 0.0716, -0.11, -0.11, 0.0716, -0.11, -0.11, -0.035, 0.11, -0.11, -0.035)
+		Face(77, 73, 0.023452, 653.2, true, -110, 0, 18.3, -1, -0, -0, 4, -0.11, -0.11, 0.0716, -0.11, 0.11, 0.0716, -0.11, 0.11, -0.035, -0.11, -0.11, -0.035)
+		Face(78, 73, 0.023452, 653.2, true, 0, 110, 18.3, 0, 1, 0, 4, -0.11, 0.11, 0.0716, 0.11, 0.11, 0.0716, 0.11, 0.11, -0.035, -0.11, 0.11, -0.035)
+		Face(79, 73, 0.023452, 653.2, true, 110, 0, 18.3, 1, 0, 0, 4, 0.11, 0.11, -0.035, 0.11, 0.11, 0.0716, 0.11, -0.11, 0.0716, 0.11, -0.11, -0.035)
+		Face(646, 645, 0.01, 400, true, 0, 0, 1.6, 0, 0, 1, 4, 0.05, -0.05, 0.0016, 0.05, 0.05, 0.0016, -0.05, 0.05, 0.0016, -0.05, -0.05, 0.0016)
+		Face(647, 645, 0.01, 400, true, 0, 0, 0, -0, -0, -1, 4, 0.05, -0.05, 0, -0.05, -0.05, 0, -0.05, 0.05, 0, 0.05, 0.05, 0)
+		Face(648, 645, 0.00016, 203.2, true, 0, -50, 0.8, -0, -1, -0, 4, 0.05, -0.05, 0.0016, -0.05, -0.05, 0.0016, -0.05, -0.05, 0, 0.05, -0.05, 0)
+		Face(649, 645, 0.00016, 203.2, true, -50, 0, 0.8, -1, -0, -0, 4, -0.05, -0.05, 0.0016, -0.05, 0.05, 0.0016, -0.05, 0.05, 0, -0.05, -0.05, 0)
+		Face(650, 645, 0.00016, 203.2, true, 0, 50, 0.8, 0, 1, 0, 4, -0.05, 0.05, 0.0016, 0.05, 0.05, 0.0016, 0.05, 0.05, 0, -0.05, 0.05, 0)
+		Face(651, 645, 0.00016, 203.2, true, 50, 0, 0.8, 1, 0, 0, 4, 0.05, 0.05, 0, 0.05, 0.05, 0.0016, 0.05, -0.05, 0.0016, 0.05, -0.05, 0)
+		Face(683, 673, 0.01, 400, true, 0, 0, 0, -0, 0, 1, 4, -0.05, -0.05, 0, 0.05, -0.05, 0, 0.05, 0.05, 0, -0.05, 0.05, 0)
+		Face(695, 685, 0.00194618, 176.48, true, 0, 0, 1.6, -0, 0, 1, 4, -0.021745, -0.022375, 0.0016, 0.021745, -0.022375, 0.0016, 0.021745, 0.022375, 0.0016, -0.021745, 0.022375, 0.0016)
+		Face(698, 697, 6.03186e-06, 7.53982, false, 0, 0, 0, -10, -10, -10, 0)
+		Face(699, 697, 1.13097e-06, 3.76991, true, 8.32, 8.32, 0, -0, -0, -1, 0)
+		Face(700, 697, 1.13097e-06, 3.76991, true, 8.32, 8.32, 1.6, 0, 0, 1, 0)
+		Face(710, 706, 7.06858e-06, 9.42478, true, 8.32, 8.32, 0, 0, 0, 1, 0)
+	$end 'FacesInfo'
+	$begin 'PartAddtionalPiecesInfo'
+		$begin 'Bodies'
+		$end 'Bodies'
+		$begin 'Faces'
+		$end 'Faces'
+	$end 'PartAddtionalPiecesInfo'
+	$begin 'DesignGeometryInfo'
+		ModelUnit='mm'
+		ModelerType=2
+		MinDimensionInModelUnits=1e-06
+		MaxDimensionInModelUnits=10000
+		GlobalCSID=1
+		RegionID=73
+		PreprocessForwardIdStart=712
+		PreprocessForwardIdEnd=712
+		PreprocessBackwardIdStart=2147483647
+		PreprocessBackwardIdEnd=2147483647
+	$end 'DesignGeometryInfo'
+	$begin 'Point3DDefinitionInfo'
+	$end 'Point3DDefinitionInfo'
+	$begin 'Plane3DDefinitionInfo'
+		Plane(-4, 'Global:XY', 1, -1, true, 7077999, 0, 0, 0, 0, 0, 1)
+		Plane(-3, 'Global:YZ', 1, -1, true, 7274580, 0, 0, 0, 1, 0, 0)
+		Plane(-2, 'Global:XZ', 1, -1, true, 7274496, 0, 0, 0, 0, 1, 0)
+	$end 'Plane3DDefinitionInfo'
+	$begin 'CoordinateSystemInfo'
+		CoordinateSystem(1, 'Global', -1, false, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+	$end 'CoordinateSystemInfo'
+	$begin 'ComponentDefinitionInfo'
+	$end 'ComponentDefinitionInfo'
+	$begin 'ComponentInstanceInfo'
+	$end 'ComponentInstanceInfo'
+	$begin 'GeometryEntityListOperationInfo'
+		$begin 'EntityList'
+			ID=2
+			Name='AllObjects'
+			$begin 'GeometryEntityListParameters'
+				EntityType='Object'
+				EntityList(73, 645, 673, 685, 697, 706)
+			$end 'GeometryEntityListParameters'
+		$end 'EntityList'
+	$end 'GeometryEntityListOperationInfo'
+	$begin 'MaterialManager'
+		$begin 'ProjectMaterials'
+		$end 'ProjectMaterials'
+		$begin 'InternalPrivateMaterials'
+		$end 'InternalPrivateMaterials'
+	$end 'MaterialManager'
+$end 'DesignData'
