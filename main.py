@@ -179,36 +179,95 @@ def _write_batch_report(report_file: Path, report: Dict[str, Any]) -> None:
     )
 
 
+def _write_run_report(report_file: Path, report: Dict[str, Any]) -> None:
+    report_file.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2, default=str),
+        encoding="utf-8",
+    )
+
+
 def run_model_batch(
     args: argparse.Namespace,
     task_specs: list[AntennaTaskSpec],
 ) -> int:
-    exit_codes = [
-        _run_model_batch_one_task(
-            args,
-            task_spec,
-            args.requirements or task_spec.description,
+    batch_spec = ModelBatchSpec.load(args.model_batch)
+    batch_id = datetime.now().strftime("batch_%Y%m%d_%H%M%S_%f")
+    batch_dir = cfg.project_dir.expanduser().resolve() / batch_id
+    batch_dir.mkdir(parents=True, exist_ok=False)
+    snapshot_file = batch_dir / "model_batch.json"
+    snapshot_file.write_text(
+        json.dumps(batch_spec.public_snapshot(), ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    root_report: Dict[str, Any] = {
+        "schema_version": 1,
+        "batch_id": batch_id,
+        "status": "running",
+        "execution_mode": "sequential",
+        "started_at_utc": datetime.now(timezone.utc).isoformat(),
+        "finished_at_utc": None,
+        "model_batch_file": str(batch_spec.source_file),
+        "model_batch_snapshot": str(snapshot_file),
+        "max_iterations_per_model_per_task": args.max_iterations,
+        "tasks": [],
+    }
+    root_report_file = batch_dir / "batch_results.json"
+    _write_batch_report(root_report_file, root_report)
+
+    had_execution_error = False
+    for task_position, task_spec in enumerate(task_specs, start=1):
+        task_report_file = batch_dir / f"batch_results_{task_spec.task_id}.json"
+        root_report["tasks"].append(
+            {
+                "position": task_position,
+                "task_id": task_spec.task_id,
+                "task_spec_file": (
+                    str(task_spec.source_file)
+                    if task_spec.source_file is not None
+                    else None
+                ),
+                "task_report": str(task_report_file),
+                "status": "running",
+            }
         )
-        for task_spec in task_specs
-    ]
-    return 1 if any(code != 0 for code in exit_codes) else 0
+        _write_batch_report(root_report_file, root_report)
+        try:
+            exit_code = _run_model_batch_one_task(
+                args,
+                task_spec,
+                args.requirements or task_spec.description,
+                batch_dir=batch_dir,
+                task_position=task_position,
+            )
+        except Exception as exc:
+            root_report["tasks"][-1]["error"] = f"{type(exc).__name__}: {exc}"
+            exit_code = 1
+        had_execution_error = had_execution_error or exit_code != 0
+        root_report["tasks"][-1]["status"] = (
+            "completed" if exit_code == 0 else "completed_with_errors"
+        )
+        _write_batch_report(root_report_file, root_report)
+
+    root_report["status"] = (
+        "completed_with_errors" if had_execution_error else "completed"
+    )
+    root_report["finished_at_utc"] = datetime.now(timezone.utc).isoformat()
+    _write_batch_report(root_report_file, root_report)
+    print(f"\n[批次汇总] {root_report_file}")
+    return 1 if had_execution_error else 0
 
 
 def _run_model_batch_one_task(
     args: argparse.Namespace,
     task_spec: AntennaTaskSpec,
     natural_language_supplement: str,
+    batch_dir: Path,
+    task_position: int,
 ) -> int:
     batch_spec = ModelBatchSpec.load(args.model_batch)
-    batch_id = datetime.now().strftime("batch_%Y%m%d_%H%M%S_%f")
-    batch_dir = cfg.project_dir.expanduser().resolve() / batch_id
-    batch_dir.mkdir(parents=True, exist_ok=False)
-    report_file = batch_dir / "batch_results.json"
+    batch_id = batch_dir.name
+    report_file = batch_dir / f"batch_results_{task_spec.task_id}.json"
     snapshot_file = batch_dir / "model_batch.json"
-    snapshot_file.write_text(
-        json.dumps(batch_spec.public_snapshot(), ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
     report: Dict[str, Any] = {
         "schema_version": 1,
         "batch_id": batch_id,
@@ -250,7 +309,8 @@ def _run_model_batch_one_task(
             _write_batch_report(report_file, report)
             continue
 
-        run_dir = batch_dir / f"{position:02d}_{entry.model_id}"
+        model_dir = batch_dir / f"{position:02d}_{entry.model_id}"
+        run_dir = model_dir / f"{task_position:02d}_{task_spec.task_id}"
         run_dir.mkdir(parents=True, exist_ok=False)
         item: Dict[str, Any] = {
             "position": position,
@@ -442,9 +502,21 @@ def main() -> int:
         except (OSError, ValueError, TypeError) as exc:
             raise SystemExit(f"无法加载模型配置 {args.model_config}: {exc}") from exc
     completed = True
-    for task_spec in task_specs:
-        run_id = datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
-        run_dir = cfg.project_dir.expanduser().resolve() / run_id
+    run_id = datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
+    run_root = cfg.project_dir.expanduser().resolve() / run_id
+    run_root.mkdir(parents=True, exist_ok=False)
+    run_report: Dict[str, Any] = {
+        "schema_version": 1,
+        "run_id": run_id,
+        "status": "running",
+        "started_at_utc": datetime.now(timezone.utc).isoformat(),
+        "finished_at_utc": None,
+        "max_iterations_per_task": args.max_iterations,
+        "tasks": [],
+    }
+    run_report_file = run_root / "run_results.json"
+    for task_position, task_spec in enumerate(task_specs, start=1):
+        run_dir = run_root / f"{task_position:02d}_{task_spec.task_id}"
         runtime_config = replace(
             model_config,
             project_dir=run_dir,
@@ -454,13 +526,47 @@ def main() -> int:
             # project. Saved projects remain available on disk for verification.
             aedt_keep_open=False,
         )
-        design_result, eval_result = run_single_model(
-            runtime_config,
-            task_spec,
-            args.requirements or task_spec.description,
-            use_placeholder=args.use_placeholder,
-        )
-        completed = completed and design_result.success and eval_result.passed
+        task_item: Dict[str, Any] = {
+            "position": task_position,
+            "task_id": task_spec.task_id,
+            "result_directory": str(run_dir),
+            "status": "running",
+        }
+        run_report["tasks"].append(task_item)
+        _write_run_report(run_report_file, run_report)
+        try:
+            design_result, eval_result = run_single_model(
+                runtime_config,
+                task_spec,
+                args.requirements or task_spec.description,
+                use_placeholder=args.use_placeholder,
+            )
+            completed = completed and design_result.success and eval_result.passed
+            task_item.update(
+                {
+                    "status": "completed",
+                    "design_completed": design_result.success,
+                    "evaluation_passed": eval_result.passed,
+                    "score": eval_result.score,
+                    "max_score": eval_result.max_score,
+                    "evaluation_report": str(eval_result.report_file),
+                    "run_manifest": str(design_result.manifest_file),
+                }
+            )
+        except Exception as exc:
+            completed = False
+            task_item.update(
+                {
+                    "status": "error",
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                }
+            )
+        _write_run_report(run_report_file, run_report)
+
+    run_report["status"] = "completed" if completed else "completed_with_errors"
+    run_report["finished_at_utc"] = datetime.now(timezone.utc).isoformat()
+    _write_run_report(run_report_file, run_report)
 
     return 0 if completed else 1
 

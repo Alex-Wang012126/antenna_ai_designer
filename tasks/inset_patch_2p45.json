@@ -221,7 +221,7 @@
         "value": 0.075,
         "unit": "GHz"
       },
-      "points": 15,
+      "points": 25,
       "semantics": "Frequency of the minimum sampled/interpolated dB(S(1,1)) within the fixed 2.30-2.60 GHz sweep. Values are linear GHz, not angular frequency."
     },
     "minimum_s11": {
@@ -282,14 +282,14 @@
       "value_representation": "linear_percentage",
       "goal": "at_least",
       "pass_threshold": {
-        "value": 85.0,
+        "value": 96.0,
         "unit": "%"
       },
       "zero_score_threshold": {
-        "value": 50.0,
+        "value": 90.0,
         "unit": "%"
       },
-      "points": 20,
+      "points": 10,
       "semantics": "Arithmetic mean on the 1 MHz Setup1:Sweep1 grid over the fixed objective target 2.45 GHz +/- 25 MHz of clamp(interp(RadiationEfficiency from the discrete Setup1:EfficiencySweep) * (1 - 10^(dB(S11)/10)), 0, 1), expressed as a linear percentage. The window does not follow the measured resonance, so a mistuned candidate is penalized through mismatch loss in the intended operating band. Interpolation is allowed only inside the discrete efficiency sweep; extrapolation is forbidden. HFSS RadiationEfficiency is treated as a linear ratio even when numerical error makes it slightly greater than 1. This is single-port total efficiency, including mismatch loss, and is not in dB."
     }
   }

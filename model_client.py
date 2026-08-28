@@ -28,6 +28,7 @@ class ChatResponse:
     usage: Dict[str, Any] = field(default_factory=dict)
     latency_seconds: Optional[float] = None
     response_id: Optional[str] = None
+    provider_raw_response: Optional[Dict[str, Any]] = None
 
 
 def _normalized_usage(raw_usage: Any) -> Dict[str, Any]:
@@ -309,6 +310,7 @@ class OpenAIModelClient(ModelClient):
             usage=_normalized_usage(body.get("usage")),
             latency_seconds=elapsed,
             response_id=body.get("id"),
+            provider_raw_response=body,
         )
 
 

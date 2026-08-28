@@ -5,7 +5,7 @@
       "id": "glm-4.5",
       "config_file": "job_glm_4_5.yaml",
       "api_style": "chat_completions",
-      "enabled": false
+      "enabled": true
     },
     {
       "id": "glm-4.7",
@@ -20,8 +20,8 @@
       "enabled": true
     },
     {
-      "id": "glm-5.1",
-      "config_file": "job_glm_5_1.yaml",
+      "id": "glm-5.3",
+      "config_file": "job_glm_5_3.yaml",
       "api_style": "chat_completions",
       "enabled": false
     }

@@ -4279,3 +4279,2492 @@ Project directory: C:\Users\user\Documents\Ansoft
         [info] Project candidate_010 Saved correctly
 -- Message Window --
 Stopping Batch Run: 11:27:11 AM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 11:50:48 AM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 52603 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260827_115045_126815\01_dual_band_patch_1p9_2p45_v1\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260827_115045_126815\01_dual_band_patch_1p9_2p45_v1\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.04674339294433594
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 51.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: Substrate,CoaxProbe,AirRegion,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 60.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 57.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 7.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 5.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 5.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 8.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 5.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 13.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 12.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+-- Message Window --
+Stopping Batch Run: 12:05:48 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 12:05:51 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 54182 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260827_115045_126815\02_cp_patch_gps_1p575_v1\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260827_115045_126815\02_cp_patch_gps_1p575_v1\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.04515862464904785
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 16.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: Substrate,CoaxProbe,AirRegion,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 40.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 49.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 1.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 35.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 49.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 34.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 57.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 50.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 55.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+-- Message Window --
+Stopping Batch Run: 12:16:29 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 2:32:22 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 2:41:57 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 56513 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\01_glm-4.5\01_inset_patch_2p45_v6\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\01_glm-4.5\01_inset_patch_2p45_v6\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.05591297149658203
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 11.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 6.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 19.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 21.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 27.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 19.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 43.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 12.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 15.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 16.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+-- Message Window --
+Stopping Batch Run: 3:00:12 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 3:00:15 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 59695 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\03_glm-5\01_inset_patch_2p45_v6\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\03_glm-5\01_inset_patch_2p45_v6\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.08497452735900879
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 9.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 3.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 21.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 10.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 9.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+-- Message Window --
+Stopping Batch Run: 3:09:47 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 3:09:50 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 52024 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\01_glm-4.5\02_dual_band_patch_1p9_2p45_v1\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\01_glm-4.5\02_dual_band_patch_1p9_2p45_v1\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.10108327865600586
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 57.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: Substrate,CoaxProbe,AirRegion,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 53.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 1.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 53.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 59.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 9.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 21.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 13.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 57.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+-- Message Window --
+Stopping Batch Run: 3:23:37 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 3:23:41 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 57188 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\03_glm-5\02_dual_band_patch_1p9_2p45_v1\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\03_glm-5\02_dual_band_patch_1p9_2p45_v1\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.05624246597290039
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 9.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: Substrate,CoaxProbe,AirRegion,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 21.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 18.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 59.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 5.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 17.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 20.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 7.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 59.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 59.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+-- Message Window --
+Stopping Batch Run: 3:39:20 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 3:39:23 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 51416 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\01_glm-4.5\03_cp_patch_gps_1p575_v1\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260827_144154_570124\01_glm-4.5\03_cp_patch_gps_1p575_v1\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.07660651206970215
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 18.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: Substrate,CoaxProbe,AirRegion,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 48.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 55.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 57.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 53.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 56.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 53.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 54.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 57.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 53.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+-- Message Window --
+Stopping Batch Run: 4:01:51 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 4:01:55 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 64531 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Project candidate_001 Saved correctly
+-- Message Window --
+Stopping Batch Run: 4:19:12 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 4:21:33 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+[warning] Electronics Desktop Student cannot be closed right now because it is being used by another application, script or extension wizard.
+
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 4:55:38 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 55314 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260827_165535_176419\01_cp_patch_gps_1p575_v1\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\run_20260827_165535_176419\01_cp_patch_gps_1p575_v1\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.04519391059875488
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 43.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: Substrate,CoaxProbe,AirRegion,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 53.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 53.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 47.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 52.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 51.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 53.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 47.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 50.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 50.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+-- Message Window --
+Stopping Batch Run: 5:07:16 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 5:09:58 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 65029 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Project candidate_001 Saved correctly
+-- Message Window --
+Stopping Batch Run: 5:31:28 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 5:33:16 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 54223 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Project candidate_001 Saved correctly
+-- Message Window --
+Stopping Batch Run: 5:39:06 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 5:39:36 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 59513 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Project candidate_001 Saved correctly
+-- Message Window --
+Stopping Batch Run: 5:42:22 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 5:48:01 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 51640 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Project candidate_001 Saved correctly
+-- Message Window --
+Stopping Batch Run: 5:51:04 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 5:55:09 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 58496 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Project candidate_001 Saved correctly
+-- Message Window --
+Stopping Batch Run: 5:58:05 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 6:06:24 PM  Aug 27, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 60563 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Project candidate_001 Saved correctly
+-- Message Window --
+Stopping Batch Run: 6:23:24 PM  Aug 27, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 3:32:11 PM  Aug 28, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 65236 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260828_153205_797072\01_glm-4.5\01_inset_patch_2p45_v6\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260828_153205_797072\01_glm-4.5\01_inset_patch_2p45_v6\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.04526209831237793
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 3.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 3.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 3.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 4.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 13.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 16.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 15.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 23.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 25.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 23.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+-- Message Window --
+Stopping Batch Run: 3:49:11 PM  Aug 28, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 3:49:15 PM  Aug 28, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 60114 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260828_153205_797072\03_glm-5\01_inset_patch_2p45_v6\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260828_153205_797072\03_glm-5\01_inset_patch_2p45_v6\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.04316353797912598
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 51.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: Substrate,AirRegion,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 1.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 3.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 0.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 59.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_005 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 3.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_006 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 2.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_007 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 5.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_008 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 0.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_009 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 5 Objects: AirRegion,Substrate,Ground,PatchFeed,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 17.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_010 Saved correctly
+-- Message Window --
+Stopping Batch Run: 4:02:12 PM  Aug 28, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 4:02:15 PM  Aug 28, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 59798 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Modeler class has been initialized! Elapsed time: 0m 0sec
+        [info] Materials class has been initialized! Elapsed time: 0m 0sec
+        [info] Adding new material to the Project Library: AntennaSubstrate
+        [info] Material has been added in Desktop.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Parsing C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260828_153205_797072\01_glm-4.5\02_dual_band_patch_1p9_2p45_v1\candidate_001.aedt.
+        [info] File C:\Users\user\Downloads\antenna_ai_designer\hfss_projects\batch_20260828_153205_797072\01_glm-4.5\02_dual_band_patch_1p9_2p45_v1\candidate_001.aedt correctly loaded. Elapsed time: 0m 0sec
+        [info] aedt file load time 0.06341886520385742
+        [info] Linear count sweep Sweep1 has been correctly created.
+        [info] Linear count sweep EfficiencySweep has been correctly created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 54.0s
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] PostProcessor class has been initialized! Elapsed time: 0m 0sec
+        [info] Post class has been initialized! Elapsed time: 0m 0sec
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_001 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: Substrate,CoaxProbe,AirRegion,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 59.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_002 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 1.0m 17.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_003 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Parsing design objects. This operation can take time
+        [info] Refreshing bodies from Object Info
+        [info] Bodies Info Refreshed Elapsed time: 0m 0sec
+        [info] 3D Modeler objects parsed. Elapsed time: 0m 0sec
+        [info] Deleted 6 Objects: AirRegion,Substrate,CoaxProbe,Ground,Patch,Port1_sheet.
+        [info] Boundary Perfect E PEC_Metals has been created.
+        [info] Boundary Perfect E CoaxProbePEC has been created.
+        [info] Boundary Lumped Port Port1 has been created.
+        [info] Boundary Radiation Rad1 has been created.
+        [info] Design validation checks.
+        [info] Design validation checks.
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Solving design setup Setup1
+        [info] Key Desktop/ActiveDSOConfigurations/HFSS correctly changed.
+        [info] Design setup Setup1 solved correctly in 0.0h 0.0m 43.0s
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Solution Data Correctly Loaded.
+        [info] Project candidate_004 Saved correctly
+-- Message Window --
+Stopping Batch Run: 4:08:32 PM  Aug 28, 2026
+ 
+Ansys Electronics Desktop Student Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtsv.exe
+Non Graphical Mode: No Project??
+Starting Batch Run: 4:08:36 PM  Aug 28, 2026
+Running as user : LAPTOP-RVKO6ORH\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+-- Message Window --
+      *Global - Messages
+        [info] gRPC server started on port 64192 of local host. Only connections from the local host initiated by the same user are permitted. 
+        [info] Project candidate_001 has been created.
+        [info] Added design 'antenna' of type HFSS.
+        [info] Aedt Objects correctly read
+        [info] Project candidate_001 Saved correctly
+-- Message Window --
+Stopping Batch Run: 4:08:50 PM  Aug 28, 2026

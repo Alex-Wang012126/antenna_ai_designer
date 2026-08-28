@@ -1,0 +1,350 @@
+$begin '$base_index$'
+  $begin 'properties'
+    all_levels=000000000000
+    time(year=000000002026, month=000000000008, day=000000000028, hour=000000000016, min=000000000020, sec=000000000051)
+    version=000000000000
+  $end 'properties'
+  $begin '$base_index$'
+    $index$(pos=000000012956, lin=000000000327, lvl=000000000000)
+  $end '$base_index$'
+$end '$base_index$'
+$begin 'SolutionBlock6'
+	SimSetupID=14
+	SimSetupName='Setup1'
+	VersionID=556
+	$begin 'EmConvergenceData'
+		EmConv(VID=624, Ver=556, EmConv='DV624_S14_V556.EMConvData')
+	$end 'EmConvergenceData'
+	IsImported=false
+	IsTable=false
+	SolveSetupID=0
+	$begin 'CurrMeshes'
+		M(VID=624, Ver=556, Dir='DV624_S14_V556.cmesh/')
+	$end 'CurrMeshes'
+	MeshAssemVersionID=0
+	$begin 'NextAssemVersionID'
+		NextUniqueID=1
+		MoveBackwards=false
+	$end 'NextAssemVersionID'
+	$begin 'CurrentMeshG3DErrorDir'
+		ME(VID=624, Ver=556, Dir='DV624_S14_V556.g3derr/')
+	$end 'CurrentMeshG3DErrorDir'
+	$begin 'ADP'
+		$begin 'SubData'
+			ID=10
+			ADP(VID=624, Ver=556, Dir='DV624_S14_ADP10_V556.sd/')
+		$end 'SubData'
+	$end 'ADP'
+	$begin 'SU'
+		$begin 'SubData'
+			ID=1
+			SU(VID=624, Ver=556, File='DV624_S14_SD1_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=2
+			SU(VID=624, Ver=556, File='DV624_S14_SD2_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=3
+			SU(VID=624, Ver=556, File='DV624_S14_SD3_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=4
+			SU(VID=624, Ver=556, File='DV624_S14_SD4_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=5
+			SU(VID=624, Ver=556, File='DV624_S14_SD5_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=6
+			SU(VID=624, Ver=556, File='DV624_S14_SD6_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=7
+			SU(VID=624, Ver=556, File='DV624_S14_SD7_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=8
+			SU(VID=624, Ver=556, File='DV624_S14_SD8_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=9
+			SU(VID=624, Ver=556, File='DV624_S14_SD9_V556.su')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=10
+			SU(VID=624, Ver=556, File='DV624_S14_SD10_V556.su')
+		$end 'SubData'
+	$end 'SU'
+	$begin 'WaveAdapt'
+		WA(VID=624, Ver=556, A=1)
+	$end 'WaveAdapt'
+	$begin 'LastPassNumbers'
+		LP(VID=624, Ver=556, P=10)
+	$end 'LastPassNumbers'
+	$begin 'Profiles'
+		P(VID=624, Ver=556, File='DV624_S14_V556.profile')
+	$end 'Profiles'
+	$begin 'MI'
+		$begin 'SubData'
+			ID=0
+			MI(VID=624, Ver=556, Dir='DV624_S14_MI0_V556.sd/')
+		$end 'SubData'
+	$end 'MI'
+$end 'SolutionBlock6'
+$begin 'BlockMapName'
+	FileHeader='SolutionBlock1'
+	'SolutionKey(SimSetup=14, Instance=\'SetupDefinition\', Solution=-1, VersionID=556)'='SolutionBlock6'
+	'SolutionKey(SimSetup=14, Instance=\'SolutionDefinition\', Solution=15, VersionID=558)'='SolutionBlock2'
+	'SolutionKey(SimSetup=14, Instance=\'SolutionDefinition\', Solution=16, VersionID=558)'='SolutionBlock3'
+	'SolutionKey(SimSetup=14, Instance=\'SolutionDefinition\', Solution=22, VersionID=558)'='SolutionBlock4'
+	'SolutionKey(SimSetup=14, Instance=\'SolutionDefinition\', Solution=24, VersionID=558)'='SolutionBlock5'
+$end 'BlockMapName'
+$begin 'SolutionBlock1'
+	ProductName=''
+	CircuitName='antenna'
+	VersionID=556
+	PostProcess=false
+	LossLess=true
+	NextUniqueID=698
+	MoveBackwards=false
+	$begin 'VariationIDs'
+		Map(V='feed_w=\'14mm\' freq0=\'2.4500000000000002GHz\' inset_d=\'11mm\' inset_gap=\'0.80000000000000004mm\' patch_l=\'38.299999999999997mm\' patch_w=\'60mm\' sub_h=\'5mm\' sub_l=\'80mm\' sub_w=\'90mm\'', ID=624)
+	$end 'VariationIDs'
+	$begin 'LinkedDataList'
+	$end 'LinkedDataList'
+	$begin 'InitialMeshes'
+		M(VID=624, Ver=556, Dir='DV624_V556.imesh/')
+	$end 'InitialMeshes'
+	MeshAssemVersionID=0
+	$begin 'NextAssemVersionID'
+		NextUniqueID=1
+		MoveBackwards=false
+	$end 'NextAssemVersionID'
+	$begin 'MeshImprintMap'
+		MI(VID=624, Ver=556, MI='DV624_V556.Imprint.idmap')
+	$end 'MeshImprintMap'
+	$begin 'DefinitionMeshes'
+		$begin 'DefMeshes_Comp-1'
+			DefinitionID=-1
+			VersionID=0
+			VIDMap('', 627)
+			DM(VID=627, Ver=0, Dir='NDV627_V0.dmesh/')
+		$end 'DefMeshes_Comp-1'
+	$end 'DefinitionMeshes'
+	$begin 'MI'
+		$begin 'SubData'
+			ID=0
+			MI(VID=624, Ver=556, Dir='DV624_MI0_V556.sd/')
+		$end 'SubData'
+	$end 'MI'
+	VersionID2=557
+$end 'SolutionBlock1'
+$begin 'SolutionBlock3'
+	SolutionName='LastAdaptive'
+	SolutionID=16
+	V=558
+	$begin 'States'
+		F(VID=624, Ver=558)
+	$end 'States'
+	$begin 'Definition'
+		SamplingInterpolation=false
+		Frequencies(2450000000)
+		SolutionType=6
+		CenterFreq=0
+	$end 'Definition'
+	IsImported=false
+	IsTable=false
+	IsMatrixDataTable=false
+	SweepID=-1
+	KeepAllFastSweepFields=false
+	$begin 'M'
+		$begin 'SubData'
+			ID=0
+			M(VID=624, Ver=558, File='DV624_SOL16_M0_V558.sd')
+		$end 'SubData'
+	$end 'M'
+	$begin 'Fields'
+		IDDblMap(632, 2450000000)
+		$begin 'DataMap'
+			VID=624
+			Ver=558
+			F(DblID=632, Dir='DV624_S16_V558_F632/')
+		$end 'DataMap'
+	$end 'Fields'
+$end 'SolutionBlock3'
+$begin 'SolutionBlock2'
+	SolutionName='AdaptivePass'
+	SolutionID=15
+	V=558
+	$begin 'States'
+		F(VID=624, Ver=558)
+	$end 'States'
+	$begin 'Definition'
+		SamplingInterpolation=false
+		Frequencies(2450000000)
+		SolutionType=6
+		CenterFreq=0
+	$end 'Definition'
+	IsImported=false
+	IsTable=false
+	IsMatrixDataTable=false
+	SweepID=-1
+	KeepAllFastSweepFields=false
+	$begin 'M'
+		$begin 'SubData'
+			ID=1
+			M(VID=624, Ver=558, File='DV624_SOL15_M1_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=2
+			M(VID=624, Ver=558, File='DV624_SOL15_M2_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=3
+			M(VID=624, Ver=558, File='DV624_SOL15_M3_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=4
+			M(VID=624, Ver=558, File='DV624_SOL15_M4_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=5
+			M(VID=624, Ver=558, File='DV624_SOL15_M5_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=6
+			M(VID=624, Ver=558, File='DV624_SOL15_M6_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=7
+			M(VID=624, Ver=558, File='DV624_SOL15_M7_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=8
+			M(VID=624, Ver=558, File='DV624_SOL15_M8_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=9
+			M(VID=624, Ver=558, File='DV624_SOL15_M9_V558.sd')
+		$end 'SubData'
+		$begin 'SubData'
+			ID=10
+			M(VID=624, Ver=558, File='DV624_SOL15_M10_V558.sd')
+		$end 'SubData'
+	$end 'M'
+$end 'SolutionBlock2'
+$begin 'SolutionBlock5'
+	SolutionName='EfficiencySweep'
+	SolutionID=24
+	V=558
+	$begin 'States'
+		F(VID=624, Ver=558)
+	$end 'States'
+	$begin 'Definition'
+		SamplingInterpolation=false
+		Frequencies(2400000000, 2410000000, 2420000000, 2430000000, 2440000000, 2450000000, 2460000000, 2470000000, 2480000000, 2490000000, 2500000000)
+		SolutionType=6
+		CenterFreq=0
+	$end 'Definition'
+	IsImported=false
+	IsTable=false
+	IsMatrixDataTable=false
+	SweepID=1
+	KeepAllFastSweepFields=false
+	$begin 'M'
+		$begin 'SubData'
+			ID=0
+			M(VID=624, Ver=558, File='DV624_SOL24_M0_V558.sd')
+		$end 'SubData'
+	$end 'M'
+	$begin 'Fields'
+		IDDblMap(664, 2400000000, 665, 2410000000, 666, 2420000000, 667, 2430000000, 668, 2440000000, 669, 2450000000, 670, 2460000000, 671, 2470000000, 672, 2480000000, 673, 2490000000, 674, 2500000000)
+		$begin 'DataMap'
+			VID=624
+			Ver=558
+			F(DblID=664, Dir='DV624_S24_V558_F664/')
+			F(DblID=665, Dir='DV624_S24_V558_F665/')
+			F(DblID=666, Dir='DV624_S24_V558_F666/')
+			F(DblID=667, Dir='DV624_S24_V558_F667/')
+			F(DblID=668, Dir='DV624_S24_V558_F668/')
+			F(DblID=669, Dir='DV624_S24_V558_F669/')
+			F(DblID=670, Dir='DV624_S24_V558_F670/')
+			F(DblID=671, Dir='DV624_S24_V558_F671/')
+			F(DblID=672, Dir='DV624_S24_V558_F672/')
+			F(DblID=673, Dir='DV624_S24_V558_F673/')
+			F(DblID=674, Dir='DV624_S24_V558_F674/')
+		$end 'DataMap'
+	$end 'Fields'
+	$begin 'SolverUsage'
+		IDDblMap(676, 2500000000, 677, 2490000000, 678, 2480000000, 679, 2470000000, 680, 2460000000, 681, 2440000000, 682, 2430000000, 683, 2420000000, 684, 2410000000, 685, 2400000000)
+		$begin 'DataMap'
+			VID=624
+			Ver=558
+			SU(DblID=685, SU='DV624_S24_V558_F685_SU.txt')
+			SU(DblID=684, SU='DV624_S24_V558_F684_SU.txt')
+			SU(DblID=683, SU='DV624_S24_V558_F683_SU.txt')
+			SU(DblID=682, SU='DV624_S24_V558_F682_SU.txt')
+			SU(DblID=681, SU='DV624_S24_V558_F681_SU.txt')
+			SU(DblID=680, SU='DV624_S24_V558_F680_SU.txt')
+			SU(DblID=679, SU='DV624_S24_V558_F679_SU.txt')
+			SU(DblID=678, SU='DV624_S24_V558_F678_SU.txt')
+			SU(DblID=677, SU='DV624_S24_V558_F677_SU.txt')
+			SU(DblID=676, SU='DV624_S24_V558_F676_SU.txt')
+		$end 'DataMap'
+	$end 'SolverUsage'
+$end 'SolutionBlock5'
+$begin 'SolutionBlock4'
+	SolutionName='Sweep1'
+	SolutionID=22
+	V=558
+	$begin 'States'
+		F(VID=624, Ver=558)
+	$end 'States'
+	$begin 'Definition'
+		SamplingInterpolation=false
+		Frequencies(2300000000, 2301000000, 2302000000, 2303000000, 2304000000, 2305000000, 2306000000, 2307000000, 2308000000, 2309000000, 2310000000, 2311000000, 2312000000, 2313000000, 2314000000, 2315000000, 2316000000, 2317000000, 2318000000, 2319000000, 2320000000, 2321000000, 2322000000, 2323000000, 2324000000, 2325000000, 2326000000, 2327000000, 2328000000, 2329000000, 2330000000, 2331000000, 2332000000, 2333000000, 2334000000, 2335000000, 2336000000, 2337000000, 2338000000, 2339000000, 2340000000, 2341000000, 2342000000, 2343000000, 2344000000, 2345000000, 2346000000, 2347000000, 2348000000, 2349000000, 2350000000, 2351000000, 2352000000, 2353000000, 2354000000, 2355000000, 2356000000, 2357000000, 2358000000, 2359000000, 2360000000, 2361000000, 2362000000, 2363000000, 2364000000, 2365000000, 2366000000, 2367000000, 2368000000, 2369000000, 2370000000, 2371000000, 2372000000, 2373000000, 2374000000, 2375000000, 2376000000, 2377000000, 2378000000, 2379000000, 2380000000, 2381000000, 2382000000, 2383000000, 2384000000, 2385000000, 2386000000, 2387000000, 2388000000, 2389000000, 2390000000, 2391000000, 2392000000, 2393000000, 2394000000, 2395000000, 2396000000, 2397000000, 2398000000, 2399000000, 2400000000, 2401000000, 2402000000, 2403000000, 2404000000, 2405000000, 2406000000, 2407000000, 2408000000, 2409000000, 2410000000, 2411000000, 2412000000, 2413000000, 2414000000, 2415000000, 2416000000, 2417000000, 2418000000, 2419000000, 2420000000, 2421000000, 2422000000, 2423000000, 2424000000, 2425000000, 2426000000, 2427000000, 2428000000, 2429000000, 2430000000, 2431000000, 2432000000, 2433000000, 2434000000, 2435000000, 2436000000, 2437000000, 2438000000, 2439000000, 2440000000, 2441000000, 2442000000, 2443000000, 2444000000, 2445000000, 2446000000, 2447000000, 2448000000, 2449000000, 2450000000, 2451000000, 2452000000, 2453000000, 2454000000, 2455000000, 2456000000, 2457000000, 2458000000, 2459000000, 2460000000, 2461000000, 2462000000, 2463000000, 2464000000, 2465000000, 2466000000, 2467000000, 2468000000, 2469000000, 2470000000, 2471000000, 2472000000, 2473000000, 2474000000, 2475000000, 2476000000, 2477000000, 2478000000, 2479000000, 2480000000, 2481000000, 2482000000, 2483000000, 2484000000, 2485000000, 2486000000, 2487000000, 2488000000, 2489000000, 2490000000, 2491000000, 2492000000, 2493000000, 2494000000, 2495000000, 2496000000, 2497000000, 2498000000, 2499000000, 2500000000, 2501000000, 2502000000, 2503000000, 2504000000, 2505000000, 2506000000, 2507000000, 2508000000, 2509000000, 2510000000, 2511000000, 2512000000, 2513000000, 2514000000, 2515000000, 2516000000, 2517000000, 2518000000, 2519000000, 2520000000, 2521000000, 2522000000, 2523000000, 2524000000, 2525000000, 2526000000, 2527000000, 2528000000, 2529000000, 2530000000, 2531000000, 2532000000, 2533000000, 2534000000, 2535000000, 2536000000, 2537000000, 2538000000, 2539000000, 2540000000, 2541000000, 2542000000, 2543000000, 2544000000, 2545000000, 2546000000, 2547000000, 2548000000, 2549000000, 2550000000, 2551000000, 2552000000, 2553000000, 2554000000, 2555000000, 2556000000, 2557000000, 2558000000, 2559000000, 2560000000, 2561000000, 2562000000, 2563000000, 2564000000, 2565000000, 2566000000, 2567000000, 2568000000, 2569000000, 2570000000, 2571000000, 2572000000, 2573000000, 2574000000, 2575000000, 2576000000, 2577000000, 2578000000, 2579000000, 2580000000, 2581000000, 2582000000, 2583000000, 2584000000, 2585000000, 2586000000, 2587000000, 2588000000, 2589000000, 2590000000, 2591000000, 2592000000, 2593000000, 2594000000, 2595000000, 2596000000, 2597000000, 2598000000, 2599000000, 2600000000)
+		SolutionType=5
+		CenterFreq=0
+	$end 'Definition'
+	IsImported=false
+	IsTable=false
+	IsMatrixDataTable=false
+	SweepID=0
+	KeepAllFastSweepFields=false
+	$begin 'M'
+		$begin 'SubData'
+			ID=0
+			M(VID=624, Ver=558, File='DV624_SOL22_M0_V558.sd')
+		$end 'SubData'
+	$end 'M'
+	$begin 'TransientSolveStauts'
+		SS(VID=624, Ver=558, SS=1)
+	$end 'TransientSolveStauts'
+	$begin 'SolverUsage'
+		IDDblMap(687, 2600000000, 688, 2300000000, 689, 2337500000, 690, 2562500000)
+		$begin 'DataMap'
+			VID=624
+			Ver=558
+			SU(DblID=688, SU='DV624_S22_V558_F688_SU.txt')
+			SU(DblID=689, SU='DV624_S22_V558_F689_SU.txt')
+			SU(DblID=690, SU='DV624_S22_V558_F690_SU.txt')
+			SU(DblID=687, SU='DV624_S22_V558_F687_SU.txt')
+		$end 'DataMap'
+	$end 'SolverUsage'
+$end 'SolutionBlock4'
+$begin '$index$'
+	$begin '$index$'
+		BlockMapName(pos=2450, lin=86, lvl=0)
+		SolutionBlock2(pos=4839, lin=167, lvl=0)
+		SolutionBlock3(pos=4178, lin=134, lvl=0)
+		SolutionBlock4(pos=8396, lin=288, lvl=0)
+		SolutionBlock5(pos=6222, lin=228, lvl=0)
+		SolutionBlock6(pos=370, lin=1, lvl=0)
+		SolutionBlock1(pos=3048, lin=94, lvl=0)
+		$base_index$(pos=0, lin=1, lvl=0)
+		$index$(pos=12956, lin=327, lvl=0)
+	$end '$index$'
+$end '$index$'
+                                                                                                                    

@@ -1,0 +1,77 @@
+$begin 'DesignData'
+	Version=242
+	$begin 'VariableValues'
+	$end 'VariableValues'
+	$begin 'PartsInfo'
+		Part(86, true, 'AirRegion', true, 'air', 6, 87, 89, 90, 91, 88, 92, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 143, 175, 143, false)
+		Part(357, true, 'Substrate', true, 'AntennaSubstrate', 6, 358, 360, 361, 362, 359, 363, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 132, 132, 193, false)
+		Part(385, false, 'Ground', false, 'copper', 1, 395, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 242, 140, 102, false)
+		Part(397, false, 'PatchFeed', false, 'copper', 1, 423, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 242, 140, 102, false)
+		Part(425, false, 'Port1_sheet', true, 'vacuum', 1, 435, true, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, false, false, -1, 230, 230, 230, false)
+	$end 'PartsInfo'
+	$begin 'FacesInfo'
+		Face(87, 86, 0.0272, 660, true, -1.63268e-14, 0, 60, 0, 0, 1, 4, 0.085, -0.08, 0.06, 0.085, 0.08, 0.06, -0.085, 0.08, 0.06, -0.085, -0.08, 0.06)
+		Face(88, 86, 0.0272, 660, true, 1.63268e-14, 0, -30, -0, -0, -1, 4, 0.085, -0.08, -0.03, -0.085, -0.08, -0.03, -0.085, 0.08, -0.03, 0.085, 0.08, -0.03)
+		Face(89, 86, 0.0153, 520, true, 0, -80, 15, -0, -1, -0, 4, 0.085, -0.08, 0.06, -0.085, -0.08, 0.06, -0.085, -0.08, -0.03, 0.085, -0.08, -0.03)
+		Face(90, 86, 0.0144, 500, true, -85, 0, 15, -1, -0, -0, 4, -0.085, -0.08, 0.06, -0.085, 0.08, 0.06, -0.085, 0.08, -0.03, -0.085, -0.08, -0.03)
+		Face(91, 86, 0.0153, 520, true, 0, 80, 15, 0, 1, 0, 4, -0.085, 0.08, 0.06, 0.085, 0.08, 0.06, 0.085, 0.08, -0.03, -0.085, 0.08, -0.03)
+		Face(92, 86, 0.0144, 500, true, 85, 0, 15, 1, 0, 0, 4, 0.085, 0.08, -0.03, 0.085, 0.08, 0.06, 0.085, -0.08, 0.06, 0.085, -0.08, -0.03)
+		Face(358, 357, 0.0072, 340, true, -7.70988e-15, 0, 5, 0, 0, 1, 4, 0.045, -0.04, 0.005, 0.045, 0.04, 0.005, -0.045, 0.04, 0.005, -0.045, -0.04, 0.005)
+		Face(359, 357, 0.0072, 340, true, 7.70988e-15, 0, 0, -0, -0, -1, 4, 0.045, -0.04, 0, -0.045, -0.04, 0, -0.045, 0.04, 0, 0.045, 0.04, 0)
+		Face(360, 357, 0.00045, 190, true, 0, -40, 2.5, -0, -1, -0, 4, 0.045, -0.04, 0.005, -0.045, -0.04, 0.005, -0.045, -0.04, 0, 0.045, -0.04, 0)
+		Face(361, 357, 0.0004, 170, true, -45, 0, 2.5, -1, -0, -0, 4, -0.045, -0.04, 0.005, -0.045, 0.04, 0.005, -0.045, 0.04, 0, -0.045, -0.04, 0)
+		Face(362, 357, 0.00045, 190, true, 0, 40, 2.5, 0, 1, 0, 4, -0.045, 0.04, 0.005, 0.045, 0.04, 0.005, 0.045, 0.04, 0, -0.045, 0.04, 0)
+		Face(363, 357, 0.0004, 170, true, 45, 0, 2.5, 1, 0, 0, 4, 0.045, 0.04, 0, 0.045, 0.04, 0.005, 0.045, -0.04, 0.005, 0.045, -0.04, 0)
+		Face(395, 385, 0.0072, 340, true, -7.70988e-15, 0, 0, -0, 0, 1, 4, -0.045, -0.04, 0, 0.045, -0.04, 0, 0.045, 0.04, 0, -0.045, 0.04, 0)
+		Face(423, 397, 0.0025723, 282.3, true, 3.03474e-15, -3.26272, 5, 0, 0, -1, 12, -0.03, 0.01915, 0.005, 0.03, 0.01915, 0.005, 0.03, -0.01915, 0.005, 0.0078, -0.01915, 0.005, 0.0078, -0.00815, 0.005, 0.007, -0.00815, 0.005, 0.007, -0.04, 0.005, -0.007, -0.04, 0.005, -0.007, -0.00815, 0.005, -0.0078, -0.00815, 0.005, -0.0078, -0.01915, 0.005, -0.03, -0.01915, 0.005)
+		Face(435, 425, 7e-05, 38, true, 0, -40, 2.5, 0, -1, 0, 4, -0.007, -0.04, 0, 0.007, -0.04, 0, 0.007, -0.04, 0.005, -0.007, -0.04, 0.005)
+	$end 'FacesInfo'
+	$begin 'PartAddtionalPiecesInfo'
+		$begin 'Bodies'
+		$end 'Bodies'
+		$begin 'Faces'
+		$end 'Faces'
+	$end 'PartAddtionalPiecesInfo'
+	$begin 'DesignGeometryInfo'
+		ModelUnit='mm'
+		ModelerType=2
+		MinDimensionInModelUnits=1e-06
+		MaxDimensionInModelUnits=10000
+		GlobalCSID=1
+		RegionID=86
+		PreprocessForwardIdStart=437
+		PreprocessForwardIdEnd=437
+		PreprocessBackwardIdStart=2147483647
+		PreprocessBackwardIdEnd=2147483647
+	$end 'DesignGeometryInfo'
+	$begin 'Point3DDefinitionInfo'
+	$end 'Point3DDefinitionInfo'
+	$begin 'Plane3DDefinitionInfo'
+		Plane(-4, 'Global:XY', 1, -1, true, 7274580, 0, 0, 0, 0, 0, 1)
+		Plane(-3, 'Global:YZ', 1, -1, true, 7077999, 0, 0, 0, 1, 0, 0)
+		Plane(-2, 'Global:XZ', 1, -1, true, 7274580, 0, 0, 0, 0, 1, 0)
+	$end 'Plane3DDefinitionInfo'
+	$begin 'CoordinateSystemInfo'
+		CoordinateSystem(1, 'Global', -1, false, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+	$end 'CoordinateSystemInfo'
+	$begin 'ComponentDefinitionInfo'
+	$end 'ComponentDefinitionInfo'
+	$begin 'ComponentInstanceInfo'
+	$end 'ComponentInstanceInfo'
+	$begin 'GeometryEntityListOperationInfo'
+		$begin 'EntityList'
+			ID=2
+			Name='AllObjects'
+			$begin 'GeometryEntityListParameters'
+				EntityType='Object'
+				EntityList(86, 357, 385, 397, 425)
+			$end 'GeometryEntityListParameters'
+		$end 'EntityList'
+	$end 'GeometryEntityListOperationInfo'
+	$begin 'MaterialManager'
+		$begin 'ProjectMaterials'
+		$end 'ProjectMaterials'
+		$begin 'InternalPrivateMaterials'
+		$end 'InternalPrivateMaterials'
+	$end 'MaterialManager'
+$end 'DesignData'

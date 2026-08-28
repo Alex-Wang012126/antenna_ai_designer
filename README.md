@@ -17,7 +17,7 @@
 
 `tasks/inset_patch_2p45.json` 同时定义拓扑、只读固定参数、模型可调变量、HFSS 仿真控制、指标单位/语义、阈值和分值。自然语言不会被反向解析为阈值。
 
-题目清单通过 `task_batch.json` 声明。`--task-batch` 会按列表顺序加载启用的题目；每个题目拥有独立的 `task_id`、结果目录、任务快照和评测报告。`--task-batch` 与 `--model-batch` 可以组合使用，执行顺序为“逐题、题内逐模型”，每个题目-模型组合都获得独立的候选与求解预算。
+题目清单通过 `task_batch.json` 声明。`--task-batch` 会按列表顺序加载启用的题目；每个题目拥有独立的 `task_id`、结果目录、任务快照和评测报告。`--task-batch` 与 `--model-batch` 可以组合使用，每个题目-模型组合都获得独立的候选与求解预算。
 
 拓扑专属校验、参数解析、模型工具名称和提示词约束存放在 `frameworks/` 中，并由任务 JSON 的 `topology.id` 自动发现和选择。`task_spec.py` 只保留任务公共合同、指标通用结构和评分调度；新增题型不会改变现有题目的字段集合、约束或仿真控制。
 
@@ -152,45 +152,49 @@
 
 ## 文件组织
 
-每次运行 `main.py` 都会创建一个独立批次目录。该次运行产生的工程副本、求解目录、指标、对话和评测报告都保存在其中：
+普通运行会创建一个 `run_*` 根目录；启用多题时，每个任务在其中拥有独立子目录。该任务产生的工程副本、求解目录、指标、对话和评测报告都保存在其子目录中：
 
 ```text
 hfss_projects/
   run_20260820_153000_123456/
-    candidate_001.aedt
-    candidate_001.aedtresults/
-    candidate_001_metrics.json
-    candidate_002.aedt
-    candidate_002.aedtresults/
-    candidate_002_metrics.json
-    task_spec.json
-    resource_usage.json
-    design_log.json
-    run_manifest.json
-    evaluation_report.json
-    manual_verification.json
+    run_results.json
+    01_dual_band_patch_1p9_2p45_v1/
+      candidate_001.aedt
+      candidate_001_metrics.json
+      task_spec.json
+      resource_usage.json
+      design_log.json
+      run_manifest.json
+      evaluation_report.json
+      manual_verification.json
+    02_cp_patch_gps_1p575_v1/
+      ...
 ```
 
-`task_spec.json` 是该次运行实际采用的只读合同快照；`resource_usage.json` 记录逐次模型延迟、API 返回的 token usage、候选/求解次数和求解耗时。`candidate_NNN_metrics.json` 同时保存带单位的设计参数、结构化测量值和后端原始指标。`manual_verification.json` 给出选中工程、AEDT 对象名、固定控制和逐项核验步骤，方便在 AEDT 中人工复现报告。
+`run_results.json` 是本次多任务运行的根索引，记录每个任务的结果目录、得分和关键报告路径。`task_spec.json` 是该任务实际采用的只读合同快照；`resource_usage.json` 记录逐次模型延迟、API 返回的 token usage、候选/求解次数和求解耗时。`candidate_NNN_metrics.json` 同时保存带单位的设计参数、结构化测量值和后端原始指标。`manual_verification.json` 给出选中工程、AEDT 对象名、固定控制和逐项核验步骤，方便在 AEDT 中人工复现报告。真实 AEDT 模式会关闭 PyAEDT 的控制台与临时文件日志；PyAEDT 消息保留在图形模式 AEDT 的 Message Manager 中。
 
-多模型模式会在同一个批次目录下为每个模型建立隔离子目录：
+多模型模式会在同一个 `batch_*` 根目录下先按模型、再按任务建立隔离子目录：
 
 ```text
 hfss_projects/
   batch_20260825_160000_123456/
     model_batch.json
     batch_results.json
+    batch_results_<task_id>.json
     01_gpt55/
-      candidate_001.aedt
-      run_manifest.json
-      evaluation_report.json
-      resource_usage.json
-      ...
+      01_dual_band_patch_1p9_2p45_v1/
+        candidate_001.aedt
+        run_manifest.json
+        evaluation_report.json
+        resource_usage.json
+        ...
+      02_cp_patch_gps_1p575_v1/
+        ...
     02_claude_opus_48/
       ...
 ```
 
-`batch_results.json` 汇总模型名称、配置文件、API 类型、得分排名、选中候选和各结果文件路径，不保存 API key。批次严格串行运行；每个模型结束后关闭其 AEDT 桌面，再启动下一个模型，避免活动工程和求解状态相互污染。某一个模型发生 API 或 AEDT 异常时会在其子目录写入 `run_error.json`，随后继续运行清单中的下一个模型。
+`batch_results.json` 汇总任务清单和每个任务的独立报告路径；`batch_results_<task_id>.json` 汇总该任务下模型名称、配置文件、API 类型、得分排名、选中候选和各结果文件路径，不保存 API key。批次严格串行运行；每个模型结束后关闭其 AEDT 桌面，再启动下一个模型，避免活动工程和求解状态相互污染。某一个模型-任务组合发生 API 或 AEDT 异常时会在其子目录写入 `run_error.json`，随后继续运行清单中的下一项。
 
 ## 安装与配置
 

@@ -24,6 +24,13 @@ def _dbg(msg: str) -> None:
     print(f"[PyAEDT] {msg}", flush=True)
 
 
+def _configure_pyaedt_logging(settings: Any, non_graphical: bool) -> None:
+    """Keep PyAEDT messages in the AEDT Message Manager only."""
+    settings.enable_screen_logs = False
+    settings.enable_file_logs = False
+    settings.enable_desktop_logs = not non_graphical
+
+
 @dataclass
 class HFSSResult:
     """HFSS 操作返回的通用结果。"""
@@ -320,6 +327,7 @@ class PyAEDTHFSSClient(HFSSClient):
             )
         import ansys.aedt.core
         _dbg(f"pyaedt 版本: {getattr(ansys.aedt.core, '__version__', '未知')}")
+        _configure_pyaedt_logging(settings, config.aedt_non_graphical)
 
         # AEDT Student 2025 R2 的 gRPC server 以 insecure 模式启动，
         # 必须关闭安全模式（与 verify_min.py 一致），否则连接会被拒

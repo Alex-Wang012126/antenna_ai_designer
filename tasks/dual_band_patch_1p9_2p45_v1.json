@@ -307,11 +307,11 @@
       "value_representation": "linear_frequency_span",
       "goal": "at_least",
       "pass_threshold": {
-        "value": 12.0,
+        "value": 15.0,
         "unit": "MHz"
       },
       "full_score_threshold": {
-        "value": 20.0,
+        "value": 30.0,
         "unit": "MHz"
       },
       "zero_score_threshold": {
@@ -353,11 +353,11 @@
         "unit": "dBi"
       },
       "full_score_threshold": {
-        "value": 2.5,
+        "value": 2.1,
         "unit": "dBi"
       },
       "zero_score_threshold": {
-        "value": -3.0,
+        "value": 0,
         "unit": "dBi"
       },
       "points": 10,
@@ -370,11 +370,11 @@
       "value_representation": "linear_percentage",
       "goal": "at_least",
       "pass_threshold": {
-        "value": 45.0,
+        "value": 25.0,
         "unit": "%"
       },
       "full_score_threshold": {
-        "value": 60.0,
+        "value": 32.0,
         "unit": "%"
       },
       "zero_score_threshold": {

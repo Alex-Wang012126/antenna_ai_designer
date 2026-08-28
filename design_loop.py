@@ -419,6 +419,7 @@ class DesignAgent:
                         "provider_latency_seconds": response.latency_seconds,
                         "response_id": response.response_id,
                         "usage": response.usage,
+                        "provider_raw_response": response.provider_raw_response,
                         "tool_calls": [tool_call.name for tool_call in response.tool_calls],
                         "content_characters": len(response.content or ""),
                     }

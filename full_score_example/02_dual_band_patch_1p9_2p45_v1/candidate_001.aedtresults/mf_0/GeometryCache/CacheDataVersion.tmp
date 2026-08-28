@@ -1,0 +1,12 @@
+$begin 'CacheDataVersion'
+	DataVersion=-1
+$end 'CacheDataVersion'
+$begin 'VariableValues'
+	sub_w='60mm'
+	sub_l='60mm'
+	sub_h='1.6mm'
+	patch_l='27.8mm'
+	patch_w='37.1mm'
+	feed_x='6.6mm'
+	feed_y='7.2mm'
+$end 'VariableValues'

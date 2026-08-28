@@ -4,7 +4,7 @@
     {
       "id": "inset_patch_2p45",
       "spec_file": "tasks/inset_patch_2p45.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "id": "dual_band_patch_1p9_2p45",
@@ -14,7 +14,7 @@
     {
       "id": "cp_patch_gps_1p575",
       "spec_file": "tasks/cp_patch_gps_1p575_v1.json",
-      "enabled": true
+      "enabled": false
     }
   ]
 }
