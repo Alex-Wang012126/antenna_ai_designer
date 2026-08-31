@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "dual_band_patch_1p9_2p45_v1",
   "title": "Dual-band coax-fed rectangular patch antenna at 1.9 and 2.45 GHz",
-  "natural_language_description": "Design a single-layer, single-port rectangular microstrip patch that operates at both 1.9 GHz and 2.45 GHz. Each intended resonance must be near its target frequency, both S11 dips must be at or below -20 dB, each operating band must have usable -10 dB bandwidth, and the weaker of the two bands must meet the gain and total-efficiency requirements. The structured thresholds and measurement semantics below are authoritative.",
+  "natural_language_description": "Design a single-layer, single-port rectangular microstrip patch that operates at both 1.9 GHz and 2.45 GHz. Each intended resonance must be within 20 MHz of its target frequency, both S11 dips must be at or below -20 dB, the lower band must have at least 15 MHz and the upper band at least 30 MHz of contiguous -10 dB bandwidth, and the weaker of the two bands must provide peak gain of at least 1 dBi and band-average total efficiency of at least 25%. The structured thresholds and measurement semantics below are authoritative.",
   "topology": {
     "id": "dual_band_coax_patch",
     "port_count": 1

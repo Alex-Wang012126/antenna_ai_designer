@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "inset_patch_2p45_v6",
   "title": "2.45 GHz 受限尺寸内嵌馈电矩形贴片天线",
-  "natural_language_description": "在给定候选与 HFSS 求解预算内，设计一副 2.45 GHz 单端口内嵌馈电矩形微带贴片天线。材料、端口、空气区域、求解设置、扫频和远场设置均由评测端固定。模型只选择基板外形与贴片/馈线几何尺寸。要求谐振频率误差不超过 25 MHz，扫频内最小 S11 不高于 -20 dB，包含该谐振点的连续 -10 dB 带宽不小于 110 MHz，2.45 GHz 自适应解处的 HFSS 峰值增益不低于 7.5 dBi，目标频率 2.45 GHz 正负 25 MHz 固定窗口内的平均总体效率不低于 85%。",
+  "natural_language_description": "在给定候选与 HFSS 求解预算内，设计一副 2.45 GHz 单端口内嵌馈电矩形微带贴片天线。材料、端口、空气区域、求解设置、扫频和远场设置均由评测端固定。模型只选择基板外形与贴片/馈线几何尺寸。要求谐振频率误差不超过 25 MHz，扫频内最小 S11 不高于 -20 dB，包含该谐振点的连续 -10 dB 带宽不小于 110 MHz，2.45 GHz 自适应解处的 HFSS 峰值增益不低于 7.5 dBi，目标频率 2.45 GHz 正负 25 MHz 固定窗口内的平均总体效率不低于 96%。",
   "topology": {
     "id": "inset_fed_rectangular_patch",
     "port_count": 1,

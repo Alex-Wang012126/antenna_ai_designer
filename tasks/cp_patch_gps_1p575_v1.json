@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "cp_patch_gps_1p575_v1",
   "title": "Single-feed right-hand circularly polarized GPS L1 patch antenna",
-  "natural_language_description": "Design a single-layer, single-port rectangular microstrip patch that receives right-hand circular polarization at 1.575 GHz. The antenna must resonate near the GPS L1 center frequency, maintain acceptable S11, achieve a boresight axial ratio at or below 2 dB, dominate in RHCP rather than LHCP, and provide usable axial-ratio bandwidth and RHCP gain. The structured thresholds and measurement semantics below are authoritative.",
+  "natural_language_description": "Design a single-layer, single-port rectangular microstrip patch that receives right-hand circular polarization at 1.575 GHz. The antenna must resonate within 25 MHz of the GPS L1 center frequency, have S11 at 1.575 GHz no higher than -18 dB, achieve a boresight axial ratio no greater than 3 dB, provide RHCP dominance of at least 15 dB over LHCP, achieve a contiguous 3 dB axial-ratio bandwidth of at least 8 MHz containing 1.575 GHz, and provide boresight RHCP gain of at least 1 dBi at 1.575 GHz. The structured thresholds and measurement semantics below are authoritative.",
   "topology": {
     "id": "single_feed_cp_coax_patch",
     "port_count": 1
