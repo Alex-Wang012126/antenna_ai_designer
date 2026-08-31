@@ -61,7 +61,7 @@ class NewTaskFrameworkTests(unittest.TestCase):
 
     def test_invalid_full_score_threshold_order_is_rejected(self):
         task_data = AntennaTaskSpec.load(CP_TASK).to_dict()
-        task_data["objectives"]["axial_ratio_center"]["full_score_threshold"]["value"] = 2.5
+        task_data["objectives"]["axial_ratio_center"]["full_score_threshold"]["value"] = 3.5
 
         with self.assertRaisesRegex(ValueError, "full_score_threshold < pass_threshold"):
             AntennaTaskSpec.from_mapping(task_data)
@@ -85,28 +85,28 @@ class ThreeStageScoringTests(unittest.TestCase):
     def test_cp_task_scores_zero_pass_and_full_boundaries(self):
         task = AntennaTaskSpec.load(CP_TASK)
         zero = {
-            "resonant_freq_ghz": 1.65,
-            "s11_center_db": -5.0,
+            "resonant_freq_ghz": 1.645,
+            "s11_center_db": -8.0,
             "axial_ratio_center_db": 8.0,
-            "rhcp_dominance_db": 0.0,
+            "rhcp_dominance_db": 8.0,
             "axial_ratio_bandwidth_mhz": 2.0,
-            "gain_rhcp_dbi": -5.0,
+            "gain_rhcp_dbi": 0.0,
         }
         passing = {
-            "resonant_freq_ghz": 1.5630000000000002,
-            "s11_center_db": -15.0,
-            "axial_ratio_center_db": 2.0,
-            "rhcp_dominance_db": 6.0,
-            "axial_ratio_bandwidth_mhz": 6.0,
-            "gain_rhcp_dbi": 0.0,
+            "resonant_freq_ghz": 1.55,
+            "s11_center_db": -18.0,
+            "axial_ratio_center_db": 3.0,
+            "rhcp_dominance_db": 15.0,
+            "axial_ratio_bandwidth_mhz": 8.0,
+            "gain_rhcp_dbi": 1.0,
         }
         full = {
             "resonant_freq_ghz": 1.575,
-            "s11_center_db": -22.0,
-            "axial_ratio_center_db": 0.8,
-            "rhcp_dominance_db": 15.0,
+            "s11_center_db": -25.0,
+            "axial_ratio_center_db": 1.5,
+            "rhcp_dominance_db": 20.0,
             "axial_ratio_bandwidth_mhz": 12.0,
-            "gain_rhcp_dbi": 1.2,
+            "gain_rhcp_dbi": 2.0,
         }
 
         self.assertEqual(task.evaluate_metrics(zero)["score"], 0.0)
@@ -121,7 +121,7 @@ class ThreeStageScoringTests(unittest.TestCase):
         scored = task.evaluate_metrics(metrics)
 
         self.assertEqual(scored["objectives"]["resonant_frequency"]["score_fraction"], 0.5)
-        self.assertEqual(scored["objectives"]["resonant_frequency"]["points_awarded"], 7.5)
+        self.assertEqual(scored["objectives"]["resonant_frequency"]["points_awarded"], 12.5)
         self.assertEqual(scored["objectives"]["resonant_frequency"]["scoring_model"], "legacy_single_stage")
 
     def test_prompt_redacts_all_full_score_calibration_fields(self):

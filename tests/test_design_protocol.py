@@ -399,7 +399,7 @@ class EvaluatorSelectionTests(unittest.TestCase):
                             "s11_min_db": -22.0,
                             "bandwidth_mhz": 120.0,
                             "peak_gain_dbi": 8.0,
-                            "total_efficiency_mean_percent": 90.0,
+                            "total_efficiency_mean_percent": 96.0,
                         },
                         "specification": valid_spec(),
                     },
